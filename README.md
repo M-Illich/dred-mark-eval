@@ -1,1 +1,1 @@
-# mat-updt-stream
+# Adapting Datalog Materialization w.r.t. Update Streams
