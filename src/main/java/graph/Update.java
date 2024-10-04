@@ -4,8 +4,8 @@ import java.util.Set;
 
 public class Update {
 
-	Set<Fact> add;
-	Set<Fact> delete;
+	public Set<Fact> add;
+	public Set<Fact> delete;
 
 	public Update(Set<Fact> add, Set<Fact> delete) {
 		this.add = add;
