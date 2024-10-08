@@ -48,6 +48,10 @@ extract_input([]) <=> true.
 extract_input([X|Xs]) <=>
 	fact(X),
 	extract_input(Xs).
+	
+
+% remove duplicates
+fact(X) \ fact(X) <=> true.	
 		
 
 %-------------------------------------------------	

@@ -7,12 +7,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import graph.Fact;
 import graph.GraphMaintainer;
 import graph.Update;
 
-public class UpdateStreamRun {
+public class UpdateStreamRun extends StreamToProlog{
 
 	/**
 	 * name of file containing SWI-Prolog code to be executed
@@ -43,15 +46,24 @@ public class UpdateStreamRun {
 	 * length of update sequence provided in the stream
 	 */
 	int numberOfUpdates;
-	
-	
-	/*
-	 *  --- TODO ---
-	 * if asked, store answers, statistics etc. for later comparison (?)
-	 * 
-	 */
 
 	/**
+	 * list of answer sets for each stated query
+	 */
+	public List<Set<Fact>> queryAnswers;
+
+	/**
+	 * list of datasets created by sequence of updates
+	 */
+	public List<Set<Fact>> datasets;
+
+	/**
+	 * states if update size is fixed or chosen randomly
+	 */
+	boolean randomSize;
+
+	/**
+	 * Fixed update size.
 	 * 
 	 * @param file            {@code String} name of file containing SWI-Prolog code
 	 *                        to be executed
@@ -73,6 +85,26 @@ public class UpdateStreamRun {
 		this.initialDataSize = initialDataSize;
 		this.updateSize = updateSize;
 		this.numberOfUpdates = numberOfUpdates;
+		this.randomSize = false;
+
+	}
+
+	/**
+	 * Size of updates varies randomly.
+	 * 
+	 * @param file          {@code String} name of file containing SWI-Prolog code
+	 *                      to be executed
+	 * @param randomSeed    {@code long} used to generate random updates
+	 * @param maxNodeNumber {@code int} maximum number of nodes contained in
+	 *                      randomly generated graph
+	 * 
+	 */
+	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int numberOfUpdates) {
+		this.file = file;
+		this.randomSeed = randomSeed;
+		this.maxNodeNumber = maxNodeNumber;
+		this.numberOfUpdates = numberOfUpdates;
+		this.randomSize = true;
 
 	}
 
@@ -110,22 +142,10 @@ public class UpdateStreamRun {
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 			// create stream of random updates each followed by a query
-			createUpdateStream(out, printUpdates);
-
-			// test examples
-//			out.println("[[edge,1,2], [edge,2,3], [edge,3,4]]:[]");
-//			out.println("[]:[[edge,3,4]]");
-//			out.println("X:"); // query
-//			out.println("[[edge,2,5],[edge,5,3]]:[]");
-//			out.println("X:"); // query
-//			out.println("[]:[[edge,2,3]]");
-//			out.println("X:"); // query
+			datasets = createUpdateStream(out, printUpdates);
 
 			// read answers for each query
-			if (printMaterialization) {
-				readOutput(in);
-				System.out.println("");
-			}
+			queryAnswers = readAnswers(in, printMaterialization);
 
 			in.close();
 			out.close();
@@ -150,11 +170,13 @@ public class UpdateStreamRun {
 
 	}
 
+	
+
 	/**
 	 * Create a stream with {@code numberOfUpdates}-many updates that each randomly
 	 * add (new) and delete (available) {@code updateSize}-many facts (i.e., edges)
-	 * to a graph that starts with {@code initialDataSize}-many facts. A query
-	 * asking for every fact is stated after each update.
+	 * to a graph/dataset that starts with {@code initialDataSize}-many facts. A
+	 * query asking for every fact is stated after each update.
 	 * 
 	 * 
 	 * @param out           {@link PrintWriter} to write updates to stream
@@ -163,8 +185,12 @@ public class UpdateStreamRun {
 	 * @param randomSeed    {@code long} seed used to randomly create updates
 	 * @param printUpdates  {@code boolean} states if updates and their overlap with
 	 *                      direct predecessor are printed to standard output
+	 * @return a list of sets of facts representing the sequence of datasets created
+	 *         by the update stream
 	 */
-	private void createUpdateStream(PrintWriter out, boolean printUpdates) {
+	private List<Set<Fact>> createUpdateStream(PrintWriter out, boolean printUpdates) {
+
+		List<Set<Fact>> datasets = new LinkedList<>();
 
 		GraphMaintainer gm = new GraphMaintainer(maxNodeNumber, randomSeed);
 
@@ -172,16 +198,25 @@ public class UpdateStreamRun {
 		Update pre = new Update(new HashSet<>(), new HashSet<>());
 		HashSet<Fact> replaced_del = new HashSet<>();
 		HashSet<Fact> replaced_add = new HashSet<>();
+		Update u;
 
 		// create stream of random updates
 		for (int i = 1; i <= numberOfUpdates; i++) {
 
 			// create random update
-			Update u = gm.createUpdate(updateSize, updateSize);
-			// first update initializes dataset
-			if (i == 1) {
-				u = gm.createUpdate(initialDataSize, 0);
+			if (randomSize) {
+				u = gm.createUpdateRandom();
+			} else {
+				// update with fixed size
+				u = gm.createUpdate(updateSize, updateSize);
+				// first update initializes dataset
+				if (i == 1) {
+					u = gm.createUpdate(initialDataSize, 0);
+				}
 			}
+
+			// store updated dataset
+			datasets.add(gm.getCurrentDataset());
 
 			if (printUpdates) {
 				replaced_del.clear();
@@ -222,53 +257,12 @@ public class UpdateStreamRun {
 		out.println("[]:[]");
 		System.out.println("");
 
-	}
-
-	/**
-	 * Read lines from provided input stream until {@code null} occurs
-	 * 
-	 * @param in {@link BufferedReader} for input stream
-	 */
-	private void readOutput(BufferedReader in) {
-		String line;
-		try {
-			while ((line = in.readLine()) != null) {
-				System.out.println(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Use command shell to execute the specified SWI-Prolog file, which
-	 * communicates over the provided local port
-	 * 
-	 * @param localPort {@code int} local port used by server for update stream
-	 * @param file      {@code String} name of SWI-Prolog file stored in
-	 *                  {@code src/main/resources}
-	 * @return {@link Process} object for executed command
-	 */
-	private Process callProlog(int localPort, String file) {
-
-		ProcessBuilder pb = new ProcessBuilder();
-
-		// prolog goal to initialize process, connect to specified local port, and
-		// measure runtime
-		String goal = "time(init(localhost:" + localPort + "))";
-
-		// open command shell and call SWI-Prolog for specified file and goal
-		pb.command("cmd.exe", "/c", "cd src/main/resources && swipl -g " + goal + " -t halt " + file);
-
-		Process process = null;
-		try {
-			process = pb.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return process;
+		return datasets;
 
 	}
+
+	
+
+	
 
 }

@@ -1,7 +1,7 @@
 package stream;
 
 
-public class UpdateServer {
+public class Main {
 
 	
 	public static void main(String[] args) {

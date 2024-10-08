@@ -8,9 +8,7 @@ import java.util.Set;
 public class GraphMaintainer {
 
 	/*
-	 * rules:
-	 * edge --> path 
-	 * edge, path --> transitive path
+	 * rules: edge --> path edge, path --> transitive path
 	 * 
 	 * randomly add + delete edges
 	 */
@@ -35,9 +33,18 @@ public class GraphMaintainer {
 	}
 
 	/**
-	 * @param num_add number of facts to be added 
-	 * @param num_del number of facts
-	 *                to be deleted
+	 * 
+	 * @return set of facts that are explicitly present in current dataset, i.e.,
+	 *         facts that were added by updates so far without the ones that were
+	 *         already deleted
+	 */
+	public Set<Fact> getCurrentDataset() {
+		return new HashSet<>(addedFacts);
+	}
+
+	/**
+	 * @param num_add number of facts to be added
+	 * @param num_del number of facts to be deleted
 	 * @return an {@link Update} instance with edges of the form {@code edge(1,2)}
 	 *         as {@link Fact} instances
 	 */
@@ -130,10 +137,10 @@ public class GraphMaintainer {
 				int x = rndm.nextInt(maxNodeNumber);
 				int y = rndm.nextInt(maxNodeNumber);
 
-				// no edge to oneself TODO
-				while (x == y) {
-					y = rndm.nextInt(maxNodeNumber);
-				}
+				// no edge to oneself
+//				while (x == y) {
+//					y = rndm.nextInt(maxNodeNumber);
+//				}
 
 				fact = new Fact("edge", List.of(x + "", y + ""));
 			} // only add new fact
@@ -172,7 +179,6 @@ public class GraphMaintainer {
 	private Set<Fact> createDelete(int num) {
 		// choose facts
 		return new HashSet<>(addedFacts.stream().limit(num).toList());
-
 	}
 
 }
