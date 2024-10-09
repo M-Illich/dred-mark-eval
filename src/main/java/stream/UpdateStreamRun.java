@@ -59,10 +59,9 @@ public class UpdateStreamRun extends StreamToProlog {
 	public List<Set<Fact>> datasets;
 
 	/**
-	 * list of string potentially containing information about number of applied
-	 * rules, marked facts, and runtime
+	 * information about number of applied rules, marked facts, and runtime
 	 */
-	public List<String> statistics;
+	public Statistics statistics;
 
 	/**
 	 * states if update size is fixed or chosen randomly
@@ -93,6 +92,7 @@ public class UpdateStreamRun extends StreamToProlog {
 		this.updateSize = updateSize;
 		this.numberOfUpdates = numberOfUpdates;
 		this.randomSize = false;
+		this.statistics = new Statistics();
 
 	}
 
@@ -161,12 +161,14 @@ public class UpdateStreamRun extends StreamToProlog {
 
 			// read output from executed commands
 			BufferedReader cmdReader = new BufferedReader(new InputStreamReader(prologCall.getInputStream()));
-			System.out.println("-- command output --");
-			statistics = readOutput(cmdReader, printStatistics);
+			if (printStatistics) {
+				System.out.println("-- command output --");
+			}
+			statistics.integrateData(readOutput(cmdReader, printStatistics));
 			cmdReader.close();
 			// get additional messages, like execution time if available
 			BufferedReader cmdError = new BufferedReader(new InputStreamReader(prologCall.getErrorStream()));
-			statistics.addAll(readOutput(cmdError, printStatistics));
+			statistics.integrateData(readOutput(cmdError, printStatistics));
 			cmdError.close();
 
 		} catch (IOException e) {
@@ -254,7 +256,10 @@ public class UpdateStreamRun extends StreamToProlog {
 
 			// insert query directly after each update (asking for every fact)
 			out.println("X:");
-			System.out.println("query " + i);
+			if(i == 1) {
+				System.out.print("query");
+			}
+			System.out.print(" " + i);
 
 		}
 

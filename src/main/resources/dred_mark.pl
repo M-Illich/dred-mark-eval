@@ -71,7 +71,7 @@ query(Q,ID)
 	compute_positive_mark/2, compute_negative_mark/2,
 	clean/0, applied_rules/2, marked_facts/2, print/0.
 
-%:- chr_option(debug, off).
+:- chr_option(debug, off).
 :- chr_option(optimize, off).
 
 
