@@ -85,17 +85,26 @@ public class StreamToProlog {
 	/**
 	 * Read lines from provided input stream until {@code null} occurs
 	 * 
-	 * @param in {@link BufferedReader} for input stream
+	 * @param in    {@link BufferedReader} for input stream
+	 * @param print {@code boolean} stating if read lines are printed to standard
+	 *              output
 	 */
-	public void readOutput(BufferedReader in) {
+	public List<String> readOutput(BufferedReader in, boolean print) {
+		List<String> lines = new LinkedList<>();
+
 		String line;
 		try {
 			while ((line = in.readLine()) != null) {
-				System.out.println(line);
+				lines.add(line);
+				if (print) {
+					System.out.println(line);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return lines;
 	}
 
 }

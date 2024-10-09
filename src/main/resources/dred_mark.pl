@@ -71,7 +71,7 @@ query(Q,ID)
 	compute_positive_mark/2, compute_negative_mark/2,
 	clean/0, applied_rules/2, marked_facts/2, print/0.
 
-:- chr_option(debug, off).
+%:- chr_option(debug, off).
 :- chr_option(optimize, off).
 
 
@@ -141,7 +141,8 @@ fact(F,del,Qd,_) \ fact(F,add,Qa,_) <=> Qd > Qa | true.
 
 % prevent duplicates
 fact(F,_,_,_) \ fact(F,_,_,_) <=> true.
-	
+% only one rule application per iteration
+apply_one \ apply_one <=> true.	
 	
 % do not read from stream when already two queries given	
 query(_,Q), mark_query(Q) \ read_stream <=> true.
@@ -189,12 +190,10 @@ query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
 
 	% new query is next one
 % mark facts that are changed by next query
-query(_,Q), mark_query(Q), fact(F,O,_,M) \ pending_fact(F,_,Q) <=>
+query(_,Q), mark_query(Q), fact(F,_,_,M) \ pending_fact(F,_,Q) <=>
 	var(M) |
 	% mark fact by assigning value to variable
-	M = 1,
-	% enable counting of marked facts
-	marked_facts(1,O).	
+	M = 1.	
 
 
 %----------	
@@ -307,13 +306,16 @@ phase(2), query(_,Q), current_query(Q) \ pending_fact(F,add,Q) <=>
 % -- insertion phase --	
 /* we first use propagation rules to ensure that a rule instance is only considered once 
 	(re-inserting apply_one-constraint can re-trigger application) */
+	
+% do not apply rule if derived fact alread present
+fact(F,add,_,_) \ derived_fact(F,_,_) <=> true.	
 
 	% edge(X,Y) --> path(X,Y)
-phase(2), current_query(Q),
+phase(3), current_query(Q),
 fact([edge,X,Y],add,Q,M) ==> derived_fact([path,X,Y],Q,M).
 	
 	% edge(X,Y), path(Y,Z) --> path(X,Z)
-phase(2), current_query(Q),
+phase(3), current_query(Q),
 fact([edge,X,Y],add,Q1,M1), fact([path,Y,Z],add,Q2,M2) ==>
 	member(Q, [Q1, Q2]) |
 	compute_negative_mark([M1, M2], M),
@@ -330,20 +332,20 @@ apply_one, derived_fact(F,Q,M) <=>
 %-------------------------------------------------
 % -- move to next phase if no operation applicable --
 current_query(Q), query(_,Q) \ apply_one, phase(N) <=>
-	N < 3 |
+	N < 4 |
 	M is N + 1,
 	phase(M).
 
 %----------	
 % -- answer query --	
 % write query answers as line in output stream
-phase(3), current_query(N), query(Q,N), stream(S) ==> 
+phase(4), current_query(N), query(Q,N), stream(S) ==> 
 	writeln(S,query(Q,N)).
-phase(3), current_query(N), query(Q,N), fact(F,add,_,_), stream(S) ==> 
+phase(4), current_query(N), query(Q,N), fact(F,add,_,_), stream(S) ==> 
 	unifiable(Q,F,_) |
 	writeln(S,F).
 % mark end of answers in stream
-phase(3), stream(S), current_query(N) \ query(_,N) <=> 
+phase(4), stream(S), current_query(N) \ query(_,N) <=> 
 	writeln(S,""), 
 	flush_output(S).
 
@@ -351,13 +353,13 @@ phase(3), stream(S), current_query(N) \ query(_,N) <=>
 % -- prepare next query --
 
 % transform marked add-facts into del-facts for next query
-phase(3), mark_query(Q) \ fact(F,add,_,1) <=> 
+phase(4), mark_query(Q) \ fact(F,add,_,1) <=> 
 	fact(F,del,Q,_),
 	% enable counting of marked facts
 	marked_facts(1,add).
 	
 % increase current and mark ID value and reset phase
-phase(3), current_query(_), mark_query(M) <=>
+phase(4), current_query(_), mark_query(M) <=>
 	N is M + 1,
 	mark_query(N),
 	current_query(M),

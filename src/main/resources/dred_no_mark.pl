@@ -131,6 +131,8 @@ fact(F,del,Qd) \ fact(F,add,Qa) <=> Qd > Qa | true.
 
 % prevent duplicates
 fact(F,_,_) \ fact(F,_,_) <=> true.
+% only one rule application per iteration
+apply_one \ apply_one <=> true.	
 
 
 % do not read from stream when already two queries given	
@@ -259,12 +261,15 @@ phase(2), query(_,Q), current_query(Q) \ pending_fact(F,add,Q) <=>
 /* we first use propagation rules to ensure that a rule instance is only considered once 
 	(re-inserting apply_one-constraint can re-trigger application) */
 
+% do not apply rule if derived fact alread present
+fact(F,add,_) \ derived_fact(F,_) <=> true.		
+
 	% edge(X,Y) --> path(X,Y)
-phase(2), current_query(Q),
+phase(3), current_query(Q),
 fact([edge,X,Y],add,Q) ==> derived_fact([path,X,Y],Q).
 	
 	% edge(X,Y), path(Y,Z) --> path(X,Z)
-phase(2), current_query(Q),
+phase(3), current_query(Q),
 fact([edge,X,Y],add,Q1), fact([path,Y,Z],add,Q2) ==>
 	member(Q, [Q1, Q2]) |
 	derived_fact([path,X,Z],Q).
@@ -280,20 +285,20 @@ apply_one, derived_fact(F,Q) <=>
 %-------------------------------------------------
 % -- move to next phase if no operation applicable --
 current_query(Q), query(_,Q) \ apply_one, phase(N) <=>
-	N < 3 |
+	N < 4 |
 	M is N + 1,
 	phase(M).
 
 %----------	
 % -- answer query --	
 % write query answers as line in output stream
-phase(3), current_query(N), query(Q,N), stream(S) ==> 
+phase(4), current_query(N), query(Q,N), stream(S) ==> 
 	writeln(S,query(Q,N)).
-phase(3), current_query(N), query(Q,N), fact(F,add,_), stream(S) ==> 
+phase(4), current_query(N), query(Q,N), fact(F,add,_), stream(S) ==> 
 	unifiable(Q,F,_) |
 	writeln(S,F).
 % mark end of answers in stream
-phase(3), stream(S), current_query(N) \ query(_,N) <=> 
+phase(4), stream(S), current_query(N) \ query(_,N) <=> 
 	writeln(S,""), 
 	flush_output(S).
 
@@ -301,7 +306,7 @@ phase(3), stream(S), current_query(N) \ query(_,N) <=>
 % -- prepare next query --
 	
 % increase current and mark ID value and reset phase
-phase(3), current_query(M) <=>
+phase(4), current_query(M) <=>
 	N is M + 1,
 	current_query(N),
 	phase(0).

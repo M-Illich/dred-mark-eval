@@ -1,4 +1,4 @@
-package prolog;
+package stream;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.Set;
 
 import graph.Fact;
-import stream.StreamToProlog;
 
 public class SimpleMaterialization extends StreamToProlog {
 

@@ -10,12 +10,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import graph.Fact;
 import graph.GraphMaintainer;
 import graph.Update;
 
-public class UpdateStreamRun extends StreamToProlog{
+public class UpdateStreamRun extends StreamToProlog {
 
 	/**
 	 * name of file containing SWI-Prolog code to be executed
@@ -56,6 +57,12 @@ public class UpdateStreamRun extends StreamToProlog{
 	 * list of datasets created by sequence of updates
 	 */
 	public List<Set<Fact>> datasets;
+
+	/**
+	 * list of string potentially containing information about number of applied
+	 * rules, marked facts, and runtime
+	 */
+	public List<String> statistics;
 
 	/**
 	 * states if update size is fixed or chosen randomly
@@ -153,24 +160,20 @@ public class UpdateStreamRun extends StreamToProlog{
 			serverSocket.close();
 
 			// read output from executed commands
-			if (printStatistics) {
-				BufferedReader cmdReader = new BufferedReader(new InputStreamReader(prologCall.getInputStream()));
-				System.out.println("-- command output --");
-				readOutput(cmdReader);
-				cmdReader.close();
-				// get additional messages, like execution time if available
-				BufferedReader cmdError = new BufferedReader(new InputStreamReader(prologCall.getErrorStream()));
-				readOutput(cmdError);
-				cmdError.close();
-			}
+			BufferedReader cmdReader = new BufferedReader(new InputStreamReader(prologCall.getInputStream()));
+			System.out.println("-- command output --");
+			statistics = readOutput(cmdReader, printStatistics);
+			cmdReader.close();
+			// get additional messages, like execution time if available
+			BufferedReader cmdError = new BufferedReader(new InputStreamReader(prologCall.getErrorStream()));
+			statistics.addAll(readOutput(cmdError, printStatistics));
+			cmdError.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
-
-	
 
 	/**
 	 * Create a stream with {@code numberOfUpdates}-many updates that each randomly
@@ -211,7 +214,9 @@ public class UpdateStreamRun extends StreamToProlog{
 				u = gm.createUpdate(updateSize, updateSize);
 				// first update initializes dataset
 				if (i == 1) {
-					u = gm.createUpdate(initialDataSize, 0);
+					// initialize dataset with complete materialization
+					SimpleMaterialization sm = new SimpleMaterialization(gm.createUpdate(initialDataSize, 0).add);
+					u = new Update(sm.execute(), Set.of());
 				}
 			}
 
@@ -253,6 +258,19 @@ public class UpdateStreamRun extends StreamToProlog{
 
 		}
 
+		/* test example */
+//		out.println("[[edge,1,2], [edge,2,3], [edge,3,4], [edge,3,5]]:[]");
+//		out.println("X:");	// query	
+//		try {
+//			TimeUnit.MILLISECONDS.sleep(1000);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		out.println("[]:[[edge,2,3], [edge,3,4], [edge,3,5]]");
+//		out.println("X:");	// query
+//		out.println("[[edge,2,3], [edge,3,4], [edge,3,5]]:[]");
+//		out.println("X:");	// query
+
 		// indicate end of stream
 		out.println("[]:[]");
 		System.out.println("");
@@ -260,9 +278,5 @@ public class UpdateStreamRun extends StreamToProlog{
 		return datasets;
 
 	}
-
-	
-
-	
 
 }
