@@ -69,7 +69,7 @@ query(Q,ID)
 	pending_fact/3, fact/4, derived_fact/3,
 	next_query_id/1, current_query/1, mark_query/1,
 	compute_positive_mark/2, compute_negative_mark/2,
-	clean/0, applied_rules/2, marked_facts/2, print/0.
+	clean/0, applied_rules/2, marked_facts/2, marked_facts/3, print/0.
 
 :- chr_option(debug, off).
 :- chr_option(optimize, off).
@@ -105,6 +105,14 @@ applied_rules(N,P), applied_rules(M,P) <=>
 	K is N + M,
 	applied_rules(K,P).
 		
+% distinguish between explicit and implicit facts	
+	% explicit
+marked_facts(N,add,[edge|_]) <=> marked_facts(N,addEx).	
+marked_facts(N,del,[edge|_]) <=> marked_facts(N,delEx).	
+	% implicit
+marked_facts(N,add,[path|_]) <=> marked_facts(N,addIm).
+marked_facts(N,del,[path|_]) <=> marked_facts(N,delIm).
+
 % count number of marked facts
 marked_facts(N,O), marked_facts(M,O) <=>
 	K is N + M,
@@ -293,7 +301,7 @@ compute_negative_mark([_|L],M) <=> compute_negative_mark(L,M).
 phase(2), mark_query(Q) \ fact(F,del,_,1) <=> 
 	pending_fact(F,add,Q),
 	% enable counting of marked facts
-	marked_facts(1,del).
+	marked_facts(1,del,F).
 phase(2) \ fact(_,del,_,M) <=> var(M) | true.
 
 % insert remaining pending facts of current query
@@ -356,7 +364,7 @@ phase(4), stream(S), current_query(N) \ query(_,N) <=>
 phase(4), mark_query(Q) \ fact(F,add,_,1) <=> 
 	fact(F,del,Q,_),
 	% enable counting of marked facts
-	marked_facts(1,add).
+	marked_facts(1,add,F).
 	
 % increase current and mark ID value and reset phase
 phase(4), current_query(_), mark_query(M) <=>

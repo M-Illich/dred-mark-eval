@@ -48,7 +48,7 @@ public class Statistics {
 			markedFacts.putIfAbsent(args[1], Integer.parseInt(args[0]));
 		}
 		// check for runtime
-		else {
+		else if (data.startsWith("%")) {
 			// format = ... 0.313 CPU in 0.332 seconds ...
 			String str = data.substring(data.indexOf("in ") + 3, data.indexOf(" sec"));
 			// store data
