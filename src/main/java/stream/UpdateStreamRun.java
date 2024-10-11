@@ -64,6 +64,11 @@ public class UpdateStreamRun extends StreamToProlog {
 	public Statistics statistics;
 
 	/**
+	 * waiting time (milliseconds) between updates in stream
+	 */
+	public int updateDelay;
+
+	/**
 	 * states if update size is fixed or chosen randomly
 	 */
 	boolean randomSize;
@@ -82,9 +87,11 @@ public class UpdateStreamRun extends StreamToProlog {
 	 *                        the dataset in each update
 	 * @param numberOfUpdates {@code int} length of update sequence provided in the
 	 *                        stream
+	 * @param updateDelay     {@code int} waiting time in milliseconds between
+	 *                        updates in stream
 	 */
 	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int initialDataSize, int updateSize,
-			int numberOfUpdates) {
+			int numberOfUpdates, int updateDelay) {
 		this.file = file;
 		this.randomSeed = randomSeed;
 		this.maxNodeNumber = maxNodeNumber;
@@ -93,6 +100,7 @@ public class UpdateStreamRun extends StreamToProlog {
 		this.numberOfUpdates = numberOfUpdates;
 		this.randomSize = false;
 		this.statistics = new Statistics();
+		this.updateDelay = updateDelay;
 
 	}
 
@@ -104,14 +112,17 @@ public class UpdateStreamRun extends StreamToProlog {
 	 * @param randomSeed    {@code long} used to generate random updates
 	 * @param maxNodeNumber {@code int} maximum number of nodes contained in
 	 *                      randomly generated graph
-	 * 
+	 * @param updateDelay   {@code int} waiting time in milliseconds between updates
+	 *                      in stream
 	 */
-	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int numberOfUpdates) {
+	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int numberOfUpdates, int updateDelay) {
 		this.file = file;
 		this.randomSeed = randomSeed;
 		this.maxNodeNumber = maxNodeNumber;
 		this.numberOfUpdates = numberOfUpdates;
 		this.randomSize = true;
+		this.statistics = new Statistics();
+		this.updateDelay = updateDelay;
 
 	}
 
@@ -251,12 +262,19 @@ public class UpdateStreamRun extends StreamToProlog {
 						+ " - replaced add = " + replaced_add.size());
 			}
 
+			// delay stream
+			try {
+				TimeUnit.MILLISECONDS.sleep(updateDelay);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 			// write update to stream
 			out.println(u.toString());
 
 			// insert query directly after each update (asking for every fact)
 			out.println("X:");
-			if(i == 1) {
+			if (i == 1) {
 				System.out.print("query");
 			}
 			System.out.print(" " + i);

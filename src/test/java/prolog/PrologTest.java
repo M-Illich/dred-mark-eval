@@ -26,10 +26,10 @@ public class PrologTest {
 		int numberOfUpdates = 3;
 
 		// compute materialization with marking approach
-		UpdateStreamRun usrMark = new UpdateStreamRun("dred_mark.pl", randomSeed, maxNodeNumber, numberOfUpdates);
+		UpdateStreamRun usrMark = new UpdateStreamRun("dred_mark.pl", randomSeed, maxNodeNumber, numberOfUpdates, 0);
 		usrMark.execute(false, false, false);
 		// compute materialization without marking
-		UpdateStreamRun usrNoMark = new UpdateStreamRun("dred_no_mark.pl", randomSeed, maxNodeNumber, numberOfUpdates);
+		UpdateStreamRun usrNoMark = new UpdateStreamRun("dred_no_mark.pl", randomSeed, maxNodeNumber, numberOfUpdates, 0);
 		usrNoMark.execute(false, false, false);
 
 		for (int i = 0; i < usrMark.datasets.size(); i++) {
