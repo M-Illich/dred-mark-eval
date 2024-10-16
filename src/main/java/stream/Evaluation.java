@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Random;
 
 public class Evaluation {
-	
+
 	/**
 	 * number of repeated runs to compute average runtime
 	 */
-	final static int REPETITIONS = 1;
+	final static int REPETITIONS = 3;
 
 	public static void main(String[] args) {
 
@@ -20,21 +20,21 @@ public class Evaluation {
 		 * random seeds: -2952287021128233795 with maxNode = 20, initial = 100, updates
 		 * = 100, size = 10-100
 		 * 
-		 * -1005128985613677429l 928174635l	2487642182737836315l
+		 * -1005128985613677429l 928174635l 2487642182737836315l
 		 * 
-		 * 		
+		 * 
 		 * 
 		 */
 
 		Random rnd = new Random();
 		long randomSeed = rnd.nextLong();
-		randomSeed = -1005128985613677429l;
+//		randomSeed = -1005128985613677429l;
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
 		int maxNodeNumber = 20;
 		int initialDataSize = 100;
-		int updateSize = 40;
+		int updateSize = 10;
 		int numberOfUpdates = 3;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
@@ -50,8 +50,7 @@ public class Evaluation {
 		int variantEnd = 90;
 		int variantStep = 10;
 
-//		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
-		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl");
+		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
 		for (String file : files) {
 			performEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart, variantEnd,
 					variantStep);
@@ -77,7 +76,7 @@ public class Evaluation {
 	 */
 	public static void performEvaluation(String file, long randomSeed, int[] parameters, String[] parameterNames,
 			int variantIndex, int variantStart, int variantEnd, int variantStep) {
-		
+
 		String approach = file.substring(5, file.length() - 3);
 		System.out.println(approach);
 
@@ -109,7 +108,7 @@ public class Evaluation {
 				float avgRuntime = 0;
 				for (int i = 0; i < REPETITIONS; i++) {
 					// process update stream
-					usr.execute(false, false, true);	// TODO false
+					usr.execute(false, false, false);
 					avgRuntime += usr.statistics.runtime;
 				}
 

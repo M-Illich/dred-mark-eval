@@ -255,6 +255,7 @@ public class UpdateStreamRun extends StreamToProlog {
 				pre = u;
 
 				// print update
+				System.out.println("");
 				String[] us = u.toString().split(":");
 				System.out.println(i + ": " + us[0]);
 				System.out.println("   " + us[1]);
@@ -275,19 +276,25 @@ public class UpdateStreamRun extends StreamToProlog {
 
 			// insert query directly after each update (asking for every fact)
 			out.println("X:");
-			if (i == 1) {
-				System.out.print("query");
+			if(printUpdates) {
+				System.out.println("query " + i);
 			}
-			System.out.print(" " + i);
+			else {
+				if (i == 1) {
+					System.out.print("query");
+				}
+				System.out.print(" " + i);
+			}
+			
 
 			// TODO test
-//			if (i == 1) {
-//				try {
-//					TimeUnit.MILLISECONDS.sleep(10000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
+			if (i == 1) {
+				try {
+					TimeUnit.MILLISECONDS.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 
 		}
 
