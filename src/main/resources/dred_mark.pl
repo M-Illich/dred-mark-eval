@@ -198,8 +198,8 @@ query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
 
 	% new query is next one
 % mark facts that are changed by next query
-query(_,Q), mark_query(Q), fact(F,_,_,M) \ pending_fact(F,_,Q) <=>
-	var(M) |
+query(_,Q), mark_query(Q), fact(F,O1,_,M) \ pending_fact(F,O2,Q) <=>
+	O1 \== O2 |
 	% mark fact by assigning value to variable
 	M = 1.	
 
