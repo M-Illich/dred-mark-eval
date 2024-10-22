@@ -177,8 +177,20 @@ public class GraphMaintainer {
 	 *         of {@code edge(1,2)}
 	 */
 	private Set<Fact> createDelete(int num) {
-		// choose facts
-		return new HashSet<>(addedFacts.stream().limit(num).toList());
+
+		HashSet<Fact> set = new HashSet<>(); // addedFacts.stream().limit(num).toList()
+		// choose facts randomly
+		for (Fact fact : addedFacts) {
+			if (rndm.nextBoolean()) {
+				set.add(fact);
+			}
+			if (set.size() == num) {
+				break;
+			}
+		}
+
+		return set;
+
 	}
 
 }

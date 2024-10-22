@@ -22,8 +22,8 @@ public class PrologTest {
 		long randomSeed = rnd.nextLong();
 		System.out.println("random seed: " + randomSeed);
 
-		int maxNodeNumber = 5;
-		int numberOfUpdates = 3;
+		int maxNodeNumber = 10;
+		int numberOfUpdates = 5;
 
 		// compute materialization without marking
 		UpdateStreamRun usrNoMark = new UpdateStreamRun("dred_no_mark.pl", randomSeed, maxNodeNumber, numberOfUpdates,
