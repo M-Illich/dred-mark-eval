@@ -16,14 +16,19 @@ public class Statistics {
 	HashMap<String, Integer> markedFacts;
 
 	/**
-	 * measured time needed to complete processing of update stream
+	 * measured exeuction time needed to complete processing of update stream
 	 */
-	float runtime;
+	float executionTime;
+
+	/**
+	 * measured CPU time needed to complete processing of update stream
+	 */
+	float cpuTime;
 
 	public Statistics() {
 		appliedRules = new HashMap<>();
 		markedFacts = new HashMap<>();
-		runtime = 0;
+		executionTime = 0;
 	}
 
 	public void integrateData(Collection<String> data) {
@@ -49,10 +54,11 @@ public class Statistics {
 		}
 		// check for runtime
 		else if (data.startsWith("%")) {
-			// format = ... 0.313 CPU in 0.332 seconds ...
-			String str = data.substring(data.indexOf("in ") + 3, data.indexOf(" sec"));
-			// store data
-			runtime = Float.parseFloat(str);
+			// format = % 252,760,468 inferences, 22.625 CPU in 47.675 seconds
+			// extract CPU time
+			cpuTime = Float.parseFloat(data.substring(data.indexOf("s, ") + 3, data.indexOf(" CPU")));
+			// extract execution time
+			executionTime = Float.parseFloat(data.substring(data.indexOf("in ") + 3, data.indexOf(" sec")));
 
 		}
 

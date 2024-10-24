@@ -32,7 +32,8 @@ public class StatisticsTest {
 		assertEquals(1123, stats.markedFacts.get("addIm").intValue());
 		assertEquals(10, stats.markedFacts.get("delEx").intValue());
 		assertEquals(5, stats.markedFacts.get("delIm").intValue());
-		assertEquals(0.332f, stats.runtime, 0.0001f);
+		assertEquals(0.313f, stats.cpuTime, 0.0001f);
+		assertEquals(0.332f, stats.executionTime, 0.0001f);
 
 	}
 

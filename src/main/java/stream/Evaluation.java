@@ -4,13 +4,16 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import graph.Fact;
 
 public class Evaluation {
 
 	/**
 	 * number of repeated runs to compute average runtime
 	 */
-	final static int REPETITIONS = 3;
+	final static int REPETITIONS = 3; // TODO
 
 	public static void main(String[] args) {
 
@@ -22,20 +25,21 @@ public class Evaluation {
 		 * 
 		 * -1005128985613677429l 928174635l 2487642182737836315l
 		 * 
+		 * -4429514994751527719 test for U = 10 and increasing number of updates
 		 * 
 		 * 
 		 */
 
 		Random rnd = new Random();
 		long randomSeed = rnd.nextLong();
-//		randomSeed = -1005128985613677429l;
+//		randomSeed = -4429514994751527719l;
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
 		int maxNodeNumber = 20;
 		int initialDataSize = 100;
-		int updateSize = 10;
-		int numberOfUpdates = 3;
+		int updateSize = 5;
+		int numberOfUpdates = 10;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
 		String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize", "numberOfUpdates",
@@ -45,10 +49,10 @@ public class Evaluation {
 		 * index of parameter for which different, increasing values are considered
 		 * during evaluation
 		 */
-		int variantIndex = 2;
-		int variantStart = 90;
-		int variantEnd = 90;
-		int variantStep = 10;
+		int variantIndex = 3;
+		int variantStart = 50;
+		int variantEnd = 300;
+		int variantStep = 50;
 
 		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
 		for (String file : files) {
@@ -105,20 +109,46 @@ public class Evaluation {
 				UpdateStreamRun usr = new UpdateStreamRun(file, randomSeed, parameters[0], parameters[1], parameters[2],
 						parameters[3], parameters[4]);
 
-				float avgRuntime = 0;
+				float avgCpuTime = 0;
 				for (int i = 0; i < REPETITIONS; i++) {
 					// process update stream
 					usr.execute(false, false, false);
-					avgRuntime += usr.statistics.runtime;
+					avgCpuTime += usr.statistics.cpuTime;
 				}
 
+				// TODO test
+//				for (int i = 0; i < usr.datasets.size(); i++) {
+//					// compute materialization for dataset from scratch
+//					SimpleMaterialization sm = new SimpleMaterialization(usr.datasets.get(i));
+//					// compare results with simple method
+//					Set<Fact> mat = sm.execute();
+//					boolean same = true;
+//					if (usr.queryAnswers.get(i).size() != mat.size()) {
+//						System.out.println("size: " + usr.queryAnswers.get(i).size() + " vs. expected: " + mat.size());
+//						same = false;
+//					}
+//					for (Fact f : mat) {
+//						if (!usr.queryAnswers.get(i).contains(f)) {
+//							System.out.print(f.toString() + " ");
+//							same = false;
+//						}
+//					}
+//					if (!same) {
+//						System.out.println("");
+//						System.out.println("Not same result for i = " + i);
+//						break;
+//					}
+//
+//				}
+
 				// compute average runtime
-				avgRuntime = avgRuntime / REPETITIONS;
-				System.out.println("average runtime: " + avgRuntime);
+				avgCpuTime = avgCpuTime / REPETITIONS;
+				System.out.println("");
+				System.out.println("average cpu time: " + avgCpuTime);
 				System.out.println("");
 
 				// get measured values from statistics
-				String measures = variant + "," + avgRuntime + "," + usr.statistics.appliedRules.get("del") + ","
+				String measures = variant + "," + avgCpuTime + "," + usr.statistics.appliedRules.get("del") + ","
 						+ usr.statistics.appliedRules.get("red") + "," + usr.statistics.appliedRules.get("ins") + ","
 						+ usr.statistics.markedFacts.get("addEx") + "," + usr.statistics.markedFacts.get("addIm") + ","
 						+ usr.statistics.markedFacts.get("delEx") + "," + usr.statistics.markedFacts.get("delIm") + ","

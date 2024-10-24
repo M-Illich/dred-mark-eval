@@ -58,6 +58,13 @@ public class StreamToProlog {
 		HashSet<Fact> facts = new HashSet<>();
 
 		String line;
+		int count = 1;
+
+		// show which query is currently processed as alternative to printing answers
+		if (!print) {
+			System.out.print("query 1 ");
+		}
+
 		try {
 			while ((line = in.readLine()) != null) {
 				// add fact to set
@@ -68,11 +75,17 @@ public class StreamToProlog {
 				else if (line.isBlank()) {
 					answers.add(facts);
 					facts = new HashSet<>();
+					// show which query is processed next
+					if (!print) {
+						count++;
+						System.out.print(count + " ");
+					}
 				}
 
 				if (print) {
 					System.out.println(line);
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
