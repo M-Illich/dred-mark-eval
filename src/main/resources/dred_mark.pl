@@ -152,8 +152,12 @@ fact(F,_,_,_) \ fact(F,_,_,_) <=> true.
 % only one rule application per iteration
 apply_one \ apply_one <=> true.	
 	
+	
 % do not read from stream when already two queries given	
 query(_,Q), mark_query(Q) \ read_stream <=> true.
+
+% postpone updates until first one completed
+query(_,1) \ read_stream <=> true.
 	
 	
 % -- loop --	

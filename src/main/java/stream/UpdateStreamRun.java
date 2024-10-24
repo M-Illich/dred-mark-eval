@@ -225,10 +225,7 @@ public class UpdateStreamRun extends StreamToProlog {
 			} else {
 				// first update initializes dataset
 				if (i == 1) {
-					// initialize dataset with complete materialization
-//					SimpleMaterialization sm = new SimpleMaterialization(gm.createUpdate(initialDataSize, 0).add);
-//					u = new Update(sm.execute(), Set.of());
-					u = gm.createUpdate(initialDataSize, 0); // TODO
+					u = gm.createUpdate(initialDataSize, 0);
 				} else {
 					// update with fixed size
 					u = gm.createUpdate(updateSize, updateSize);
@@ -279,20 +276,12 @@ public class UpdateStreamRun extends StreamToProlog {
 			out.println("X:");
 			if (printUpdates) {
 				System.out.println("query " + i);
-			} else {
-				if (i == 1) {
-					System.out.print("query");
-				}
-				System.out.print(" " + i);
 			}
-
-			// TODO test
-//			if (i == 1) {
-//				try {
-//					TimeUnit.MILLISECONDS.sleep(5000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
+//			else {						TODO already done during reading answers 
+//				if (i == 1) {
+//					System.out.print("query");
 //				}
+//				System.out.print(" " + i);
 //			}
 
 		}
