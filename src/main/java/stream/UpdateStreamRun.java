@@ -277,12 +277,6 @@ public class UpdateStreamRun extends StreamToProlog {
 			if (printUpdates) {
 				System.out.println("query " + i);
 			}
-//			else {						TODO already done during reading answers 
-//				if (i == 1) {
-//					System.out.print("query");
-//				}
-//				System.out.print(" " + i);
-//			}
 
 		}
 
@@ -301,7 +295,6 @@ public class UpdateStreamRun extends StreamToProlog {
 
 		// indicate end of stream
 		out.println("[]:[]");
-		System.out.println("");
 
 		return datasets;
 

@@ -91,6 +91,8 @@ public class StreamToProlog {
 			e.printStackTrace();
 		}
 
+		System.out.println("");
+
 		return answers;
 
 	}

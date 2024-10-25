@@ -13,6 +13,11 @@ import graph.Fact;
 public class SimpleMaterialization extends StreamToProlog {
 
 	/**
+	 * name of Prolog file where materialization approach is saved
+	 */
+	public String file;
+	
+	/**
 	 * dataset for which the materialization has to be created
 	 */
 	public Set<Fact> dataset;
@@ -22,7 +27,8 @@ public class SimpleMaterialization extends StreamToProlog {
 	 */
 	public Set<Fact> materialization;
 
-	public SimpleMaterialization(Set<Fact> dataset) {
+	public SimpleMaterialization(String file, Set<Fact> dataset) {
+		this.file = file;
 		this.dataset = dataset;
 	}
 
@@ -37,7 +43,7 @@ public class SimpleMaterialization extends StreamToProlog {
 			ServerSocket serverSocket = new ServerSocket(0);
 
 			// execute prolog file
-			callProlog(serverSocket.getLocalPort(), "materialize.pl");
+			callProlog(serverSocket.getLocalPort(), file);
 
 			// accept connection from prolog file
 			Socket clientSocket = serverSocket.accept();

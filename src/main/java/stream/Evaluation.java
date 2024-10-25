@@ -38,8 +38,8 @@ public class Evaluation {
 		// parameters for update stream
 		int maxNodeNumber = 20;
 		int initialDataSize = 100;
-		int updateSize = 5;
-		int numberOfUpdates = 10;
+		int updateSize = 10;
+		int numberOfUpdates = 100;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
 		String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize", "numberOfUpdates",
@@ -49,12 +49,13 @@ public class Evaluation {
 		 * index of parameter for which different, increasing values are considered
 		 * during evaluation
 		 */
-		int variantIndex = 3;
-		int variantStart = 50;
-		int variantEnd = 300;
-		int variantStep = 50;
+		int variantIndex = 2;
+		int variantStart = 10;
+		int variantEnd = 90;
+		int variantStep = 10;
 
-		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
+//		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
+		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
 		for (String file : files) {
 			performEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart, variantEnd,
 					variantStep);
