@@ -135,8 +135,8 @@ fact(F,_,_) \ fact(F,_,_) <=> true.
 apply_one \ apply_one <=> true.	
 
 
-% do not read from stream when already two queries given	
-query(_,N), current_query(M) \ read_stream <=> N > M | true.	
+% do not read from stream when a query already available	
+query(_,_) \ read_stream <=> true.	
 	
 	
 % -- loop --	
