@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import graph.Fact;
+import data.Fact;
 
 public class Evaluation {
 
@@ -36,9 +36,9 @@ public class Evaluation {
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
-		int maxNodeNumber = 20;
+		int maxNodeNumber = 100;
 		int initialDataSize = 100;
-		int updateSize = 10;
+		int updateSize = 2;
 		int numberOfUpdates = 100;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
@@ -55,7 +55,7 @@ public class Evaluation {
 		int variantStep = 10;
 
 //		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
-		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
+		List<String> files = List.of("dred_no_mark_alt.pl","dred_mark_alt.pl");
 		for (String file : files) {
 			performEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart, variantEnd,
 					variantStep);
@@ -100,7 +100,7 @@ public class Evaluation {
 
 			writer.println(parameterNames[variantIndex] + "," + categories + "," + parameterNamesString);
 
-			// perform evaluation for different update sizes
+			// perform evaluation for different parameter values
 			for (int variant = variantStart; variant <= variantEnd; variant += variantStep) {
 				System.out.println(parameterNames[variantIndex] + ": " + variant);
 

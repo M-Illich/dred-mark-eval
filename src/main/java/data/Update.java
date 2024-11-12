@@ -1,15 +1,15 @@
-package graph;
+package data;
 
 import java.util.Set;
 
 public class Update {
 
-	public Set<Fact> add;
-	public Set<Fact> delete;
+	public Set<Fact> added;
+	public Set<Fact> deleted;
 
 	public Update(Set<Fact> add, Set<Fact> delete) {
-		this.add = add;
-		this.delete = delete;
+		this.added = add;
+		this.deleted = delete;
 	}
 
 	/**
@@ -17,7 +17,7 @@ public class Update {
 	 * a String {@code [[F1,a1,a2],[F2,a3],...]:[[F3,a4,...],...]}
 	 */
 	public String toString() {
-		return add.toString() + ":" + delete.toString();
+		return added.toString() + ":" + deleted.toString();
 	}
 
 }

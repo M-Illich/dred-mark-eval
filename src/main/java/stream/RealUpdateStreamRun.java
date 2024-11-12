@@ -1,6 +1,8 @@
 package stream;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -13,10 +15,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import data.Fact;
-import data.GraphMaintainer;
 import data.Update;
 
-public class UpdateStreamRun extends StreamToProlog {
+public class RealUpdateStreamRun extends StreamToProlog {
 
 	/**
 	 * name of file containing SWI-Prolog code to be executed
@@ -24,29 +25,15 @@ public class UpdateStreamRun extends StreamToProlog {
 	String file;
 
 	/**
-	 * used to generate random updates
+	 * name of folder where each stream update is stored as file
 	 */
-	long randomSeed;
+	String updateFolder;
 
 	/**
-	 * maximum number of nodes contained in randomly generated graph
+	 * states if there should be a delay between updates based on real GPS time
+	 * points
 	 */
-	int maxNodeNumber;
-
-	/**
-	 * number of facts (edges) which are used to initialize the dataset (graph)
-	 */
-	int initialDataSize;
-
-	/**
-	 * number of facts added to and deleted from the dataset in each update
-	 */
-	int updateSize;
-
-	/**
-	 * length of update sequence provided in the stream
-	 */
-	int numberOfUpdates;
+	boolean realDelay;
 
 	/**
 	 * list of answer sets for each stated query
@@ -64,65 +51,20 @@ public class UpdateStreamRun extends StreamToProlog {
 	public Statistics statistics;
 
 	/**
-	 * waiting time (milliseconds) between updates in stream
-	 */
-	public int updateDelay;
-
-	/**
-	 * states if update size is fixed or chosen randomly
-	 */
-	boolean randomSize;
-
-	/**
 	 * Fixed update size.
 	 * 
-	 * @param file            {@code String} name of file containing SWI-Prolog code
-	 *                        to be executed
-	 * @param randomSeed      {@code long} used to generate random updates
-	 * @param maxNodeNumber   {@code int} maximum number of nodes contained in
-	 *                        randomly generated graph
-	 * @param initialDataSize {@code int} number of facts (edges) which are used to
-	 *                        initialize the dataset (graph)
-	 * @param updateSize      {@code int} number of facts added to and deleted from
-	 *                        the dataset in each update
-	 * @param numberOfUpdates {@code int} length of update sequence provided in the
-	 *                        stream
-	 * @param updateDelay     {@code int} waiting time in milliseconds between
-	 *                        updates in stream
+	 * @param file         {@code String} name of file containing SWI-Prolog code to
+	 *                     be executed
+	 * @param updateFolder {@code String} name of folder where each stream update is
+	 *                     stored as file
+	 * @param realDelay    {@code boolean} stating if there should be a delay
+	 *                     between updates based on real GPS time points
 	 */
-	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int initialDataSize, int updateSize,
-			int numberOfUpdates, int updateDelay) {
+	public RealUpdateStreamRun(String file, String updateFolder, boolean realDelay) {
 		this.file = file;
-		this.randomSeed = randomSeed;
-		this.maxNodeNumber = maxNodeNumber;
-		this.initialDataSize = initialDataSize;
-		this.updateSize = updateSize;
-		this.numberOfUpdates = numberOfUpdates;
-		this.randomSize = false;
+		this.updateFolder = updateFolder;
+		this.realDelay = realDelay;
 		this.statistics = new Statistics();
-		this.updateDelay = updateDelay;
-
-	}
-
-	/**
-	 * Size of updates varies randomly.
-	 * 
-	 * @param file          {@code String} name of file containing SWI-Prolog code
-	 *                      to be executed
-	 * @param randomSeed    {@code long} used to generate random updates
-	 * @param maxNodeNumber {@code int} maximum number of nodes contained in
-	 *                      randomly generated graph
-	 * @param updateDelay   {@code int} waiting time in milliseconds between updates
-	 *                      in stream
-	 */
-	public UpdateStreamRun(String file, long randomSeed, int maxNodeNumber, int numberOfUpdates, int updateDelay) {
-		this.file = file;
-		this.randomSeed = randomSeed;
-		this.maxNodeNumber = maxNodeNumber;
-		this.numberOfUpdates = numberOfUpdates;
-		this.randomSize = true;
-		this.statistics = new Statistics();
-		this.updateDelay = updateDelay;
 
 	}
 
@@ -159,7 +101,7 @@ public class UpdateStreamRun extends StreamToProlog {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-			// create stream of random updates each followed by a query
+			// create stream based on updates stored in update folder
 			datasets = createUpdateStream(out, printUpdates);
 
 			// read answers for each query
@@ -189,26 +131,20 @@ public class UpdateStreamRun extends StreamToProlog {
 	}
 
 	/**
-	 * Create a stream with {@code numberOfUpdates}-many updates that each randomly
-	 * add (new) and delete (available) {@code updateSize}-many facts (i.e., edges)
-	 * to a graph/dataset that starts with {@code initialDataSize}-many facts. A
+	 * Create a stream based on the predefined updates in {@code updateFolder}. A
 	 * query asking for every fact is stated after each update.
 	 * 
 	 * 
-	 * @param out           {@link PrintWriter} to write updates to stream
-	 * @param maxNodeNumber {@code int} maximum number of nodes in created random
-	 *                      graph of edges
-	 * @param randomSeed    {@code long} seed used to randomly create updates
-	 * @param printUpdates  {@code boolean} states if updates and their overlap with
-	 *                      direct predecessor are printed to standard output
+	 * @param out          {@link PrintWriter} to write updates to stream
+	 * @param printUpdates {@code boolean} states if updates and their overlap with
+	 *                     direct predecessor are printed to standard output
 	 * @return a list of sets of facts representing the sequence of datasets created
 	 *         by the update stream
 	 */
-	private List<Set<Fact>> createUpdateStream(PrintWriter out, boolean printUpdates) {
+	List<Set<Fact>> createUpdateStream(PrintWriter out, boolean printUpdates) {
 
 		List<Set<Fact>> datasets = new LinkedList<>();
-
-		GraphMaintainer gm = new GraphMaintainer(maxNodeNumber, randomSeed);
+		Set<Fact> dataset = new HashSet<>();
 
 		// store previous update to compute overlap
 		Update pre = new Update(new HashSet<>(), new HashSet<>());
@@ -216,24 +152,16 @@ public class UpdateStreamRun extends StreamToProlog {
 		HashSet<Fact> replaced_add = new HashSet<>();
 		Update u;
 
-		// create stream of random updates
-		for (int i = 1; i <= numberOfUpdates; i++) {
+		// create stream based on updates stored as files
+		File[] updateFiles = new File(updateFolder).listFiles();
+		for (int i = 1; i <= updateFiles.length; i++) {
+			// read update from file
+			u = readUpdate(updateFiles[i - 1]);
 
-			// create random update
-			if (randomSize) {
-				u = gm.createUpdateRandom();
-			} else {
-				// first update initializes dataset
-				if (i == 1) {
-					u = gm.createUpdate(initialDataSize, 0);
-				} else {
-					// update with fixed size
-					u = gm.createUpdate(updateSize, updateSize);
-				}
-			}
-
-			// store updated dataset
-			datasets.add(gm.getCurrentDataset());
+			// store updated explicit dataset
+			dataset.addAll(u.added);
+			dataset.removeAll(u.deleted);
+			datasets.add(new HashSet<Fact>(dataset));
 
 			if (printUpdates) {
 				replaced_del.clear();
@@ -262,11 +190,13 @@ public class UpdateStreamRun extends StreamToProlog {
 						+ " - replaced add = " + replaced_add.size());
 			}
 
-			// delay stream
-			try {
-				TimeUnit.MILLISECONDS.sleep(updateDelay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			// delay stream according to GPS point time
+			if (realDelay && i > 1) {
+				try {
+					TimeUnit.SECONDS.sleep(getTimeSeconds(updateFiles[i - 1]) - getTimeSeconds(updateFiles[i - 2]));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 
 			// write update to stream
@@ -280,23 +210,68 @@ public class UpdateStreamRun extends StreamToProlog {
 
 		}
 
-		/* test example */
-//		out.println("[[edge,1,2], [edge,2,3], [edge,3,4], [edge,3,5]]:[]");
-//		out.println("X:");	// query	
-//		try {
-//			TimeUnit.MILLISECONDS.sleep(1000);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		out.println("[]:[[edge,2,3], [edge,3,4], [edge,3,5]]");
-//		out.println("X:");	// query
-//		out.println("[[edge,2,3], [edge,3,4], [edge,3,5]]:[]");
-//		out.println("X:");	// query
-
 		// indicate end of stream
 		out.println("[]:[]");
 
 		return datasets;
+
+	}
+
+	/**
+	 * Get time in seconds that is stated in the name of the file in the format
+	 * {@code HH.MM.SS}.
+	 * 
+	 * @param file a {@link File} containing an update
+	 * @return {@code long} seconds
+	 */
+	long getTimeSeconds(File file) {
+		String name = file.getName();
+		String timeString = name.substring(name.lastIndexOf("T") + 1, name.lastIndexOf("Z"));
+
+		// time format = "HH.MM.SS"
+		long hours = Long.valueOf(timeString.substring(0, 2));
+		long min = Long.valueOf(timeString.substring(3, 5));
+		long sec = Long.valueOf(timeString.substring(6));
+		long seconds = hours * 3600 + min * 60 + sec;
+
+		return seconds;
+	}
+
+	/**
+	 * Create an update based on a file that explicitly states which facts have to
+	 * be added and deleted.
+	 * 
+	 * @param file {@link File} containing in each line either
+	 *             {@code add(p(a1, a2))} or {@code delete(p(a1, a2))} for any
+	 *             Datalog fact {@code p(a2, a2)}
+	 * @return {@link Update} with {@code add} and {@code delete} sets based on file
+	 */
+	Update readUpdate(File file) {
+
+		Set<Fact> addFacts = new HashSet<>();
+		Set<Fact> deleteFacts = new HashSet<>();
+
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line = reader.readLine();
+
+			while (line != null) {
+				if (line.startsWith("add")) {
+					addFacts.add(new Fact(line.substring(4, line.length() - 2)));
+				} else if (line.startsWith("delete")) {
+					deleteFacts.add(new Fact(line.substring(7, line.length() - 2)));
+				}
+				line = reader.readLine();
+			}
+
+			reader.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new Update(addFacts, deleteFacts);
 
 	}
 

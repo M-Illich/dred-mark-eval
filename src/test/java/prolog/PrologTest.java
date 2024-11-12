@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import graph.Fact;
+import data.Fact;
 import stream.SimpleMaterialization;
 import stream.UpdateStreamRun;
 

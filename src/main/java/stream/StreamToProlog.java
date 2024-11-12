@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import graph.Fact;
+import data.Fact;
 
 public class StreamToProlog {
 
