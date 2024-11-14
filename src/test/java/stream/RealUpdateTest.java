@@ -16,8 +16,8 @@ import data.Update;
 public class RealUpdateTest {
 
 	String updateFolder = "src/test/resources/updates";
-	File file1 = new File(updateFolder + "/1_facts_48.397762LAT_9.984186LON_2024-08-10T09.23.45Z_100R.pl");
-	File file2 = new File(updateFolder + "/2_facts_48.397602LAT_9.984297LON_2024-08-10T09.23.50Z_100R.pl");
+	File file1 = new File(updateFolder + "/1_facts_48.397762_9.984186_2024-08-10_09.23.45_100.pl");
+	File file2 = new File(updateFolder + "/2_facts_48.397602_9.984297_2024-08-10_09.23.50_100.pl");
 	RealUpdateStreamRun usr = new RealUpdateStreamRun("no_file", updateFolder, false);
 
 	@Test

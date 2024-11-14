@@ -3,11 +3,7 @@ package stream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,12 +13,7 @@ import java.util.concurrent.TimeUnit;
 import data.Fact;
 import data.Update;
 
-public class RealUpdateStreamRun extends StreamToProlog {
-
-	/**
-	 * name of file containing SWI-Prolog code to be executed
-	 */
-	String file;
+public class RealUpdateStreamRun extends UpdateStreamRun {
 
 	/**
 	 * name of folder where each stream update is stored as file
@@ -36,22 +27,6 @@ public class RealUpdateStreamRun extends StreamToProlog {
 	boolean realDelay;
 
 	/**
-	 * list of answer sets for each stated query
-	 */
-	public List<Set<Fact>> queryAnswers;
-
-	/**
-	 * list of datasets created by sequence of updates
-	 */
-	public List<Set<Fact>> datasets;
-
-	/**
-	 * information about number of applied rules, marked facts, and runtime
-	 */
-	public Statistics statistics;
-
-	/**
-	 * Fixed update size.
 	 * 
 	 * @param file         {@code String} name of file containing SWI-Prolog code to
 	 *                     be executed
@@ -65,68 +40,6 @@ public class RealUpdateStreamRun extends StreamToProlog {
 		this.updateFolder = updateFolder;
 		this.realDelay = realDelay;
 		this.statistics = new Statistics();
-
-	}
-
-	/**
-	 * Process a stream of updates that adapt a graph by adding and deleting edges.
-	 * The updates are created randomly based on the caller's attributes. The Prolog
-	 * code in {@code file} incrementally maintains the materialization of the graph
-	 * by computing the transitive closure of paths comprising connected edges.
-	 * 
-	 * @param printUpdates         {@code boolean} states if updates and their
-	 *                             overlap with direct predecessor are printed to
-	 *                             standard output
-	 * 
-	 * @param printMaterialization {@code boolean} states if materialization
-	 *                             obtained after each update is printed to standard
-	 *                             output
-	 * 
-	 * @param printStatistics      {@code boolean} states if number of applied rules
-	 *                             and runtime is printed to standard output
-	 * 
-	 */
-	public void execute(boolean printUpdates, boolean printMaterialization, boolean printStatistics) {
-
-		try {
-			// open server
-			ServerSocket serverSocket = new ServerSocket(0);
-
-			// execute prolog file
-			Process prologCall = callProlog(serverSocket.getLocalPort(), file);
-
-			// accept connection from prolog file
-			Socket clientSocket = serverSocket.accept();
-
-			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-			// create stream based on updates stored in update folder
-			datasets = createUpdateStream(out, printUpdates);
-
-			// read answers for each query
-			queryAnswers = readAnswers(in, printMaterialization);
-
-			in.close();
-			out.close();
-			clientSocket.close();
-			serverSocket.close();
-
-			// read output from executed commands
-			BufferedReader cmdReader = new BufferedReader(new InputStreamReader(prologCall.getInputStream()));
-			if (printStatistics) {
-				System.out.println("-- command output --");
-			}
-			statistics.integrateData(readOutput(cmdReader, printStatistics));
-			cmdReader.close();
-			// get additional messages, like execution time if available
-			BufferedReader cmdError = new BufferedReader(new InputStreamReader(prologCall.getErrorStream()));
-			statistics.integrateData(readOutput(cmdError, printStatistics));
-			cmdError.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -182,36 +95,47 @@ public class RealUpdateStreamRun extends StreamToProlog {
 
 				// print update
 				System.out.println("");
-				String[] us = u.toString().split(":");
-				System.out.println(i + ": " + us[0]);
-				System.out.println("   " + us[1]);
+				String[] us = u.toString().split("]:");
+				System.out.println(i + ": " + us[0] + "]");
+				System.out.println("    " + us[1]);
 				// print size of overlap with previous update
 				System.out.println(" Overlap with previous: replaced del = " + replaced_del.size()
 						+ " - replaced add = " + replaced_add.size());
 			}
 
 			// delay stream according to GPS point time
-			if (realDelay && i > 1) {
+			if (realDelay) {
 				try {
-					TimeUnit.SECONDS.sleep(getTimeSeconds(updateFiles[i - 1]) - getTimeSeconds(updateFiles[i - 2]));
+					if (i == 1) {
+						System.out.print("update delay [sec]: ");
+					} else {
+						long delay = getTimeSeconds(updateFiles[i - 1]) - getTimeSeconds(updateFiles[i - 2]);
+						System.out.print(delay + " ");
+						TimeUnit.SECONDS.sleep(delay);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				if(i == updateFiles.length) {
+					System.out.println();
+				}
+
 			}
 
 			// write update to stream
-			out.println(u.toString());
+			out.println(u.added.toString());
+			out.println(u.deleted.toString());
 
-			// insert query directly after each update (asking for every fact)
-			out.println("X:");
 			if (printUpdates) {
+				// there is a query directly after each update (asking for every fact)
 				System.out.println("query " + i);
 			}
 
 		}
 
 		// indicate end of stream
-		out.println("[]:[]");
+		out.println("[]");
+		out.println("[]");
 
 		return datasets;
 
@@ -221,12 +145,13 @@ public class RealUpdateStreamRun extends StreamToProlog {
 	 * Get time in seconds that is stated in the name of the file in the format
 	 * {@code HH.MM.SS}.
 	 * 
-	 * @param file a {@link File} containing an update
+	 * @param file a {@link File} containing an update, where name is similar to
+	 *             {@code 1_facts_48.397762_9.984186_2024-08-10_09.23.45_100.pl}
 	 * @return {@code long} seconds
 	 */
 	long getTimeSeconds(File file) {
 		String name = file.getName();
-		String timeString = name.substring(name.lastIndexOf("T") + 1, name.lastIndexOf("Z"));
+		String timeString = name.substring(name.lastIndexOf("_") - 8, name.lastIndexOf("_"));
 
 		// time format = "HH.MM.SS"
 		long hours = Long.valueOf(timeString.substring(0, 2));
@@ -257,9 +182,9 @@ public class RealUpdateStreamRun extends StreamToProlog {
 			String line = reader.readLine();
 
 			while (line != null) {
-				if (line.startsWith("add")) {
+				if (line.startsWith("add(node") || line.startsWith("add(way")) { // TODO
 					addFacts.add(new Fact(line.substring(4, line.length() - 2)));
-				} else if (line.startsWith("delete")) {
+				} else if (line.startsWith("delete(node") || line.startsWith("delete(way")) { // TODO
 					deleteFacts.add(new Fact(line.substring(7, line.length() - 2)));
 				}
 				line = reader.readLine();

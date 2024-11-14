@@ -117,6 +117,8 @@ clean \ current_query(_) <=> true.
 
 %----------
 % -- termination --
+	% prevent new query at end of stream
+stream_end, query(_,_) \ query(_,_) <=> true.
 	% prevent waiting for next input
 stream_end \ read_stream <=> true.
 	% stop loop when all updates are fully processed
@@ -156,26 +158,20 @@ stream(S) \ read_stream <=>
 available_input([]) <=> true.	
 
 % get input from stream
-available_input([S]) <=>
-	% read from stream
-	read_line_to_string(S,T), 
-	% input is provided as string "X:", "[...]:", or "[...]:[...]"
-	split_string(T,":","",[X,Y]),
-	% determine if query or update
-	extract_input(X,Y).
+available_input([S]), next_query_id(N) <=>
+	% read added and deleted facts from stream
+	read_line_to_string(S,A),
+	read_line_to_string(S,D),	
+	extract_input(A,D),
+	% insert query asking for every fact
+	M is N + 1,
+	next_query_id(M),
+	query(_Q,N).
 
 
 %----------
 % -- input is a query --
-extract_input(X,""), next_query_id(N) <=>
-	M is N + 1,
-	next_query_id(M),
-	term_string(Q,X),
-	query(Q,N).
-		
-
-	% no other query
-% insert delete-facts of current query
+% if no other query, insert delete-facts of current query
 query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
 	% variable at end allows mark if needed
 	fact(F,del,Q).

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import data.Fact;
 import stream.SimpleMaterialization;
+import stream.SyntheticUpdateStreamRun;
 import stream.UpdateStreamRun;
 
 public class PrologTest {
@@ -33,16 +34,16 @@ public class PrologTest {
 				int numberOfUpdates = 5;
 
 				// compute materialization without marking
-				UpdateStreamRun usrNoMark = new UpdateStreamRun(file1, randomSeed, maxNodeNumber, numberOfUpdates,
+				UpdateStreamRun usrNoMark = new SyntheticUpdateStreamRun(file1, randomSeed, maxNodeNumber, numberOfUpdates,
 						0);
 				usrNoMark.execute(false, false, false);
 
 				// compute materialization with marking approach
-				UpdateStreamRun usrMark = new UpdateStreamRun(file2, randomSeed, maxNodeNumber, numberOfUpdates, 0);
+				UpdateStreamRun usrMark = new SyntheticUpdateStreamRun(file2, randomSeed, maxNodeNumber, numberOfUpdates, 0);
 				usrMark.execute(false, false, false);
 
 				// compute materialization with marking approach
-				UpdateStreamRun usrMarkOnlyNegative = new UpdateStreamRun(file3, randomSeed, maxNodeNumber,
+				UpdateStreamRun usrMarkOnlyNegative = new SyntheticUpdateStreamRun(file3, randomSeed, maxNodeNumber,
 						numberOfUpdates, 0);
 				usrMarkOnlyNegative.execute(false, false, false);
 

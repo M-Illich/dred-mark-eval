@@ -36,10 +36,10 @@ public class Evaluation {
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
-		int maxNodeNumber = 100;
+		int maxNodeNumber = 20;
 		int initialDataSize = 100;
 		int updateSize = 2;
-		int numberOfUpdates = 100;
+		int numberOfUpdates = 5;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
 		String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize", "numberOfUpdates",
@@ -50,20 +50,34 @@ public class Evaluation {
 		 * during evaluation
 		 */
 		int variantIndex = 2;
-		int variantStart = 10;
-		int variantEnd = 90;
+		int variantStart = 30;
+		int variantEnd = 30;
 		int variantStep = 10;
 
 //		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
-		List<String> files = List.of("dred_no_mark_alt.pl","dred_mark_alt.pl");
+		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
 		for (String file : files) {
-			performEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart, variantEnd,
-					variantStep);
+//			performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
+//					variantEnd, variantStep);
 		}
+		
+		
+		String updateFolder = "src/main/resources/updates";
+				// TODO "dred_no_mark_osm.pl", 
+		List<String> filesReal = List.of("dred_mark_osm.pl");
+		for (String file : filesReal) {
+			performRealEvaluation(file, updateFolder, false);
+		}
+		
+		
 
 	}
 
 	/**
+	 * Use the materialization maintenance approach implemented in {@code file} to
+	 * process a randomly created stream of updates. A csv-file is created, which
+	 * shows the cpu runtime, the number of applied rules for the overdeletion,
+	 * rederivation and insertion phase, as well as the number of marked facts.
 	 * 
 	 * @param file           {@code String} name of Prolog file which contains the
 	 *                       approach to be evaluated
@@ -79,7 +93,7 @@ public class Evaluation {
 	 * @param variantStep    {@code int} value used to increase variant each
 	 *                       iteration
 	 */
-	public static void performEvaluation(String file, long randomSeed, int[] parameters, String[] parameterNames,
+	public static void performRandomEvaluation(String file, long randomSeed, int[] parameters, String[] parameterNames,
 			int variantIndex, int variantStart, int variantEnd, int variantStep) {
 
 		String approach = file.substring(5, file.length() - 3);
@@ -107,7 +121,7 @@ public class Evaluation {
 				parameters[variantIndex] = variant;
 
 				// create update stream
-				UpdateStreamRun usr = new UpdateStreamRun(file, randomSeed, parameters[0], parameters[1], parameters[2],
+				SyntheticUpdateStreamRun usr = new SyntheticUpdateStreamRun(file, randomSeed, parameters[0], parameters[1], parameters[2],
 						parameters[3], parameters[4]);
 
 				float avgCpuTime = 0;
@@ -116,31 +130,6 @@ public class Evaluation {
 					usr.execute(false, false, false);
 					avgCpuTime += usr.statistics.cpuTime;
 				}
-
-				// TODO test
-//				for (int i = 0; i < usr.datasets.size(); i++) {
-//					// compute materialization for dataset from scratch
-//					SimpleMaterialization sm = new SimpleMaterialization(usr.datasets.get(i));
-//					// compare results with simple method
-//					Set<Fact> mat = sm.execute();
-//					boolean same = true;
-//					if (usr.queryAnswers.get(i).size() != mat.size()) {
-//						System.out.println("size: " + usr.queryAnswers.get(i).size() + " vs. expected: " + mat.size());
-//						same = false;
-//					}
-//					for (Fact f : mat) {
-//						if (!usr.queryAnswers.get(i).contains(f)) {
-//							System.out.print(f.toString() + " ");
-//							same = false;
-//						}
-//					}
-//					if (!same) {
-//						System.out.println("");
-//						System.out.println("Not same result for i = " + i);
-//						break;
-//					}
-//
-//				}
 
 				// compute average runtime
 				avgCpuTime = avgCpuTime / REPETITIONS;
@@ -158,6 +147,67 @@ public class Evaluation {
 				// write statistics to file
 				writer.println(measures);
 			}
+
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Use the materialization maintenance approach implemented in {@code file} to
+	 * process a stream of updates based on real-world data. A csv-file is created,
+	 * which shows the cpu runtime, the number of applied rules for the
+	 * overdeletion, rederivation and insertion phase, as well as the number of
+	 * marked facts.
+	 * 
+	 * @param file         {@code String} name of file containing SWI-Prolog code to
+	 *                     be executed
+	 * @param updateFolder {@code String} name of folder where each stream update is
+	 *                     stored as file
+	 * @param realDelay    {@code boolean} stating if there should be a delay
+	 *                     between updates based on real GPS time points
+	 */
+	public static void performRealEvaluation(String file, String folder, boolean realDelay) {
+
+		String approach = file.substring(5, file.length() - 3);
+		System.out.println(approach);
+
+		PrintWriter writer;
+
+		try {
+			// store results as table in a file
+			writer = new PrintWriter(
+					"results-" + approach + "-map_stream-" + (realDelay ? "real_delay" : "no_delay") + ".csv", "UTF-8");
+			// different statistics (used as columns for table in file)
+			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
+			writer.println(categories);
+
+			// create update stream
+			RealUpdateStreamRun usr = new RealUpdateStreamRun(file, folder, realDelay);
+
+			float avgCpuTime = 0;
+			for (int i = 0; i < REPETITIONS; i++) {
+				// process update stream
+				usr.execute(false, false, false);
+				avgCpuTime += usr.statistics.cpuTime;
+			}
+
+			// compute average runtime
+			avgCpuTime = avgCpuTime / REPETITIONS;
+			System.out.println("");
+			System.out.println("average cpu time: " + avgCpuTime);
+			System.out.println("");
+
+			// get measured values from statistics
+			String measures = avgCpuTime + "," + usr.statistics.appliedRules.get("del") + ","
+					+ usr.statistics.appliedRules.get("red") + "," + usr.statistics.appliedRules.get("ins") + ","
+					+ usr.statistics.markedFacts.get("addEx") + "," + usr.statistics.markedFacts.get("addIm") + ","
+					+ usr.statistics.markedFacts.get("delEx") + "," + usr.statistics.markedFacts.get("delIm");
+
+			// write statistics to file
+			writer.println(measures);
 
 			writer.close();
 

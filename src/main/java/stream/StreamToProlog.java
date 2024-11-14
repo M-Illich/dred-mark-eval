@@ -62,7 +62,7 @@ public class StreamToProlog {
 
 		// show which query is currently processed as alternative to printing answers
 		if (!print) {
-			System.out.print("query 1 ");
+			System.out.print("finished query: ");
 		}
 
 		try {
@@ -76,9 +76,9 @@ public class StreamToProlog {
 					answers.add(facts);
 					facts = new HashSet<>();
 					// show which query is processed next
-					if (!print) {
-						count++;
+					if (!print) {						
 						System.out.print(count + " ");
+						count++;
 					}
 				}
 
