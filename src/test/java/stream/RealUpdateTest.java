@@ -15,7 +15,7 @@ import data.Update;
 
 public class RealUpdateTest {
 
-	String updateFolder = "src/test/resources/updates";
+	String updateFolder = "src/test/resources/simple_updates";
 	File file1 = new File(updateFolder + "/1_facts_48.397762_9.984186_2024-08-10_09.23.45_100.pl");
 	File file2 = new File(updateFolder + "/2_facts_48.397602_9.984297_2024-08-10_09.23.50_100.pl");
 	RealUpdateStreamRun usr = new RealUpdateStreamRun("no_file", updateFolder, false);
@@ -30,8 +30,8 @@ public class RealUpdateTest {
 			List<Set<Fact>> datasets = usr.createUpdateStream(out, false);
 
 			// check explicit datasets
-			Set<Fact> dataset1 = Set.of(new Fact("position(1)"), new Fact("node(1)"), new Fact("node(2)"));
-			Set<Fact> dataset2 = Set.of(new Fact("position(2)"), new Fact("node(3)"), new Fact("node(2)"),
+			Set<Fact> dataset1 = Set.of(new Fact("node(1)"), new Fact("node(2)"));
+			Set<Fact> dataset2 = Set.of(new Fact("node(3)"), new Fact("node(2)"),
 					new Fact("nodeTag(3, \"test\", \"yes\")"));
 
 			assertEquals(dataset1.size(), datasets.get(0).size());
@@ -58,8 +58,8 @@ public class RealUpdateTest {
 
 	@Test
 	public void testReadUpdate() {
-		Set<Fact> added = Set.of(new Fact("position(2)"), new Fact("node(3)"), new Fact("nodeTag(3, \"test\", \"yes\")"));
-		Set<Fact> deleted = Set.of(new Fact("position(1)"), new Fact("node(1)"));
+		Set<Fact> added = Set.of(new Fact("node(3)"), new Fact("nodeTag(3, \"test\", \"yes\")"));
+		Set<Fact> deleted = Set.of(new Fact("node(1)"));
 		
 		Update u = usr.readUpdate(file2);
 		

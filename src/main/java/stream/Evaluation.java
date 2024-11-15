@@ -36,8 +36,8 @@ public class Evaluation {
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
-		int maxNodeNumber = 20;
-		int initialDataSize = 100;
+		int maxNodeNumber = 10;
+		int initialDataSize = 5;
 		int updateSize = 2;
 		int numberOfUpdates = 5;
 		int updateDelay = 0;
@@ -50,12 +50,12 @@ public class Evaluation {
 		 * during evaluation
 		 */
 		int variantIndex = 2;
-		int variantStart = 30;
-		int variantEnd = 30;
-		int variantStep = 10;
+		int variantStart = 2;
+		int variantEnd = 2;
+		int variantStep = 2;
 
-//		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
-		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
+		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
+//		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
 		for (String file : files) {
 //			performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
 //					variantEnd, variantStep);
@@ -63,8 +63,7 @@ public class Evaluation {
 		
 		
 		String updateFolder = "src/main/resources/updates";
-				// TODO "dred_no_mark_osm.pl", 
-		List<String> filesReal = List.of("dred_mark_osm.pl");
+		List<String> filesReal = List.of("dred_no_mark_osm.pl", "dred_mark_osm.pl");
 		for (String file : filesReal) {
 			performRealEvaluation(file, updateFolder, false);
 		}

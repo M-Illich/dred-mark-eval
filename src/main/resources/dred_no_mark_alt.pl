@@ -50,14 +50,6 @@ query(Q,ID)
 	to ensure that at least one new introduced fact used
 	thus, repetitions avoided, too
 	
-?- should we only read two queries from stream
-	and then block further readings until one query finished
-	- because only next query actually relevant for marking
-*- maybe better to keep it more general
-	i.e., also allow further input,
-	for case that we want to test approach with several marks
-	- although we might control reading by introduction of certain constraint
-		and change way/time of introduction based on approach
 	
 */
 
@@ -66,7 +58,7 @@ query(Q,ID)
 	loop/0, read_stream/0, apply_one/0, phase/1, 
 	available_input/1, extract_input/2,
 	query/2, update/2, updt/3, stream_end/0,
-	pending_fact/3, fact/3, derived_fact/2,
+	pending_fact/3, fact/3, derived_fact/2, create_query/1,
 	next_query_id/1, current_query/1, 
 	clean/0, applied_rules/2, print/0.
 
@@ -118,7 +110,7 @@ clean \ current_query(_) <=> true.
 %----------
 % -- termination --
 	% prevent new query at end of stream
-stream_end, query(_,_) \ query(_,_) <=> true.
+stream_end\ create_query(_) <=> true.
 	% prevent waiting for next input
 stream_end \ read_stream <=> true.
 	% stop loop when all updates are fully processed
@@ -158,19 +150,22 @@ stream(S) \ read_stream <=>
 available_input([]) <=> true.	
 
 % get input from stream
-available_input([S]), next_query_id(N) <=>
+available_input([S]) <=>
 	% read added and deleted facts from stream
 	read_line_to_string(S,A),
 	read_line_to_string(S,D),	
 	extract_input(A,D),
 	% insert query asking for every fact
-	M is N + 1,
-	next_query_id(M),
-	query(_Q,N).
+	create_query(_Q).
 
 
 %----------
 % -- input is a query --
+create_query(Q), next_query_id(N) <=>
+	M is N + 1,
+	next_query_id(M),
+	query(Q,N).
+	
 % if no other query, insert delete-facts of current query
 query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
 	% variable at end allows mark if needed
