@@ -122,9 +122,11 @@ public class RealUpdateStreamRun extends UpdateStreamRun {
 
 			}
 
-			// write update to stream
-			out.println(u.added.toString());
-			out.println(u.deleted.toString());
+			// write update to stream (if not empty)
+			if (!(u.added.isEmpty() && u.deleted.isEmpty())) {
+				out.println(u.added.toString());
+				out.println(u.deleted.toString());
+			}
 
 			if (printUpdates) {
 				// there is a query directly after each update (asking for every fact)
