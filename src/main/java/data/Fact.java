@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Fact {
 
-	String predicate;
-	List<String> arguments;
+	public String predicate;
+	public List<String> arguments;
 
 	public Fact(String predicate, List<String> arguments) {
 		this.predicate = predicate;

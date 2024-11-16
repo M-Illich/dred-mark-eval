@@ -116,7 +116,7 @@ public class RealUpdateStreamRun extends UpdateStreamRun {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if(i == updateFiles.length) {
+				if (i == updateFiles.length) {
 					System.out.println();
 				}
 
@@ -182,13 +182,23 @@ public class RealUpdateStreamRun extends UpdateStreamRun {
 			String line = reader.readLine();
 
 			while (line != null) {
-				if (line.startsWith("add(node") || line.startsWith("add(way")) { // TODO
-					addFacts.add(new Fact(line.substring(4, line.length() - 2)));
-				} else if (line.startsWith("delete(node") || line.startsWith("delete(way")) { // TODO
-					deleteFacts.add(new Fact(line.substring(7, line.length() - 2)));
+				if (line.startsWith("add(")) {
+					String fact = line.substring(4, line.length() - 2);
+					if (filteredFact(fact)) {
+						addFacts.add(new Fact(fact));
+					}
+				} else if (line.startsWith("delete(")) {
+					String fact = line.substring(7, line.length() - 2);
+					if (filteredFact(fact)) {
+						deleteFacts.add(new Fact(fact));
+					}
 				}
 				line = reader.readLine();
 			}
+
+			// only keep node and way fats that actually have relevant tags
+			addFacts = keepTaggedFacts(addFacts);
+			deleteFacts = keepTaggedFacts(deleteFacts);
 
 			reader.close();
 
@@ -198,6 +208,67 @@ public class RealUpdateStreamRun extends UpdateStreamRun {
 
 		return new Update(addFacts, deleteFacts);
 
+	}
+
+	/**
+	 * 
+	 * @param fact {@code String} describing a Datalog fact
+	 * @return {@code true} if {@code fact} can be matched to rules that are used
+	 *         for evaluation with real data
+	 */
+	boolean filteredFact(String fact) {
+		if (fact.startsWith("node(")) {
+			return true;
+		} else if (fact.startsWith("nodeTag(")) {
+			if (fact.contains("highway")) {
+				if (fact.contains("give_way") || fact.contains("stop") || fact.contains("traffic_signals")
+						|| fact.contains("crossing") || fact.contains("tram_level_crossing")
+						|| fact.contains("level_crossing")) {
+					return true;
+				}
+			} else if (fact.contains("public_transport") && fact.contains("stop_position")) {
+				return true;
+			} else if ((fact.contains("bus") || fact.contains("tram")) && fact.contains("yes")) {
+				return true;
+			}
+		} else if (fact.startsWith("way(")) {
+			return true;
+		} else if (fact.startsWith("wayTag(")) {
+			if (fact.contains("amenity") && (fact.contains("kindergarten") || fact.contains("school"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Only keep {@code node} and {@code way} facts for which there exist
+	 * {@code nodeTag} or {@code wayTag} facts in {@code set}
+	 * 
+	 * @param set {@link Set} of {@link Fact} elements representing OSM facts
+	 * @return {@code set} without any non-tagged facts
+	 */
+	Set<Fact> keepTaggedFacts(Set<Fact> set) {
+		Set<Fact> filteredSet = new HashSet<>(set);
+		for (Fact fact : set) {
+			if (fact.predicate.equals("node") || fact.predicate.equals("way")) {
+				// get ID
+				String id = fact.arguments.getFirst();
+
+				// only keep fact if there exist tags for ID
+				boolean noTag = true;
+				for (Fact fact2 : set) {
+					if (fact2.predicate.contains("Tag") && fact2.arguments.contains(id)) {
+						noTag = false;
+						break;
+					}
+				}
+				if (noTag) {
+					filteredSet.remove(fact);
+				}
+			}
+		}
+		return filteredSet;
 	}
 
 }

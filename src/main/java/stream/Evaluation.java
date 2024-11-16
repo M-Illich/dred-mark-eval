@@ -37,9 +37,9 @@ public class Evaluation {
 
 		// parameters for update stream
 		int maxNodeNumber = 10;
-		int initialDataSize = 5;
-		int updateSize = 2;
-		int numberOfUpdates = 5;
+		int initialDataSize = 100;
+		int updateSize = 20;
+		int numberOfUpdates = 50;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
 		String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize", "numberOfUpdates",
@@ -50,9 +50,9 @@ public class Evaluation {
 		 * during evaluation
 		 */
 		int variantIndex = 2;
-		int variantStart = 2;
-		int variantEnd = 2;
-		int variantStep = 2;
+		int variantStart = 10;
+		int variantEnd = 90;
+		int variantStep = 10;
 
 		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
 //		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
@@ -63,7 +63,7 @@ public class Evaluation {
 		
 		
 		String updateFolder = "src/main/resources/updates";
-		List<String> filesReal = List.of("dred_no_mark_osm.pl", "dred_mark_osm.pl");
+		List<String> filesReal = List.of("dred_no_mark_osm.pl", "dred_mark_osm.pl", "dred_mark_osm2.pl");
 		for (String file : filesReal) {
 			performRealEvaluation(file, updateFolder, false);
 		}
@@ -189,7 +189,7 @@ public class Evaluation {
 			float avgCpuTime = 0;
 			for (int i = 0; i < REPETITIONS; i++) {
 				// process update stream
-				usr.execute(false, false, false);
+				usr.execute(true, false, false);	// TODO
 				avgCpuTime += usr.statistics.cpuTime;
 			}
 
