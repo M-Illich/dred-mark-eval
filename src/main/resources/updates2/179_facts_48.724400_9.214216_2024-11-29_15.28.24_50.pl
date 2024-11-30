@@ -1,0 +1,13 @@
+delete(position(54193308)).
+delete(node(54193308)).
+delete(node(216319873)).
+delete(node(5435749425)).
+add(position(54193303)).
+add(node(54193303)).
+add(node(216319844)).
+add(node(216319855)).
+add(node(2734454034)).
+add(node(2734454035)).
+add(node(3955074053)).
+add(node(5435749427)).
+add(node(5435749428)).

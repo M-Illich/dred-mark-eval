@@ -1,0 +1,822 @@
+delete(position(11310551976)).
+delete(node(801163588)).
+delete(node(1370202373)).
+delete(node(1370202388)).
+delete(node(4316011231)).
+delete(node(4316011234)).
+delete(node(4316011235)).
+delete(node(11078544915)).
+delete(node(11124443585)).
+delete(node(11139322699)).
+delete(node(11139322700)).
+delete(node(11139322701)).
+delete(node(11139322702)).
+delete(node(11139322703)).
+delete(node(11139371505)).
+delete(node(11139371507)).
+delete(node(11139371522)).
+delete(node(11139371523)).
+delete(node(11139371524)).
+delete(node(11139371526)).
+delete(node(11927787423)).
+delete(node(12050805649)).
+delete(node(12059864099)).
+delete(way(57729756)).
+delete(wayTag(57729756, "sidewalk", "right")).
+delete(wayTag(57729756, "bicycle", "yes")).
+delete(wayTag(57729756, "surface", "asphalt")).
+delete(wayTag(57729756, "check_date", "2023-08-23")).
+delete(wayTag(57729756, "lit", "yes")).
+delete(wayTag(57729756, "kerb", "no")).
+delete(wayTag(57729756, "lanes", "2")).
+delete(wayTag(57729756, "name", "Bahnhofplatz")).
+delete(wayTag(57729756, "parking:both", "separate")).
+delete(wayTag(57729756, "highway", "living_street")).
+delete(wayTag(57729756, "name:etymology:wikidata", "Q472937")).
+delete(wayTag(57729756, "sidewalk:right:surface", "asphalt")).
+delete(nextInWay(4316011231, 11139322702, 57729756)).
+delete(nextInWay(11139322702, 11139322699, 57729756)).
+delete(nextInWay(11139322699, 4316011234, 57729756)).
+delete(nextInWay(4316011234, 11139322700, 57729756)).
+delete(nextInWay(11139322700, 11139322701, 57729756)).
+delete(nextInWay(11139322701, 4316011235, 57729756)).
+delete(nextInWay(4316011235, 1370202371, 57729756)).
+delete(way(65753877)).
+delete(wayTag(65753877, "wheelchair", "yes")).
+delete(wayTag(65753877, "roof:shape", "flat")).
+delete(wayTag(65753877, "building:levels", "4")).
+delete(wayTag(65753877, "roof:colour", "#808080")).
+delete(wayTag(65753877, "building:colour", "white")).
+delete(wayTag(65753877, "building", "train_station")).
+delete(wayTag(65753877, "operator", "DB Station&Service AG")).
+delete(nextInWay(982714658, 1474117340, 65753877)).
+delete(nextInWay(1474117340, 6099969285, 65753877)).
+delete(nextInWay(6099969285, 1474117336, 65753877)).
+delete(nextInWay(1474117336, 6695814980, 65753877)).
+delete(nextInWay(6695814980, 6695814981, 65753877)).
+delete(nextInWay(6695814981, 1449492138, 65753877)).
+delete(nextInWay(1449492138, 6695814979, 65753877)).
+delete(nextInWay(6695814979, 6695814978, 65753877)).
+delete(nextInWay(6695814978, 12014434724, 65753877)).
+delete(nextInWay(12014434724, 6099969286, 65753877)).
+delete(nextInWay(6099969286, 6099969287, 65753877)).
+delete(nextInWay(6099969287, 801163588, 65753877)).
+delete(nextInWay(801163588, 6695814977, 65753877)).
+delete(nextInWay(6695814977, 6695814976, 65753877)).
+delete(nextInWay(6695814976, 801163584, 65753877)).
+delete(nextInWay(801163584, 4368388615, 65753877)).
+delete(nextInWay(4368388615, 6695814974, 65753877)).
+delete(nextInWay(6695814974, 6695849625, 65753877)).
+delete(nextInWay(6695849625, 12106043184, 65753877)).
+delete(nextInWay(12106043184, 6695849626, 65753877)).
+delete(nextInWay(6695849626, 6695814975, 65753877)).
+delete(nextInWay(6695814975, 801163600, 65753877)).
+delete(nextInWay(801163600, 801163596, 65753877)).
+delete(nextInWay(801163596, 8094806753, 65753877)).
+delete(nextInWay(8094806753, 12106646542, 65753877)).
+delete(nextInWay(12106646542, 4011544893, 65753877)).
+delete(nextInWay(4011544893, 4139385145, 65753877)).
+delete(nextInWay(4139385145, 4139385144, 65753877)).
+delete(nextInWay(4139385144, 4011544892, 65753877)).
+delete(nextInWay(4011544892, 4011544891, 65753877)).
+delete(nextInWay(4011544891, 801163601, 65753877)).
+delete(nextInWay(801163601, 11309442737, 65753877)).
+delete(nextInWay(11309442737, 801163606, 65753877)).
+delete(nextInWay(801163606, 982714658, 65753877)).
+delete(way(102660268)).
+delete(wayTag(102660268, "landuse", "railway")).
+delete(nextInWay(982714617, 982714607, 102660268)).
+delete(nextInWay(982714607, 1185660557, 102660268)).
+delete(nextInWay(1185660557, 1185660535, 102660268)).
+delete(nextInWay(1185660535, 2508153389, 102660268)).
+delete(nextInWay(2508153389, 652770580, 102660268)).
+delete(nextInWay(652770580, 2508153395, 102660268)).
+delete(nextInWay(2508153395, 2320149403, 102660268)).
+delete(nextInWay(2320149403, 2320149401, 102660268)).
+delete(nextInWay(2320149401, 2320149400, 102660268)).
+delete(nextInWay(2320149400, 2508153397, 102660268)).
+delete(nextInWay(2508153397, 2320149398, 102660268)).
+delete(nextInWay(2320149398, 2320149397, 102660268)).
+delete(nextInWay(2320149397, 4353596460, 102660268)).
+delete(nextInWay(4353596460, 1185660599, 102660268)).
+delete(nextInWay(1185660599, 4353596459, 102660268)).
+delete(nextInWay(4353596459, 4353596462, 102660268)).
+delete(nextInWay(4353596462, 4353596461, 102660268)).
+delete(nextInWay(4353596461, 4353596465, 102660268)).
+delete(nextInWay(4353596465, 4353596464, 102660268)).
+delete(nextInWay(4353596464, 1185660584, 102660268)).
+delete(nextInWay(1185660584, 1185660585, 102660268)).
+delete(nextInWay(1185660585, 1185660559, 102660268)).
+delete(nextInWay(1185660559, 1185660490, 102660268)).
+delete(nextInWay(1185660490, 8224273138, 102660268)).
+delete(nextInWay(8224273138, 1185660600, 102660268)).
+delete(nextInWay(1185660600, 1185660524, 102660268)).
+delete(nextInWay(1185660524, 1185660505, 102660268)).
+delete(nextInWay(1185660505, 1185660569, 102660268)).
+delete(nextInWay(1185660569, 1185660547, 102660268)).
+delete(nextInWay(1185660547, 1185660591, 102660268)).
+delete(nextInWay(1185660591, 1185660564, 102660268)).
+delete(nextInWay(1185660564, 6342092286, 102660268)).
+delete(nextInWay(6342092286, 1185660492, 102660268)).
+delete(nextInWay(1185660492, 6775262588, 102660268)).
+delete(nextInWay(6775262588, 6775262587, 102660268)).
+delete(nextInWay(6775262587, 1176327712, 102660268)).
+delete(nextInWay(1176327712, 1176327634, 102660268)).
+delete(nextInWay(1176327634, 1176327690, 102660268)).
+delete(nextInWay(1176327690, 1176327607, 102660268)).
+delete(nextInWay(1176327607, 1176327583, 102660268)).
+delete(nextInWay(1176327583, 1487053748, 102660268)).
+delete(nextInWay(1487053748, 1176327651, 102660268)).
+delete(nextInWay(1176327651, 6790289221, 102660268)).
+delete(nextInWay(6790289221, 1176327711, 102660268)).
+delete(nextInWay(1176327711, 1487053743, 102660268)).
+delete(nextInWay(1487053743, 1176327630, 102660268)).
+delete(nextInWay(1176327630, 8457470207, 102660268)).
+delete(nextInWay(8457470207, 3709780886, 102660268)).
+delete(nextInWay(3709780886, 8457470206, 102660268)).
+delete(nextInWay(8457470206, 6790283750, 102660268)).
+delete(nextInWay(6790283750, 6790289222, 102660268)).
+delete(nextInWay(6790289222, 1176327688, 102660268)).
+delete(nextInWay(1176327688, 6790283749, 102660268)).
+delete(nextInWay(6790283749, 6790289223, 102660268)).
+delete(nextInWay(6790289223, 6790283748, 102660268)).
+delete(nextInWay(6790283748, 6790283747, 102660268)).
+delete(nextInWay(6790283747, 1176327606, 102660268)).
+delete(nextInWay(1176327606, 6790289220, 102660268)).
+delete(nextInWay(6790289220, 6790283746, 102660268)).
+delete(nextInWay(6790283746, 1487053735, 102660268)).
+delete(nextInWay(1487053735, 6790283745, 102660268)).
+delete(nextInWay(6790283745, 1176327659, 102660268)).
+delete(nextInWay(1176327659, 6790283744, 102660268)).
+delete(nextInWay(6790283744, 1176327573, 102660268)).
+delete(nextInWay(1176327573, 4023184424, 102660268)).
+delete(nextInWay(4023184424, 6790283743, 102660268)).
+delete(nextInWay(6790283743, 6790283742, 102660268)).
+delete(nextInWay(6790283742, 1176327644, 102660268)).
+delete(nextInWay(1176327644, 2332209525, 102660268)).
+delete(nextInWay(2332209525, 8637447980, 102660268)).
+delete(nextInWay(8637447980, 8637447981, 102660268)).
+delete(nextInWay(8637447981, 11780711250, 102660268)).
+delete(nextInWay(11780711250, 1185660562, 102660268)).
+delete(nextInWay(1185660562, 11780711257, 102660268)).
+delete(nextInWay(11780711257, 1185660504, 102660268)).
+delete(nextInWay(1185660504, 1185660522, 102660268)).
+delete(nextInWay(1185660522, 1185660597, 102660268)).
+delete(nextInWay(1185660597, 1185660489, 102660268)).
+delete(nextInWay(1185660489, 8429312380, 102660268)).
+delete(nextInWay(8429312380, 1185660485, 102660268)).
+delete(nextInWay(1185660485, 6789376832, 102660268)).
+delete(nextInWay(6789376832, 4023814746, 102660268)).
+delete(nextInWay(4023814746, 4023814752, 102660268)).
+delete(nextInWay(4023814752, 1185660502, 102660268)).
+delete(nextInWay(1185660502, 1185660578, 102660268)).
+delete(nextInWay(1185660578, 1185660596, 102660268)).
+delete(nextInWay(1185660596, 1185660527, 102660268)).
+delete(nextInWay(1185660527, 8429312382, 102660268)).
+delete(nextInWay(8429312382, 1185660551, 102660268)).
+delete(nextInWay(1185660551, 27373864, 102660268)).
+delete(nextInWay(27373864, 310266203, 102660268)).
+delete(nextInWay(310266203, 3277527577, 102660268)).
+delete(nextInWay(3277527577, 10050529378, 102660268)).
+delete(nextInWay(10050529378, 27373877, 102660268)).
+delete(nextInWay(27373877, 8429312372, 102660268)).
+delete(nextInWay(8429312372, 27373878, 102660268)).
+delete(nextInWay(27373878, 8429312375, 102660268)).
+delete(nextInWay(8429312375, 8429312374, 102660268)).
+delete(nextInWay(8429312374, 8429312373, 102660268)).
+delete(nextInWay(8429312373, 3277572461, 102660268)).
+delete(nextInWay(3277572461, 1185660603, 102660268)).
+delete(nextInWay(1185660603, 4477848510, 102660268)).
+delete(nextInWay(4477848510, 1185660592, 102660268)).
+delete(nextInWay(1185660592, 1185660509, 102660268)).
+delete(nextInWay(1185660509, 3277572665, 102660268)).
+delete(nextInWay(3277572665, 1185660494, 102660268)).
+delete(nextInWay(1185660494, 3277572568, 102660268)).
+delete(nextInWay(3277572568, 1185660538, 102660268)).
+delete(nextInWay(1185660538, 1185660541, 102660268)).
+delete(nextInWay(1185660541, 26880949, 102660268)).
+delete(nextInWay(26880949, 26880950, 102660268)).
+delete(nextInWay(26880950, 26880951, 102660268)).
+delete(nextInWay(26880951, 26880952, 102660268)).
+delete(nextInWay(26880952, 26880953, 102660268)).
+delete(nextInWay(26880953, 26880954, 102660268)).
+delete(nextInWay(26880954, 26778576, 102660268)).
+delete(nextInWay(26778576, 1185660575, 102660268)).
+delete(nextInWay(1185660575, 1185660587, 102660268)).
+delete(nextInWay(1185660587, 3958338734, 102660268)).
+delete(nextInWay(3958338734, 1185660601, 102660268)).
+delete(nextInWay(1185660601, 1185660540, 102660268)).
+delete(nextInWay(1185660540, 1185660561, 102660268)).
+delete(nextInWay(1185660561, 982703048, 102660268)).
+delete(nextInWay(982703048, 6027815805, 102660268)).
+delete(nextInWay(6027815805, 6027815807, 102660268)).
+delete(nextInWay(6027815807, 6027815803, 102660268)).
+delete(nextInWay(6027815803, 6027815802, 102660268)).
+delete(nextInWay(6027815802, 7460337484, 102660268)).
+delete(nextInWay(7460337484, 6027815801, 102660268)).
+delete(nextInWay(6027815801, 982702929, 102660268)).
+delete(nextInWay(982702929, 982702954, 102660268)).
+delete(nextInWay(982702954, 982703052, 102660268)).
+delete(nextInWay(982703052, 982702903, 102660268)).
+delete(nextInWay(982702903, 982703010, 102660268)).
+delete(nextInWay(982703010, 982703028, 102660268)).
+delete(nextInWay(982703028, 982702818, 102660268)).
+delete(nextInWay(982702818, 982703013, 102660268)).
+delete(nextInWay(982703013, 9988843120, 102660268)).
+delete(nextInWay(9988843120, 982703079, 102660268)).
+delete(nextInWay(982703079, 6452628691, 102660268)).
+delete(nextInWay(6452628691, 6452628690, 102660268)).
+delete(nextInWay(6452628690, 982702821, 102660268)).
+delete(nextInWay(982702821, 982702906, 102660268)).
+delete(nextInWay(982702906, 2418877872, 102660268)).
+delete(nextInWay(2418877872, 2418877870, 102660268)).
+delete(nextInWay(2418877870, 2418877871, 102660268)).
+delete(nextInWay(2418877871, 2418877864, 102660268)).
+delete(nextInWay(2418877864, 10869907359, 102660268)).
+delete(nextInWay(10869907359, 2418877869, 102660268)).
+delete(nextInWay(2418877869, 2418872991, 102660268)).
+delete(nextInWay(2418872991, 10869907362, 102660268)).
+delete(nextInWay(10869907362, 10869907360, 102660268)).
+delete(nextInWay(10869907360, 2418873217, 102660268)).
+delete(nextInWay(2418873217, 10869907361, 102660268)).
+delete(nextInWay(10869907361, 2418873364, 102660268)).
+delete(nextInWay(2418873364, 2418873308, 102660268)).
+delete(nextInWay(2418873308, 1185660537, 102660268)).
+delete(nextInWay(1185660537, 10869907363, 102660268)).
+delete(nextInWay(10869907363, 1185660558, 102660268)).
+delete(nextInWay(1185660558, 1185660552, 102660268)).
+delete(nextInWay(1185660552, 1185660582, 102660268)).
+delete(nextInWay(1185660582, 11688130538, 102660268)).
+delete(nextInWay(11688130538, 1185660507, 102660268)).
+delete(nextInWay(1185660507, 2418873146, 102660268)).
+delete(nextInWay(2418873146, 2418873182, 102660268)).
+delete(nextInWay(2418873182, 982714690, 102660268)).
+delete(nextInWay(982714690, 3121841311, 102660268)).
+delete(nextInWay(3121841311, 3121841308, 102660268)).
+delete(nextInWay(3121841308, 12079874233, 102660268)).
+delete(nextInWay(12079874233, 12079874232, 102660268)).
+delete(nextInWay(12079874232, 982714647, 102660268)).
+delete(nextInWay(982714647, 982714706, 102660268)).
+delete(nextInWay(982714706, 2068127826, 102660268)).
+delete(nextInWay(2068127826, 29206571, 102660268)).
+delete(nextInWay(29206571, 1448627682, 102660268)).
+delete(nextInWay(1448627682, 1382878164, 102660268)).
+delete(nextInWay(1382878164, 1382878171, 102660268)).
+delete(nextInWay(1382878171, 29206602, 102660268)).
+delete(nextInWay(29206602, 29206603, 102660268)).
+delete(nextInWay(29206603, 29206604, 102660268)).
+delete(nextInWay(29206604, 1382878167, 102660268)).
+delete(nextInWay(1382878167, 10908657706, 102660268)).
+delete(nextInWay(10908657706, 1536453176, 102660268)).
+delete(nextInWay(1536453176, 10908668405, 102660268)).
+delete(nextInWay(10908668405, 1194208227, 102660268)).
+delete(nextInWay(1194208227, 29206605, 102660268)).
+delete(nextInWay(29206605, 29206606, 102660268)).
+delete(nextInWay(29206606, 6649207080, 102660268)).
+delete(nextInWay(6649207080, 6649210934, 102660268)).
+delete(nextInWay(6649210934, 2488886092, 102660268)).
+delete(nextInWay(2488886092, 29206607, 102660268)).
+delete(nextInWay(29206607, 29206608, 102660268)).
+delete(nextInWay(29206608, 10908668309, 102660268)).
+delete(nextInWay(10908668309, 1375997477, 102660268)).
+delete(nextInWay(1375997477, 4406683144, 102660268)).
+delete(nextInWay(4406683144, 982714593, 102660268)).
+delete(nextInWay(982714593, 982714655, 102660268)).
+delete(nextInWay(982714655, 982714701, 102660268)).
+delete(nextInWay(982714701, 982714686, 102660268)).
+delete(nextInWay(982714686, 982714712, 102660268)).
+delete(nextInWay(982714712, 982714590, 102660268)).
+delete(nextInWay(982714590, 982714651, 102660268)).
+delete(nextInWay(982714651, 982714614, 102660268)).
+delete(nextInWay(982714614, 982714674, 102660268)).
+delete(nextInWay(982714674, 982714575, 102660268)).
+delete(nextInWay(982714575, 6536068505, 102660268)).
+delete(nextInWay(6536068505, 11309442725, 102660268)).
+delete(nextInWay(11309442725, 982714642, 102660268)).
+delete(nextInWay(982714642, 11309442726, 102660268)).
+delete(nextInWay(11309442726, 11309442727, 102660268)).
+delete(nextInWay(11309442727, 801163596, 102660268)).
+delete(nextInWay(801163596, 801163600, 102660268)).
+delete(nextInWay(801163600, 6695814975, 102660268)).
+delete(nextInWay(6695814975, 6695849626, 102660268)).
+delete(nextInWay(6695849626, 12106043184, 102660268)).
+delete(nextInWay(12106043184, 6695849625, 102660268)).
+delete(nextInWay(6695849625, 6695814974, 102660268)).
+delete(nextInWay(6695814974, 4368388615, 102660268)).
+delete(nextInWay(4368388615, 801163584, 102660268)).
+delete(nextInWay(801163584, 6695814976, 102660268)).
+delete(nextInWay(6695814976, 6695814977, 102660268)).
+delete(nextInWay(6695814977, 801163588, 102660268)).
+delete(nextInWay(801163588, 6099969287, 102660268)).
+delete(nextInWay(6099969287, 6099969286, 102660268)).
+delete(nextInWay(6099969286, 12014434724, 102660268)).
+delete(nextInWay(12014434724, 6695814978, 102660268)).
+delete(nextInWay(6695814978, 6695814979, 102660268)).
+delete(nextInWay(6695814979, 1449492138, 102660268)).
+delete(nextInWay(1449492138, 6695814981, 102660268)).
+delete(nextInWay(6695814981, 6695814980, 102660268)).
+delete(nextInWay(6695814980, 1474117336, 102660268)).
+delete(nextInWay(1474117336, 6099969285, 102660268)).
+delete(nextInWay(6099969285, 1474117340, 102660268)).
+delete(nextInWay(1474117340, 982714658, 102660268)).
+delete(nextInWay(982714658, 801163606, 102660268)).
+delete(nextInWay(801163606, 6695849624, 102660268)).
+delete(nextInWay(6695849624, 6695849623, 102660268)).
+delete(nextInWay(6695849623, 6695849622, 102660268)).
+delete(nextInWay(6695849622, 6695849621, 102660268)).
+delete(nextInWay(6695849621, 801163603, 102660268)).
+delete(nextInWay(801163603, 6695849619, 102660268)).
+delete(nextInWay(6695849619, 6695849617, 102660268)).
+delete(nextInWay(6695849617, 12106646515, 102660268)).
+delete(nextInWay(12106646515, 12343343893, 102660268)).
+delete(nextInWay(12343343893, 2627638584, 102660268)).
+delete(nextInWay(2627638584, 12106646525, 102660268)).
+delete(nextInWay(12106646525, 5410202919, 102660268)).
+delete(nextInWay(5410202919, 2627638582, 102660268)).
+delete(nextInWay(2627638582, 982714596, 102660268)).
+delete(nextInWay(982714596, 982714700, 102660268)).
+delete(nextInWay(982714700, 982714617, 102660268)).
+delete(way(102660270)).
+delete(wayTag(102660270, "landuse", "residential")).
+delete(nextInWay(11688130544, 982714686, 102660270)).
+delete(nextInWay(982714686, 982714712, 102660270)).
+delete(nextInWay(982714712, 982714590, 102660270)).
+delete(nextInWay(982714590, 982714651, 102660270)).
+delete(nextInWay(982714651, 982714614, 102660270)).
+delete(nextInWay(982714614, 982714674, 102660270)).
+delete(nextInWay(982714674, 982714575, 102660270)).
+delete(nextInWay(982714575, 6536068505, 102660270)).
+delete(nextInWay(6536068505, 11309442725, 102660270)).
+delete(nextInWay(11309442725, 982714642, 102660270)).
+delete(nextInWay(982714642, 11309442726, 102660270)).
+delete(nextInWay(11309442726, 11309442727, 102660270)).
+delete(nextInWay(11309442727, 801163596, 102660270)).
+delete(nextInWay(801163596, 801163600, 102660270)).
+delete(nextInWay(801163600, 6695814975, 102660270)).
+delete(nextInWay(6695814975, 6695849626, 102660270)).
+delete(nextInWay(6695849626, 12106043184, 102660270)).
+delete(nextInWay(12106043184, 6695849625, 102660270)).
+delete(nextInWay(6695849625, 6695814974, 102660270)).
+delete(nextInWay(6695814974, 4368388615, 102660270)).
+delete(nextInWay(4368388615, 801163584, 102660270)).
+delete(nextInWay(801163584, 6695814976, 102660270)).
+delete(nextInWay(6695814976, 6695814977, 102660270)).
+delete(nextInWay(6695814977, 801163588, 102660270)).
+delete(nextInWay(801163588, 6099969287, 102660270)).
+delete(nextInWay(6099969287, 6099969286, 102660270)).
+delete(nextInWay(6099969286, 12014434724, 102660270)).
+delete(nextInWay(12014434724, 6695814978, 102660270)).
+delete(nextInWay(6695814978, 6695814979, 102660270)).
+delete(nextInWay(6695814979, 1449492138, 102660270)).
+delete(nextInWay(1449492138, 6695814981, 102660270)).
+delete(nextInWay(6695814981, 6695814980, 102660270)).
+delete(nextInWay(6695814980, 1474117336, 102660270)).
+delete(nextInWay(1474117336, 6099969285, 102660270)).
+delete(nextInWay(6099969285, 1474117340, 102660270)).
+delete(nextInWay(1474117340, 982714658, 102660270)).
+delete(nextInWay(982714658, 801163606, 102660270)).
+delete(nextInWay(801163606, 6695849624, 102660270)).
+delete(nextInWay(6695849624, 6695849623, 102660270)).
+delete(nextInWay(6695849623, 6695849622, 102660270)).
+delete(nextInWay(6695849622, 6695849621, 102660270)).
+delete(nextInWay(6695849621, 801163603, 102660270)).
+delete(nextInWay(801163603, 6695849619, 102660270)).
+delete(nextInWay(6695849619, 6695849617, 102660270)).
+delete(nextInWay(6695849617, 12106646515, 102660270)).
+delete(nextInWay(12106646515, 12343343893, 102660270)).
+delete(nextInWay(12343343893, 2627638584, 102660270)).
+delete(nextInWay(2627638584, 12106646526, 102660270)).
+delete(nextInWay(12106646526, 5410202919, 102660270)).
+delete(nextInWay(5410202919, 2627638582, 102660270)).
+delete(nextInWay(2627638582, 982714596, 102660270)).
+delete(nextInWay(982714596, 982714700, 102660270)).
+delete(nextInWay(982714700, 982714617, 102660270)).
+delete(nextInWay(982714617, 982714607, 102660270)).
+delete(nextInWay(982714607, 12310923587, 102660270)).
+delete(nextInWay(12310923587, 4402127142, 102660270)).
+delete(nextInWay(4402127142, 982714623, 102660270)).
+delete(nextInWay(982714623, 982714683, 102660270)).
+delete(nextInWay(982714683, 982714582, 102660270)).
+delete(nextInWay(982714582, 982714691, 102660270)).
+delete(nextInWay(982714691, 982714644, 102660270)).
+delete(nextInWay(982714644, 982714704, 102660270)).
+delete(nextInWay(982714704, 9469194907, 102660270)).
+delete(nextInWay(9469194907, 982714613, 102660270)).
+delete(nextInWay(982714613, 982714671, 102660270)).
+delete(nextInWay(982714671, 982714636, 102660270)).
+delete(nextInWay(982714636, 982714695, 102660270)).
+delete(nextInWay(982714695, 982714707, 102660270)).
+delete(nextInWay(982714707, 982714631, 102660270)).
+delete(nextInWay(982714631, 982714587, 102660270)).
+delete(nextInWay(982714587, 982714649, 102660270)).
+delete(nextInWay(982714649, 982714597, 102660270)).
+delete(nextInWay(982714597, 982714657, 102660270)).
+delete(nextInWay(982714657, 2359120695, 102660270)).
+delete(nextInWay(2359120695, 982714620, 102660270)).
+delete(nextInWay(982714620, 1483981672, 102660270)).
+delete(nextInWay(1483981672, 2359120693, 102660270)).
+delete(nextInWay(2359120693, 982714681, 102660270)).
+delete(nextInWay(982714681, 1014814565, 102660270)).
+delete(nextInWay(1014814565, 2305089540, 102660270)).
+delete(nextInWay(2305089540, 982714637, 102660270)).
+delete(nextInWay(982714637, 982714685, 102660270)).
+delete(nextInWay(982714685, 982714603, 102660270)).
+delete(nextInWay(982714603, 982714584, 102660270)).
+delete(nextInWay(982714584, 982714678, 102660270)).
+delete(nextInWay(982714678, 982714640, 102660270)).
+delete(nextInWay(982714640, 982714699, 102660270)).
+delete(nextInWay(982714699, 982714605, 102660270)).
+delete(nextInWay(982714605, 982714663, 102660270)).
+delete(nextInWay(982714663, 982714627, 102660270)).
+delete(nextInWay(982714627, 982714688, 102660270)).
+delete(nextInWay(982714688, 1229534754, 102660270)).
+delete(nextInWay(1229534754, 982714702, 102660270)).
+delete(nextInWay(982714702, 982714621, 102660270)).
+delete(nextInWay(982714621, 982714643, 102660270)).
+delete(nextInWay(982714643, 982714705, 102660270)).
+delete(nextInWay(982714705, 982714625, 102660270)).
+delete(nextInWay(982714625, 982714583, 102660270)).
+delete(nextInWay(982714583, 982714645, 102660270)).
+delete(nextInWay(982714645, 982714661, 102660270)).
+delete(nextInWay(982714661, 982714576, 102660270)).
+delete(nextInWay(982714576, 982714684, 102660270)).
+delete(nextInWay(982714684, 982714602, 102660270)).
+delete(nextInWay(982714602, 982714652, 102660270)).
+delete(nextInWay(982714652, 982714708, 102660270)).
+delete(nextInWay(982714708, 7188060453, 102660270)).
+delete(nextInWay(7188060453, 1022746113, 102660270)).
+delete(nextInWay(1022746113, 7188060454, 102660270)).
+delete(nextInWay(7188060454, 7188060455, 102660270)).
+delete(nextInWay(7188060455, 7188060456, 102660270)).
+delete(nextInWay(7188060456, 7188060457, 102660270)).
+delete(nextInWay(7188060457, 7188060458, 102660270)).
+delete(nextInWay(7188060458, 7188060459, 102660270)).
+delete(nextInWay(7188060459, 7188060460, 102660270)).
+delete(nextInWay(7188060460, 7188060461, 102660270)).
+delete(nextInWay(7188060461, 7188060462, 102660270)).
+delete(nextInWay(7188060462, 7188060463, 102660270)).
+delete(nextInWay(7188060463, 7188060464, 102660270)).
+delete(nextInWay(7188060464, 7188060465, 102660270)).
+delete(nextInWay(7188060465, 7188060466, 102660270)).
+delete(nextInWay(7188060466, 7188060467, 102660270)).
+delete(nextInWay(7188060467, 7188060468, 102660270)).
+delete(nextInWay(7188060468, 7188060469, 102660270)).
+delete(nextInWay(7188060469, 7188060470, 102660270)).
+delete(nextInWay(7188060470, 7188060471, 102660270)).
+delete(nextInWay(7188060471, 982714591, 102660270)).
+delete(nextInWay(982714591, 982714610, 102660270)).
+delete(nextInWay(982714610, 12288263728, 102660270)).
+delete(nextInWay(12288263728, 982714667, 102660270)).
+delete(nextInWay(982714667, 982714632, 102660270)).
+delete(nextInWay(982714632, 982714692, 102660270)).
+delete(nextInWay(982714692, 982714626, 102660270)).
+delete(nextInWay(982714626, 982714585, 102660270)).
+delete(nextInWay(982714585, 982714646, 102660270)).
+delete(nextInWay(982714646, 982714662, 102660270)).
+delete(nextInWay(982714662, 982714577, 102660270)).
+delete(nextInWay(982714577, 982714687, 102660270)).
+delete(nextInWay(982714687, 982714604, 102660270)).
+delete(nextInWay(982714604, 982714654, 102660270)).
+delete(nextInWay(982714654, 982714710, 102660270)).
+delete(nextInWay(982714710, 982714676, 102660270)).
+delete(nextInWay(982714676, 982714592, 102660270)).
+delete(nextInWay(982714592, 982714611, 102660270)).
+delete(nextInWay(982714611, 982714668, 102660270)).
+delete(nextInWay(982714668, 2418853823, 102660270)).
+delete(nextInWay(2418853823, 982714633, 102660270)).
+delete(nextInWay(982714633, 982714693, 102660270)).
+delete(nextInWay(982714693, 6697836718, 102660270)).
+delete(nextInWay(6697836718, 982714580, 102660270)).
+delete(nextInWay(982714580, 3942362033, 102660270)).
+delete(nextInWay(3942362033, 3942362030, 102660270)).
+delete(nextInWay(3942362030, 982714664, 102660270)).
+delete(nextInWay(982714664, 982714682, 102660270)).
+delete(nextInWay(982714682, 3942362034, 102660270)).
+delete(nextInWay(3942362034, 982714599, 102660270)).
+delete(nextInWay(982714599, 1022580990, 102660270)).
+delete(nextInWay(1022580990, 982714703, 102660270)).
+delete(nextInWay(982714703, 1022581202, 102660270)).
+delete(nextInWay(1022581202, 982714622, 102660270)).
+delete(nextInWay(982714622, 2163450297, 102660270)).
+delete(nextInWay(2163450297, 2163450294, 102660270)).
+delete(nextInWay(2163450294, 982714669, 102660270)).
+delete(nextInWay(982714669, 982714586, 102660270)).
+delete(nextInWay(982714586, 982714694, 102660270)).
+delete(nextInWay(982714694, 982714612, 102660270)).
+delete(nextInWay(982714612, 982714630, 102660270)).
+delete(nextInWay(982714630, 982714690, 102660270)).
+delete(nextInWay(982714690, 3121841311, 102660270)).
+delete(nextInWay(3121841311, 3121841308, 102660270)).
+delete(nextInWay(3121841308, 11688130541, 102660270)).
+delete(nextInWay(11688130541, 11688130540, 102660270)).
+delete(nextInWay(11688130540, 11688130539, 102660270)).
+delete(nextInWay(11688130539, 11688130549, 102660270)).
+delete(nextInWay(11688130549, 11688130550, 102660270)).
+delete(nextInWay(11688130550, 11688130551, 102660270)).
+delete(nextInWay(11688130551, 11688130552, 102660270)).
+delete(nextInWay(11688130552, 11688130553, 102660270)).
+delete(nextInWay(11688130553, 11688130554, 102660270)).
+delete(nextInWay(11688130554, 11688130555, 102660270)).
+delete(nextInWay(11688130555, 11688130556, 102660270)).
+delete(nextInWay(11688130556, 11688130557, 102660270)).
+delete(nextInWay(11688130557, 11688130558, 102660270)).
+delete(nextInWay(11688130558, 11688130559, 102660270)).
+delete(nextInWay(11688130559, 11688130560, 102660270)).
+delete(nextInWay(11688130560, 11688130561, 102660270)).
+delete(nextInWay(11688130561, 11688130562, 102660270)).
+delete(nextInWay(11688130562, 11688130563, 102660270)).
+delete(nextInWay(11688130563, 11688130564, 102660270)).
+delete(nextInWay(11688130564, 11688130565, 102660270)).
+delete(nextInWay(11688130565, 11688130544, 102660270)).
+delete(way(1193532038)).
+delete(wayTag(1193532038, "parking", "surface")).
+delete(wayTag(1193532038, "orientation", "perpendicular")).
+delete(wayTag(1193532038, "access", "no")).
+delete(wayTag(1193532038, "amenity", "parking")).
+delete(wayTag(1193532038, "lit", "yes")).
+delete(wayTag(1193532038, "name", "Taxistand Ulm Hbf 3")).
+delete(wayTag(1193532038, "taxi", "designated")).
+delete(wayTag(1193532038, "operator", "Taxen-Zentrale Ulm e.G.")).
+delete(wayTag(1193532038, "capacity", "7")).
+delete(nextInWay(11078544926, 12059864097, 1193532038)).
+delete(nextInWay(12059864097, 12059864099, 1193532038)).
+delete(nextInWay(12059864099, 12059864098, 1193532038)).
+delete(nextInWay(12059864098, 11078544926, 1193532038)).
+delete(relation(1696895)).
+delete(relationTag(1696895, "ref:IFOPT", "de:08421:1008")).
+delete(relationTag(1696895, "name", "Ulm Hauptbahnhof")).
+delete(relationTag(1696895, "service_times:wheelchair", "06:30-23:15")).
+delete(relationTag(1696895, "public_transport", "stop_area")).
+delete(relationTag(1696895, "railway", "facility")).
+delete(relationTag(1696895, "wikipedia", "de:Ulm Hauptbahnhof")).
+delete(relationTag(1696895, "type", "public_transport")).
+delete(relationTag(1696895, "wikidata", "Q472937")).
+delete(relationTag(1696895, "check_date:service_times:wheelchair", "2024-05-08")).
+delete(nextInRelation(652770775, 11420203, 1696895)).
+delete(relationMember(652770775, "node", "stop", 1696895)).
+delete(nextInRelation(11420203, 652770779, 1696895)).
+delete(relationMember(11420203, "node", "stop", 1696895)).
+delete(nextInRelation(652770779, 4396537863, 1696895)).
+delete(relationMember(652770779, "node", "stop", 1696895)).
+delete(nextInRelation(4396537863, 4396537861, 1696895)).
+delete(relationMember(4396537863, "node", "stop", 1696895)).
+delete(nextInRelation(4396537861, 653504226, 1696895)).
+delete(relationMember(4396537861, "node", "stop", 1696895)).
+delete(nextInRelation(653504226, 4396537862, 1696895)).
+delete(relationMember(653504226, "node", "stop", 1696895)).
+delete(nextInRelation(4396537862, 4396537860, 1696895)).
+delete(relationMember(4396537862, "node", "stop", 1696895)).
+delete(nextInRelation(4396537860, 1384282562, 1696895)).
+delete(relationMember(4396537860, "node", "stop", 1696895)).
+delete(nextInRelation(1384282562, 652770707, 1696895)).
+delete(relationMember(1384282562, "node", "stop", 1696895)).
+delete(nextInRelation(652770707, 652770780, 1696895)).
+delete(relationMember(652770707, "node", "stop", 1696895)).
+delete(nextInRelation(652770780, 8081821401, 1696895)).
+delete(relationMember(652770780, "node", "stop", 1696895)).
+delete(nextInRelation(8081821401, 653504209, 1696895)).
+delete(relationMember(8081821401, "node", "stop", 1696895)).
+delete(nextInRelation(653504209, 652770761, 1696895)).
+delete(relationMember(653504209, "node", "stop", 1696895)).
+delete(nextInRelation(652770761, 1384282567, 1696895)).
+delete(relationMember(652770761, "node", "stop", 1696895)).
+delete(nextInRelation(1384282567, 1384282603, 1696895)).
+delete(relationMember(1384282567, "node", "stop", 1696895)).
+delete(nextInRelation(1384282603, 3810012040, 1696895)).
+delete(relationMember(1384282603, "node", "stop", 1696895)).
+delete(nextInRelation(3810012040, 186663373, 1696895)).
+delete(relationMember(3810012040, "node", "stop", 1696895)).
+delete(nextInRelation(186663373, 1307229106, 1696895)).
+delete(relationMember(186663373, "way", "platform", 1696895)).
+delete(nextInRelation(1307229106, 124345142, 1696895)).
+delete(relationMember(1307229106, "way", "platform", 1696895)).
+delete(nextInRelation(124345142, 1307229104, 1696895)).
+delete(relationMember(124345142, "way", "platform", 1696895)).
+delete(nextInRelation(1307229104, 1307229105, 1696895)).
+delete(relationMember(1307229104, "way", "platform", 1696895)).
+delete(nextInRelation(1307229105, 186663405, 1696895)).
+delete(relationMember(1307229105, "way", "platform", 1696895)).
+delete(nextInRelation(186663405, 1307215540, 1696895)).
+delete(relationMember(186663405, "way", "platform", 1696895)).
+delete(nextInRelation(1307215540, 186663368, 1696895)).
+delete(relationMember(1307215540, "way", "platform", 1696895)).
+delete(nextInRelation(186663368, 124345154, 1696895)).
+delete(relationMember(186663368, "way", "platform", 1696895)).
+delete(nextInRelation(124345154, 1307215539, 1696895)).
+delete(relationMember(124345154, "way", "platform", 1696895)).
+delete(nextInRelation(1307215539, 186663383, 1696895)).
+delete(relationMember(1307215539, "way", "platform", 1696895)).
+delete(nextInRelation(186663383, 1307215541, 1696895)).
+delete(relationMember(186663383, "way", "platform", 1696895)).
+delete(nextInRelation(1307215541, 124345156, 1696895)).
+delete(relationMember(1307215541, "way", "platform", 1696895)).
+delete(nextInRelation(124345156, 412079726, 1696895)).
+delete(relationMember(124345156, "way", "platform", 1696895)).
+delete(nextInRelation(412079726, 1307215542, 1696895)).
+delete(relationMember(412079726, "way", "platform", 1696895)).
+delete(nextInRelation(1307215542, 1307311655, 1696895)).
+delete(relationMember(1307215542, "way", "platform", 1696895)).
+delete(nextInRelation(1307311655, 1307311654, 1696895)).
+delete(relationMember(1307311655, "way", "platform", 1696895)).
+delete(nextInRelation(1307311654, 186663397, 1696895)).
+delete(relationMember(1307311654, "way", "platform", 1696895)).
+delete(nextInRelation(186663397, 1384282612, 1696895)).
+delete(relationMember(186663397, "way", "platform", 1696895)).
+delete(nextInRelation(1384282612, 65753877, 1696895)).
+delete(relationMember(1384282612, "node", "", 1696895)).
+delete(nextInRelation(65753877, 1220491573, 1696895)).
+delete(relationMember(65753877, "way", "building", 1696895)).
+delete(relationMember(1220491573, "way", "building", 1696895)).
+add(position(11310551974)).
+add(node(26731992)).
+add(node(5410314160)).
+add(nodeTag(5410314160, "check_date", "2022-12-21")).
+add(nodeTag(5410314160, "advertising", "column")).
+add(node(6518484630)).
+add(node(6518484631)).
+add(node(6926255769)).
+add(node(8856405173)).
+add(node(8856405174)).
+add(nodeTag(8856405174, "tactile_paving", "no")).
+add(nodeTag(8856405174, "check_date:traffic_signals:vibration", "2022-11-22")).
+add(nodeTag(8856405174, "button_operated", "yes")).
+add(nodeTag(8856405174, "highway", "crossing")).
+add(nodeTag(8856405174, "crossing", "traffic_signals")).
+add(nodeTag(8856405174, "traffic_signals:sound", "no")).
+add(nodeTag(8856405174, "traffic_signals:vibration", "yes")).
+add(node(8933734695)).
+add(nodeTag(8933734695, "railway", "tram_crossing")).
+add(nodeTag(8933734695, "crossing", "traffic_signals")).
+add(node(8933734696)).
+add(nodeTag(8933734696, "railway", "tram_crossing")).
+add(nodeTag(8933734696, "crossing", "traffic_signals")).
+add(node(8951791382)).
+add(node(9325010267)).
+add(node(9325010268)).
+add(node(10076927210)).
+add(nodeTag(10076927210, "leaf_cycle", "deciduous")).
+add(nodeTag(10076927210, "natural", "tree")).
+add(nodeTag(10076927210, "circumference", "40")).
+add(nodeTag(10076927210, "denotation", "urban")).
+add(nodeTag(10076927210, "leaf_type", "broadleaved")).
+add(nodeTag(10076927210, "height", "3")).
+add(node(10077531602)).
+add(node(10077531604)).
+add(node(10077531605)).
+add(node(11309993582)).
+add(node(11896666639)).
+add(nodeTag(11896666639, "waste", "trash;cigarettes")).
+add(nodeTag(11896666639, "amenity", "waste_basket")).
+add(node(12270509480)).
+add(nodeTag(12270509480, "door", "sliding")).
+add(nodeTag(12270509480, "wheelchair", "yes")).
+add(nodeTag(12270509480, "automatic_door", "motion")).
+add(nodeTag(12270509480, "entrance", "yes")).
+add(node(12339074139)).
+add(node(12339074140)).
+add(way(4620215)).
+add(wayTag(4620215, "sidewalk", "no")).
+add(wayTag(4620215, "turn:lanes", "left")).
+add(wayTag(4620215, "surface", "asphalt")).
+add(wayTag(4620215, "lanes", "1")).
+add(wayTag(4620215, "maxspeed", "50")).
+add(wayTag(4620215, "name", "Olgastrasse")).
+add(wayTag(4620215, "highway", "secondary")).
+add(wayTag(4620215, "foot", "no")).
+add(wayTag(4620215, "oneway", "yes")).
+add(nextInWay(27152757, 6518484631, 4620215)).
+add(nextInWay(6518484631, 6518484630, 4620215)).
+add(nextInWay(6518484630, 10077531605, 4620215)).
+add(nextInWay(10077531605, 10077531604, 4620215)).
+add(nextInWay(10077531604, 26731992, 4620215)).
+add(way(328962567)).
+add(wayTag(328962567, "sidewalk:left", "no")).
+add(wayTag(328962567, "surface", "concrete")).
+add(wayTag(328962567, "maxspeed", "50")).
+add(wayTag(328962567, "name:etymology:wikidata", "Q234926")).
+add(wayTag(328962567, "oneway", "yes")).
+add(wayTag(328962567, "cycleway:right:oneway", "no")).
+add(wayTag(328962567, "cycleway:right", "track")).
+add(wayTag(328962567, "lit", "yes")).
+add(wayTag(328962567, "lanes", "2")).
+add(wayTag(328962567, "name", "Olgastrasse")).
+add(wayTag(328962567, "sidewalk:right", "separate")).
+add(wayTag(328962567, "cycleway:right:bicycle", "designated")).
+add(wayTag(328962567, "highway", "secondary")).
+add(nextInWay(26870383, 26731992, 328962567)).
+add(way(832236686)).
+add(wayTag(832236686, "smoothness", "excellent")).
+add(wayTag(832236686, "surface", "paving_stones")).
+add(wayTag(832236686, "lit", "yes")).
+add(wayTag(832236686, "name", "Albert-Einstein-Platz")).
+add(wayTag(832236686, "highway", "pedestrian")).
+add(nextInWay(11309993582, 7770072990, 832236686)).
+add(nextInWay(7770072990, 10079889540, 832236686)).
+add(nextInWay(10079889540, 7770072986, 832236686)).
+add(way(965702788)).
+add(wayTag(965702788, "gauge", "1000")).
+add(wayTag(965702788, "bus", "yes")).
+add(wayTag(965702788, "access", "no")).
+add(wayTag(965702788, "surface", "concrete")).
+add(wayTag(965702788, "type", "transport")).
+add(wayTag(965702788, "oneway", "yes")).
+add(wayTag(965702788, "operator", "SWU")).
+add(wayTag(965702788, "frequency", "0")).
+add(wayTag(965702788, "voltage", "750")).
+add(wayTag(965702788, "electrified", "contact_line")).
+add(wayTag(965702788, "detail", "track")).
+add(wayTag(965702788, "railway", "tram")).
+add(wayTag(965702788, "highway", "service")).
+add(wayTag(965702788, "tram", "yes")).
+add(wayTag(965702788, "start_date", "2021-11-08")).
+add(nextInWay(8933734695, 9238923720, 965702788)).
+add(nextInWay(9238923720, 8996521281, 965702788)).
+add(nextInWay(8996521281, 8933734694, 965702788)).
+add(way(965702789)).
+add(wayTag(965702789, "gauge", "1000")).
+add(wayTag(965702789, "bus", "yes")).
+add(wayTag(965702789, "access", "no")).
+add(wayTag(965702789, "surface", "concrete")).
+add(wayTag(965702789, "type", "transport")).
+add(wayTag(965702789, "oneway", "yes")).
+add(wayTag(965702789, "operator", "SWU")).
+add(wayTag(965702789, "frequency", "0")).
+add(wayTag(965702789, "voltage", "750")).
+add(wayTag(965702789, "electrified", "contact_line")).
+add(wayTag(965702789, "detail", "track")).
+add(wayTag(965702789, "railway", "tram")).
+add(wayTag(965702789, "highway", "service")).
+add(wayTag(965702789, "tram", "yes")).
+add(nextInWay(8933734697, 8996521280, 965702789)).
+add(nextInWay(8996521280, 310277199, 965702789)).
+add(nextInWay(310277199, 8933734696, 965702789)).
+add(way(973265254)).
+add(wayTag(973265254, "bus", "yes")).
+add(wayTag(973265254, "wheelchair", "yes")).
+add(wayTag(973265254, "shelter", "yes")).
+add(wayTag(973265254, "bench", "no")).
+add(wayTag(973265254, "bin", "yes")).
+add(wayTag(973265254, "uic_ref", "801260")).
+add(wayTag(973265254, "public_transport", "platform")).
+add(wayTag(973265254, "operator", "SWU")).
+add(wayTag(973265254, "passenger_information_display", "yes")).
+add(wayTag(973265254, "ref", "A")).
+add(wayTag(973265254, "tactile_paving", "yes")).
+add(wayTag(973265254, "check_date", "2024-03-16")).
+add(wayTag(973265254, "lit", "yes")).
+add(wayTag(973265254, "covered", "yes")).
+add(wayTag(973265254, "name", "Hauptbahnhof, Steig A")).
+add(wayTag(973265254, "highway", "platform")).
+add(wayTag(973265254, "start_date", "2021-11-08")).
+add(nextInWay(9325010267, 9235444941, 973265254)).
+add(nextInWay(9235444941, 9692278415, 973265254)).
+add(nextInWay(9692278415, 9008064985, 973265254)).
+add(nextInWay(9008064985, 9008064984, 973265254)).
+add(nextInWay(9008064984, 9325010270, 973265254)).
+add(way(973265256)).
+add(wayTag(973265256, "bus", "yes")).
+add(wayTag(973265256, "wheelchair", "yes")).
+add(wayTag(973265256, "shelter", "yes")).
+add(wayTag(973265256, "bench", "yes")).
+add(wayTag(973265256, "bin", "yes")).
+add(wayTag(973265256, "uic_ref", "801260")).
+add(wayTag(973265256, "public_transport", "platform")).
+add(wayTag(973265256, "operator", "SWU")).
+add(wayTag(973265256, "passenger_information_display", "yes")).
+add(wayTag(973265256, "ref", "B")).
+add(wayTag(973265256, "tactile_paving", "yes")).
+add(wayTag(973265256, "check_date", "2024-03-16")).
+add(wayTag(973265256, "lit", "yes")).
+add(wayTag(973265256, "covered", "yes")).
+add(wayTag(973265256, "name", "Hauptbahnhof, Steig B")).
+add(wayTag(973265256, "highway", "platform")).
+add(wayTag(973265256, "start_date", "2021-09-13")).
+add(nextInWay(9325010269, 9008064989, 973265256)).
+add(nextInWay(9008064989, 9008064988, 973265256)).
+add(nextInWay(9008064988, 6276485302, 973265256)).
+add(nextInWay(6276485302, 9325010268, 973265256)).
+add(way(1101195680)).
+add(wayTag(1101195680, "surface", "paving_stones")).
+add(wayTag(1101195680, "highway", "footway")).
+add(nextInWay(7734774462, 10077531602, 1101195680)).
+add(way(1104607262)).
+add(wayTag(1104607262, "surface", "asphalt")).
+add(wayTag(1104607262, "lit", "yes")).
+add(wayTag(1104607262, "highway", "footway")).
+add(nextInWay(7734986283, 8856405172, 1104607262)).
+add(nextInWay(8856405172, 12339074139, 1104607262)).
+add(nextInWay(12339074139, 8856405173, 1104607262)).
+add(nextInWay(8856405173, 8951791382, 1104607262)).
+add(nextInWay(8951791382, 8856405174, 1104607262)).
+add(nextInWay(8856405174, 9325010268, 1104607262)).
+add(nextInWay(9325010268, 8933734696, 1104607262)).
+add(nextInWay(8933734696, 8933734695, 1104607262)).
+add(nextInWay(8933734695, 9325010267, 1104607262)).
+add(nextInWay(9325010267, 8968601664, 1104607262)).
+add(nextInWay(8968601664, 11309993581, 1104607262)).
+add(way(1333693291)).
+add(wayTag(1333693291, "smoothness", "excellent")).
+add(wayTag(1333693291, "surface", "paving_stones")).
+add(wayTag(1333693291, "lit", "yes")).
+add(wayTag(1333693291, "highway", "footway")).
+add(nextInWay(12339074140, 11309993582, 1333693291)).

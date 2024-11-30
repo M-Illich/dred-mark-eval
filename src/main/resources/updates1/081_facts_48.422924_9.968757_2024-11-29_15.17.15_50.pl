@@ -1,0 +1,53 @@
+delete(position(27196970)).
+delete(node(27196969)).
+delete(node(27196970)).
+delete(node(243961763)).
+delete(node(1702624939)).
+delete(node(9764720357)).
+delete(nodeTag(9764720357, "railway:milestone:catenary_mast", "no")).
+delete(nodeTag(9764720357, "railway:position", "85.8")).
+delete(nodeTag(9764720357, "railway", "milestone")).
+delete(nodeTag(9764720357, "video", "https://youtu.be/YnNTSIOCkOc?t=1315")).
+add(position(27196972)).
+add(node(27196972)).
+add(node(697444837)).
+add(node(1702624941)).
+add(node(1702624943)).
+add(node(2486984128)).
+add(node(2679586663)).
+add(node(3035797877)).
+add(node(12064743677)).
+add(way(158022165)).
+add(wayTag(158022165, "landuse", "farmland")).
+add(nextInWay(2679586683, 2679586679, 158022165)).
+add(nextInWay(2679586679, 2679586677, 158022165)).
+add(nextInWay(2679586677, 2679586673, 158022165)).
+add(nextInWay(2679586673, 2679586671, 158022165)).
+add(nextInWay(2679586671, 2679586668, 158022165)).
+add(nextInWay(2679586668, 2679586666, 158022165)).
+add(nextInWay(2679586666, 2679586663, 158022165)).
+add(nextInWay(2679586663, 2679586664, 158022165)).
+add(nextInWay(2679586664, 2679586665, 158022165)).
+add(nextInWay(2679586665, 2679586662, 158022165)).
+add(nextInWay(2679586662, 2679586667, 158022165)).
+add(nextInWay(2679586667, 2679586669, 158022165)).
+add(nextInWay(2679586669, 2679586670, 158022165)).
+add(nextInWay(2679586670, 2679586672, 158022165)).
+add(nextInWay(2679586672, 2679586674, 158022165)).
+add(nextInWay(2679586674, 2679586675, 158022165)).
+add(nextInWay(2679586675, 2679586676, 158022165)).
+add(nextInWay(2679586676, 2679586678, 158022165)).
+add(nextInWay(2679586678, 2679586680, 158022165)).
+add(nextInWay(2679586680, 2679586692, 158022165)).
+add(nextInWay(2679586692, 2679586702, 158022165)).
+add(nextInWay(2679586702, 2679586683, 158022165)).
+add(way(457146311)).
+add(wayTag(457146311, "surface", "paved")).
+add(wayTag(457146311, "lcn", "yes")).
+add(wayTag(457146311, "tracktype", "grade1")).
+add(wayTag(457146311, "highway", "track")).
+add(nextInWay(697444837, 697444839, 457146311)).
+add(nextInWay(697444839, 697444832, 457146311)).
+add(nextInWay(697444832, 3672183669, 457146311)).
+add(nextInWay(3672183669, 4923059872, 457146311)).
+add(nextInWay(4923059872, 4923059870, 457146311)).

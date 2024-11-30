@@ -109,7 +109,7 @@ public class RealUpdateTest {
 		set.add(way3);
 		set.add(wayTag3);
 
-		Set<Fact> testSet = usr.keepTaggedFacts(set);
+		Set<Fact> testSet = usr.keepRelatedFacts(set);
 
 		assertEquals(4, testSet.size());
 		assertTrue(testSet.contains(node1));

@@ -1,0 +1,97 @@
+delete(position(54193277)).
+delete(node(216319771)).
+delete(node(2734454029)).
+delete(node(3955076262)).
+delete(way(392266225)).
+delete(wayTag(392266225, "landuse", "meadow")).
+delete(nextInWay(3955074048, 3955074049, 392266225)).
+delete(nextInWay(3955074049, 3955074050, 392266225)).
+delete(nextInWay(3955074050, 3955074051, 392266225)).
+delete(nextInWay(3955074051, 3955074053, 392266225)).
+delete(nextInWay(3955074053, 3955074056, 392266225)).
+delete(nextInWay(3955074056, 3955076257, 392266225)).
+delete(nextInWay(3955076257, 3955076260, 392266225)).
+delete(nextInWay(3955076260, 3955076262, 392266225)).
+delete(nextInWay(3955076262, 3955076264, 392266225)).
+delete(nextInWay(3955076264, 3955076263, 392266225)).
+delete(nextInWay(3955076263, 3955076261, 392266225)).
+delete(nextInWay(3955076261, 8585154552, 392266225)).
+delete(nextInWay(8585154552, 3955076258, 392266225)).
+delete(nextInWay(3955076258, 3955074055, 392266225)).
+delete(nextInWay(3955074055, 3955074054, 392266225)).
+delete(nextInWay(3955074054, 3955074052, 392266225)).
+delete(nextInWay(3955074052, 3955074048, 392266225)).
+add(position(2734454028)).
+add(node(54193272)).
+add(node(130444441)).
+add(nodeTag(130444441, "traffic_sign", "DE:206")).
+add(nodeTag(130444441, "highway", "stop")).
+add(nodeTag(130444441, "direction", "65")).
+add(node(216319753)).
+add(node(1676029361)).
+add(node(3955076266)).
+add(node(3955076271)).
+add(node(4432664905)).
+add(nodeTag(4432664905, "traffic_sign", "DE:260,1026-36")).
+add(nodeTag(4432664905, "direction", "50")).
+add(node(5435749430)).
+add(node(5435749431)).
+add(node(5435749432)).
+add(node(5435749433)).
+add(node(5435749434)).
+add(nodeTag(5435749434, "traffic_sign", "DE:260,1026-36")).
+add(nodeTag(5435749434, "direction", "236")).
+add(node(5435749435)).
+add(nodeTag(5435749435, "traffic_sign", "DE:206")).
+add(nodeTag(5435749435, "highway", "stop")).
+add(nodeTag(5435749435, "direction", "218")).
+add(node(8997997238)).
+add(node(8997997239)).
+add(node(8997997240)).
+add(node(8997997241)).
+add(node(8997997242)).
+add(node(8997997243)).
+add(way(114381055)).
+add(wayTag(114381055, "motor_vehicle", "agricultural")).
+add(wayTag(114381055, "surface", "asphalt")).
+add(wayTag(114381055, "lit", "no")).
+add(wayTag(114381055, "traffic_sign", "DE:260,1026-36")).
+add(wayTag(114381055, "mapillary", "481632912904687")).
+add(wayTag(114381055, "tracktype", "grade1")).
+add(wayTag(114381055, "highway", "track")).
+add(wayTag(114381055, "survey:date", "2021-06-08")).
+add(nextInWay(130444434, 130444441, 114381055)).
+add(nextInWay(130444441, 54193272, 114381055)).
+add(nextInWay(54193272, 5435749435, 114381055)).
+add(nextInWay(5435749435, 8997997238, 114381055)).
+add(nextInWay(8997997238, 216319702, 114381055)).
+add(way(392266231)).
+add(wayTag(392266231, "landuse", "forest")).
+add(nextInWay(3955076270, 3955076271, 392266231)).
+add(nextInWay(3955076271, 3955076272, 392266231)).
+add(nextInWay(3955076272, 3955076273, 392266231)).
+add(nextInWay(3955076273, 3955076274, 392266231)).
+add(nextInWay(3955076274, 3955076275, 392266231)).
+add(nextInWay(3955076275, 3955076276, 392266231)).
+add(nextInWay(3955076276, 3955076277, 392266231)).
+add(nextInWay(3955076277, 3955076290, 392266231)).
+add(nextInWay(3955076290, 3955076285, 392266231)).
+add(nextInWay(3955076285, 3955076288, 392266231)).
+add(nextInWay(3955076288, 3955076289, 392266231)).
+add(nextInWay(3955076289, 3955076286, 392266231)).
+add(nextInWay(3955076286, 3955076287, 392266231)).
+add(nextInWay(3955076287, 3955076278, 392266231)).
+add(nextInWay(3955076278, 3955076279, 392266231)).
+add(nextInWay(3955076279, 3955076280, 392266231)).
+add(nextInWay(3955076280, 3955076281, 392266231)).
+add(nextInWay(3955076281, 3955076282, 392266231)).
+add(nextInWay(3955076282, 3955076283, 392266231)).
+add(nextInWay(3955076283, 3955076284, 392266231)).
+add(nextInWay(3955076284, 3955076270, 392266231)).
+add(way(564106334)).
+add(wayTag(564106334, "building", "shed")).
+add(wayTag(564106334, "operator", "Stadt Stuttgart")).
+add(nextInWay(5435749433, 5435749432, 564106334)).
+add(nextInWay(5435749432, 5435749431, 564106334)).
+add(nextInWay(5435749431, 5435749430, 564106334)).
+add(nextInWay(5435749430, 5435749433, 564106334)).

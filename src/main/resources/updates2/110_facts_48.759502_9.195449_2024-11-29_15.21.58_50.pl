@@ -1,0 +1,43 @@
+delete(position(87348282)).
+delete(node(2627752153)).
+delete(node(2627752157)).
+delete(node(2627752161)).
+delete(node(2627752163)).
+delete(node(2627752165)).
+delete(node(2627752167)).
+delete(node(2627752171)).
+delete(node(2627752174)).
+delete(node(2627752176)).
+add(position(2627752134)).
+add(node(675773)).
+add(node(87348268)).
+add(node(87388014)).
+add(node(130120967)).
+add(node(130120968)).
+add(node(256776689)).
+add(node(256779149)).
+add(node(279898508)).
+add(node(794743076)).
+add(node(794743098)).
+add(node(2627752094)).
+add(node(2627752097)).
+add(node(2627752098)).
+add(node(2627752099)).
+add(node(2627752100)).
+add(node(2627752101)).
+add(node(2627752102)).
+add(node(2627752104)).
+add(node(2627752106)).
+add(node(2627752108)).
+add(node(2627752111)).
+add(node(2627752113)).
+add(node(2627752114)).
+add(node(2627752121)).
+add(node(2627752125)).
+add(node(2627752126)).
+add(node(3954842506)).
+add(node(9447858099)).
+add(nodeTag(9447858099, "man_made", "mast")).
+add(nodeTag(9447858099, "communication:mobile_phone", "yes")).
+add(nodeTag(9447858099, "tower:type", "communication")).
+add(node(9592299765)).

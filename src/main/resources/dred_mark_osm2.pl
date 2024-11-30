@@ -188,6 +188,59 @@ updt(O,[F|Fs],Q) <=>
 % -- overdeletion phase --
 % pass deletion on to derived facts
 
+	% node(X1), node(X2), nextInWay(X1, X2, Y), way(Y), wayTag(Y, "highway", T), 
+	% member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	
+	% --> roadSegment(X1, X2, Y)
+phase(0), current_query(Q),
+fact([node,X1],O1,Q1,M1), fact([node,X2],O2,Q2,M2),
+fact([nextInWay,X1,X2,Y],O3,Q3,M3), fact([way,Y],O4,Q4,M4),
+fact([wayTag,Y,"highway",T],O5,Q5,M5) 
+\ apply_one, fact([roadSegment,X1,X2,Y],add,_,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2],[O3,Q3],[O4,Q4],[O5,Q5]]),
+	member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	|
+	compute_positive_mark([(O1,M1,ex),(O2,M2,ex),(O3,M3,ex),(O4,M4,ex),(O5,M5,ex)],M),
+	fact([roadSegment,X1,X2,Y],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).
+	
+	% node(X), position(X) --> isReachable(X)
+phase(0), current_query(Q),
+fact([node,X],O1,Q1,M1), fact([position,X],O2,Q2,M2) \ apply_one, fact([isReachable,X],add,_,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2]]) |
+	compute_positive_mark([(O1,M1,ex), (O2,M2,ex)],M),
+	fact([isReachable,X],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).
+	
+	% position(X1), roadSegment(X1, X2, _) --> isReachable(X2)
+phase(0), current_query(Q),
+fact([position,X1],O1,Q1,M1), fact([roadSegment,X1,X2,_],O2,Q2,M2) \ apply_one, fact([isReachable,X2],add,_,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2]]) |
+	compute_positive_mark([(O1,M1,ex), (O2,M2,im)],M),
+	fact([isReachable,X2],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).
+
+	% isReachable(X1), isReachable(X2), roadConnection(X1, X2, X3) --> isReachable(X3)
+phase(0), current_query(Q),
+fact([isReachable,X1],O1,Q1,M1), fact([isReachable,X2],O2,Q2,M2), fact([roadConnection,X1,X2,X3],O3,Q3,M3)
+ \ apply_one, fact([isReachable,X3],add,_,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2],[O3,Q3]]) |
+	compute_positive_mark([(O1,M1,im),(O2,M2,im),(O3,M3,im)],M),
+	fact([isReachable,X3],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).
+
+	% roadSegment(X1, X2, _), roadSegment(X2, X3, _) --> roadConnection(X1, X2, X3)
+phase(0), current_query(Q),
+fact([roadSegment,X1,X2,_],O1,Q1,M1), fact([roadSegment,X2,X3,_],O2,Q2,M2) \ apply_one, fact([roadConnection,X1,X2,X3],add,_,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2]]) |
+	compute_positive_mark([(O1,M1,im), (O2,M2,im)],M),
+	fact([roadConnection,X1,X2,X3],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).
+	
+
 	% node(X), nodeTag(X,"highway","give_way") --> yieldSign(X)
 phase(0), current_query(Q),
 fact([node,X],O1,Q1,M), fact([nodeTag,X,"highway","give_way"],O2,Q2,_) \ apply_one, fact([yieldSign,X],add,_,_) <=> 
@@ -315,6 +368,54 @@ compute_positive_mark([_|L],M) <=> compute_positive_mark(L,M).
 %----------	
 % -- rederivation phase --	
 % look for a rule instance that can still derive a deleted fact
+	
+		% node(X1), node(X2), nextInWay(X1, X2, Y), way(Y), wayTag(Y, "highway", T), 
+	% member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	
+	% --> roadSegment(X1, X2, Y)
+phase(1), 
+fact([node,X1],add,Q,M1), fact([node,X2],add,_,M2),
+fact([nextInWay,X1,X2,Y],add,_,M3), fact([way,Y],add,_,M4),
+fact([wayTag,Y,"highway",T],add,_,M5) 
+\ apply_one, fact([roadSegment,X1,X2,Y],del,_,_) <=> 
+	member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	|
+	compute_negative_mark([M1, M2, M3, M4, M5], M),
+	fact([roadSegment,X1,X2,Y],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+	
+	% node(X), position(X) --> isReachable(X)
+phase(1), 
+fact([node,X],add,Q,M1), fact([position,X],add,_,M2) \ apply_one, fact([isReachable,X],del,_,_) <=> 
+	compute_negative_mark([M1, M2], M),
+	fact([isReachable,X],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+	
+	% position(X1), roadSegment(X1, X2, _) --> isReachable(X2)
+phase(1), 
+fact([position,X1],add,Q,M1), fact([roadSegment,X1,X2,_],add,_,M2) \ apply_one, fact([isReachable,X2],del,_,_) <=> 
+	compute_negative_mark([M1, M2], M),
+	fact([isReachable,X2],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+
+	% isReachable(X1), isReachable(X2), roadConnection(X1, X2, X3) --> isReachable(X3)
+phase(1), 
+fact([isReachable,X1],add,Q,M1), fact([isReachable,X2],add,_,M2), fact([roadConnection,X1,X2,X3],add,_,M3)
+ \ apply_one, fact([isReachable,X3],del,_,_) <=> 
+	compute_negative_mark([M1, M2, M3], M),
+	fact([isReachable,X3],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+
+	% roadSegment(X1, X2, _), roadSegment(X2, X3, _) --> roadConnection(X1, X2, X3)
+phase(1), 
+fact([roadSegment,X1,X2,_],add,Q,M1), fact([roadSegment,X2,X3,_],add,_,M2) \ apply_one, fact([roadConnection,X1,X2,X3],del,_,_) <=> 
+	compute_negative_mark([M1, M2], M),
+	fact([roadConnection,X1,X2,X3],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+	
 
 	% node(X), nodeTag(X,"highway","give_way") --> yieldSign(X)
 phase(1), 
@@ -442,6 +543,47 @@ phase(2), query(_,Q), current_query(Q) \ pending_fact(F,add,Q) <=>
 	
 % do not apply rule if derived fact alread present
 fact(F,add,_,_) \ derived_fact(F,_,_) <=> true.	
+
+	% node(X1), node(X2), nextInWay(X1, X2, Y), way(Y), wayTag(Y, "highway", T), 
+	% member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	
+	% --> roadSegment(X1, X2, Y)
+phase(3), current_query(Q),
+fact([node,X1],add,Q1,M1), fact([node,X2],add,Q2,M2),
+fact([nextInWay,X1,X2,Y],add,Q3,M3), fact([way,Y],add,Q4,M4),
+fact([wayTag,Y,"highway",T],add,Q5,M5) ==>
+	member(Q,[Q1,Q2,Q3,Q4,Q5]),
+	member(T, ["motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link","living_street","service"])	|
+	compute_negative_mark([M1, M2, M3, M4, M5], M),
+	derived_fact([roadSegment,X1,X2,Y],Q,M).
+	
+	% node(X), position(X) --> isReachable(X)
+phase(3), current_query(Q),
+fact([node,X],add,Q1,M1), fact([position,X],add,Q2,M2) ==>
+	member(Q, [Q1, Q2]) | 
+	compute_negative_mark([M1, M2], M),
+	derived_fact([isReachable,X],Q,M).
+	
+	% position(X1), roadSegment(X1, X2, _) --> isReachable(X2)
+phase(3), current_query(Q),
+fact([position,X1],add,Q1,M1), fact([roadSegment,X1,X2,_],add,Q2,M2) ==>
+	member(Q, [Q1, Q2]) |
+	compute_negative_mark([M1, M2], M),
+	derived_fact([isReachable,X2],Q,M).
+
+	% isReachable(X1), isReachable(X2), roadConnection(X1, X2, X3) --> isReachable(X3)
+phase(3), current_query(Q),
+fact([isReachable,X1],add,Q1,M1), fact([isReachable,X2],add,Q2,M2), fact([roadConnection,X1,X2,X3],add,_,M3) ==>
+	member(Q, [Q1, Q2]) |
+	compute_negative_mark([M1, M2, M3], M),
+	derived_fact([isReachable,X3],Q,M).
+
+	% roadSegment(X1, X2, _), roadSegment(X2, X3, _) --> roadConnection(X1, X2, X3)
+phase(3), current_query(Q),
+fact([roadSegment,X1,X2,_],add,Q1,M1), fact([roadSegment,X2,X3,_],add,Q2,M2) ==>
+	member(Q, [Q1, Q2]) |
+	compute_negative_mark([M1, M2], M),
+	derived_fact([roadConnection,X1,X2,X3],Q,M).
+	
 
 	% node(X), nodeTag(X,"highway","give_way") --> yieldSign(X)
 phase(3), current_query(Q),

@@ -29,7 +29,9 @@ public class StreamToProlog {
 		String goal = "time(init(localhost:" + localPort + "))";
 
 		// open command shell and call SWI-Prolog for specified file and goal
-		pb.command("cmd.exe", "/c", "cd src/main/resources && swipl -g " + goal + " -t halt " + file);
+		pb.command("cmd.exe", "/c", "cd src/main/resources && swipl --stack-limit=4G -g " + goal + " -t halt " + file);
+				// 	TODO											----
+//		pb.command("cmd.exe", "/c", "cd src/main/resources/compiled && swipl -g " + goal + " -t halt " + file);
 
 		Process process = null;
 		try {

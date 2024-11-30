@@ -1,5 +1,6 @@
 package stream;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -7,13 +8,14 @@ import java.util.Random;
 import java.util.Set;
 
 import data.Fact;
+import data.Update;
 
 public class Evaluation {
 
 	/**
 	 * number of repeated runs to compute average runtime
 	 */
-	final static int REPETITIONS = 3; // TODO
+	final static int REPETITIONS = 5; // TODO
 
 	public static void main(String[] args) {
 
@@ -28,17 +30,17 @@ public class Evaluation {
 		 * -4429514994751527719 test for U = 10 and increasing number of updates
 		 * 
 		 * 
-		 */
+		 */		
 
 		Random rnd = new Random();
 		long randomSeed = rnd.nextLong();
-//		randomSeed = -4429514994751527719l;
+//		randomSeed = -8192733726540027428l;
 		System.out.println("random seed:" + randomSeed);
 
 		// parameters for update stream
 		int maxNodeNumber = 10;
-		int initialDataSize = 100;
-		int updateSize = 20;
+		int initialDataSize = 5;
+		int updateSize = 10;
 		int numberOfUpdates = 50;
 		int updateDelay = 0;
 		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
@@ -50,25 +52,23 @@ public class Evaluation {
 		 * during evaluation
 		 */
 		int variantIndex = 2;
-		int variantStart = 10;
-		int variantEnd = 90;
-		int variantStep = 10;
+		int variantStart = 1;
+		int variantEnd = 3;
+		int variantStep = 1;
 
-		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl", "dred_mark_only_negative.pl");
+		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl"); //, "dred_mark_only_negative.pl");
 //		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
 		for (String file : files) {
 //			performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
 //					variantEnd, variantStep);
 		}
-		
-		
-		String updateFolder = "src/main/resources/updates";
-		List<String> filesReal = List.of("dred_no_mark_osm.pl", "dred_mark_osm.pl", "dred_mark_osm2.pl");
+
+		String updateFolder = "src/main/resources/updates";	// TODO
+		List<String> filesReal = List.of("dred_no_mark_osm_simple.pl", "dred_mark_osm_simple.pl");
+//		List<String> filesReal = List.of("dred_no_mark_train.pl", "dred_mark_train.pl");
 		for (String file : filesReal) {
 			performRealEvaluation(file, updateFolder, false);
 		}
-		
-		
 
 	}
 
@@ -120,8 +120,8 @@ public class Evaluation {
 				parameters[variantIndex] = variant;
 
 				// create update stream
-				SyntheticUpdateStreamRun usr = new SyntheticUpdateStreamRun(file, randomSeed, parameters[0], parameters[1], parameters[2],
-						parameters[3], parameters[4]);
+				SyntheticUpdateStreamRun usr = new SyntheticUpdateStreamRun(file, randomSeed, parameters[0],
+						parameters[1], parameters[2], parameters[3], parameters[4]);
 
 				float avgCpuTime = 0;
 				for (int i = 0; i < REPETITIONS; i++) {
@@ -189,7 +189,7 @@ public class Evaluation {
 			float avgCpuTime = 0;
 			for (int i = 0; i < REPETITIONS; i++) {
 				// process update stream
-				usr.execute(true, false, false);	// TODO
+				usr.execute(false, false, true);		// TODO false
 				avgCpuTime += usr.statistics.cpuTime;
 			}
 

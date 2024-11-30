@@ -88,15 +88,15 @@ public class PrologTest {
 
 	private void testRealProlog(String file1, String file2, String fileExpected) {
 
-		String updateFolder = "src/test/resources/real_updates";
+		String updateFolder = "src/test/resources/updates";
 
 		// compute materialization without marking
 		UpdateStreamRun usrNoMark = new RealUpdateStreamRun(file1, updateFolder, false);
-		usrNoMark.execute(false, false, true);
+		usrNoMark.execute(false, false, false);
 
 		// compute materialization with marking approach
 		UpdateStreamRun usrMark = new RealUpdateStreamRun(file2, updateFolder, false);
-		usrMark.execute(false, false, true);	// TODO
+		usrMark.execute(false, false, false);
 
 		assertEquals(new File(updateFolder).listFiles().length, usrNoMark.queryAnswers.size());
 		assertEquals(new File(updateFolder).listFiles().length, usrMark.queryAnswers.size());

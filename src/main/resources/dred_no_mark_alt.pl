@@ -226,7 +226,7 @@ fact([edge2,X,Y],del,Q) \ apply_one, fact([edge3,X,Y],add,_) <=>
 	% edge3(X,Y) --> edge4(X,Y)
 phase(0), current_query(Q),
 fact([edge3,X,Y],del,Q) \ apply_one, fact([edge4,X,Y],add,_) <=> 
-	fact([edge3,X,Y],del,Q),
+	fact([edge4,X,Y],del,Q),
 	% enable counting of applied rules per phase
 	applied_rules(1,del).			
 	

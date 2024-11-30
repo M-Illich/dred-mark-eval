@@ -1,0 +1,9 @@
+delete(position(2192630184)).
+delete(node(54193485)).
+delete(node(659591001)).
+delete(node(680198384)).
+delete(node(1798451238)).
+delete(node(9586638529)).
+add(position(54193478)).
+add(node(1698385114)).
+add(node(1798451235)).

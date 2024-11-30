@@ -1,0 +1,224 @@
+delete(position(1324063562)).
+delete(node(280997251)).
+delete(node(280997252)).
+delete(node(280997907)).
+delete(node(628957202)).
+delete(node(1324059031)).
+delete(node(1324059061)).
+delete(node(1324063562)).
+delete(node(1692561981)).
+delete(node(1692561986)).
+delete(node(2990108910)).
+delete(nodeTag(2990108910, "ref", "36")).
+delete(nodeTag(2990108910, "aeroway", "parking_position")).
+delete(node(2990108914)).
+delete(node(2990108915)).
+delete(node(2990108916)).
+delete(node(2990108919)).
+delete(node(2990108920)).
+delete(node(4347029340)).
+delete(node(4921016009)).
+delete(node(5691299247)).
+delete(node(5691299248)).
+delete(node(5760685321)).
+delete(node(5760685327)).
+delete(node(7542439310)).
+delete(node(7560759407)).
+delete(node(10711118305)).
+delete(way(25765210)).
+delete(wayTag(25765210, "access", "no")).
+delete(wayTag(25765210, "source", "Stuttgart Luftbild")).
+delete(wayTag(25765210, "highway", "service")).
+delete(nextInWay(2990108755, 9492436012, 25765210)).
+delete(nextInWay(9492436012, 280997250, 25765210)).
+delete(nextInWay(280997250, 2990108843, 25765210)).
+delete(nextInWay(2990108843, 280997251, 25765210)).
+delete(nextInWay(280997251, 2990108914, 25765210)).
+delete(nextInWay(2990108914, 280997252, 25765210)).
+delete(nextInWay(280997252, 2990108916, 25765210)).
+delete(nextInWay(2990108916, 280997907, 25765210)).
+delete(nextInWay(280997907, 2990108915, 25765210)).
+delete(nextInWay(2990108915, 1063799626, 25765210)).
+delete(nextInWay(1063799626, 2990947632, 25765210)).
+delete(nextInWay(2990947632, 2990947623, 25765210)).
+delete(nextInWay(2990947623, 280997908, 25765210)).
+delete(nextInWay(280997908, 2990947588, 25765210)).
+delete(nextInWay(2990947588, 2990947567, 25765210)).
+delete(nextInWay(2990947567, 2990947554, 25765210)).
+delete(nextInWay(2990947554, 9168413861, 25765210)).
+delete(nextInWay(9168413861, 2990108766, 25765210)).
+delete(nextInWay(2990108766, 280997911, 25765210)).
+delete(way(295298299)).
+delete(wayTag(295298299, "source", "Stuttgart Luftbild")).
+delete(wayTag(295298299, "aeroway", "apron")).
+delete(nextInWay(1691335007, 10711103330, 295298299)).
+delete(nextInWay(10711103330, 10711103331, 295298299)).
+delete(nextInWay(10711103331, 10711103332, 295298299)).
+delete(nextInWay(10711103332, 10711103333, 295298299)).
+delete(nextInWay(10711103333, 10711103334, 295298299)).
+delete(nextInWay(10711103334, 2990065525, 295298299)).
+delete(nextInWay(2990065525, 2990065530, 295298299)).
+delete(nextInWay(2990065530, 2990108233, 295298299)).
+delete(nextInWay(2990108233, 2990108235, 295298299)).
+delete(nextInWay(2990108235, 2990108236, 295298299)).
+delete(nextInWay(2990108236, 1691334957, 295298299)).
+delete(nextInWay(1691334957, 1866538704, 295298299)).
+delete(nextInWay(1866538704, 2990065509, 295298299)).
+delete(nextInWay(2990065509, 2990108258, 295298299)).
+delete(nextInWay(2990108258, 2990108260, 295298299)).
+delete(nextInWay(2990108260, 2990947233, 295298299)).
+delete(nextInWay(2990947233, 2990108278, 295298299)).
+delete(nextInWay(2990108278, 2990108289, 295298299)).
+delete(nextInWay(2990108289, 2990108290, 295298299)).
+delete(nextInWay(2990108290, 9168103139, 295298299)).
+delete(nextInWay(9168103139, 2990108313, 295298299)).
+delete(nextInWay(2990108313, 2990108318, 295298299)).
+delete(nextInWay(2990108318, 28131091, 295298299)).
+delete(nextInWay(28131091, 281010092, 295298299)).
+delete(nextInWay(281010092, 264040178, 295298299)).
+delete(nextInWay(264040178, 281010093, 295298299)).
+delete(nextInWay(281010093, 281010094, 295298299)).
+delete(nextInWay(281010094, 60100916, 295298299)).
+delete(nextInWay(60100916, 281010095, 295298299)).
+delete(nextInWay(281010095, 60100927, 295298299)).
+delete(nextInWay(60100927, 9168418444, 295298299)).
+delete(nextInWay(9168418444, 28131105, 295298299)).
+delete(nextInWay(28131105, 281010096, 295298299)).
+delete(nextInWay(281010096, 281010097, 295298299)).
+delete(nextInWay(281010097, 281010098, 295298299)).
+delete(nextInWay(281010098, 42030558, 295298299)).
+delete(nextInWay(42030558, 2990947340, 295298299)).
+delete(nextInWay(2990947340, 2990108625, 295298299)).
+delete(nextInWay(2990108625, 1699718766, 295298299)).
+delete(nextInWay(1699718766, 2990108766, 295298299)).
+delete(nextInWay(2990108766, 1692561965, 295298299)).
+delete(nextInWay(1692561965, 2990108867, 295298299)).
+delete(nextInWay(2990108867, 4921016012, 295298299)).
+delete(nextInWay(4921016012, 2990108908, 295298299)).
+delete(nextInWay(2990108908, 2990108913, 295298299)).
+delete(nextInWay(2990108913, 1692561986, 295298299)).
+delete(nextInWay(1692561986, 2990108920, 295298299)).
+delete(nextInWay(2990108920, 2990108919, 295298299)).
+delete(nextInWay(2990108919, 1692561981, 295298299)).
+delete(nextInWay(1692561981, 1692561971, 295298299)).
+delete(nextInWay(1692561971, 10711118308, 295298299)).
+delete(nextInWay(10711118308, 10711118309, 295298299)).
+delete(nextInWay(10711118309, 10711026909, 295298299)).
+delete(nextInWay(10711026909, 10711026908, 295298299)).
+delete(nextInWay(10711026908, 1691335007, 295298299)).
+delete(way(295298319)).
+delete(wayTag(295298319, "ref", "36")).
+delete(wayTag(295298319, "source", "Stuttgart Luftbild")).
+delete(wayTag(295298319, "aeroway", "parking_position")).
+delete(nextInWay(2990108860, 2990108880, 295298319)).
+delete(nextInWay(2990108880, 2990108910, 295298319)).
+delete(way(436842785)).
+delete(wayTag(436842785, "man_made", "gantry")).
+delete(wayTag(436842785, "traffic_sign", "DE:449")).
+delete(wayTag(436842785, "gantry:type", "destination_sign")).
+delete(wayTag(436842785, "layer", "1")).
+delete(wayTag(436842785, "direction", "99")).
+delete(nextInWay(4347029342, 4347029340, 436842785)).
+delete(way(1151349315)).
+delete(wayTag(1151349315, "ref", "GA3")).
+delete(wayTag(1151349315, "aeroway", "apron")).
+delete(nextInWay(10711026924, 10711026954, 1151349315)).
+delete(nextInWay(10711026954, 10711026953, 1151349315)).
+delete(nextInWay(10711026953, 10711026952, 1151349315)).
+delete(nextInWay(10711026952, 10711026951, 1151349315)).
+delete(nextInWay(10711026951, 10711026950, 1151349315)).
+delete(nextInWay(10711026950, 10711026949, 1151349315)).
+delete(nextInWay(10711026949, 10711026948, 1151349315)).
+delete(nextInWay(10711026948, 10711013085, 1151349315)).
+delete(nextInWay(10711013085, 10711013084, 1151349315)).
+delete(nextInWay(10711013084, 10711013083, 1151349315)).
+delete(nextInWay(10711013083, 10711013082, 1151349315)).
+delete(nextInWay(10711013082, 10711026947, 1151349315)).
+delete(nextInWay(10711026947, 10711026946, 1151349315)).
+delete(nextInWay(10711026946, 10711026945, 1151349315)).
+delete(nextInWay(10711026945, 10711026944, 1151349315)).
+delete(nextInWay(10711026944, 10711026943, 1151349315)).
+delete(nextInWay(10711026943, 10711026942, 1151349315)).
+delete(nextInWay(10711026942, 10711118307, 1151349315)).
+delete(nextInWay(10711118307, 10711118306, 1151349315)).
+delete(nextInWay(10711118306, 10711118305, 1151349315)).
+delete(nextInWay(10711118305, 10711026924, 1151349315)).
+add(position(1324063560)).
+add(node(763572614)).
+add(nodeTag(763572614, "distance", "195.0")).
+add(nodeTag(763572614, "highway", "milestone")).
+add(node(1324063560)).
+add(node(2038589067)).
+add(node(2990947711)).
+add(nodeTag(2990947711, "crossing_ref", "zebra")).
+add(nodeTag(2990947711, "highway", "crossing")).
+add(nodeTag(2990947711, "crossing", "uncontrolled")).
+add(node(2990947733)).
+add(node(2990947748)).
+add(node(2990947752)).
+add(node(2990947755)).
+add(node(2990947758)).
+add(node(2990947759)).
+add(node(2990947766)).
+add(node(2990947772)).
+add(node(5691299244)).
+add(node(5691299245)).
+add(node(5760681510)).
+add(node(5760681519)).
+add(node(7542439307)).
+add(node(9168418338)).
+add(node(9168418339)).
+add(node(9168418340)).
+add(node(9168418341)).
+add(node(9168418412)).
+add(node(11005424924)).
+add(way(295388323)).
+add(wayTag(295388323, "parking", "surface")).
+add(wayTag(295388323, "access", "private")).
+add(wayTag(295388323, "amenity", "parking")).
+add(wayTag(295388323, "parking:orientation", "diagonal")).
+add(wayTag(295388323, "capacity", "16")).
+add(nextInWay(2990947646, 2990947689, 295388323)).
+add(nextInWay(2990947689, 2990947743, 295388323)).
+add(nextInWay(2990947743, 2990947706, 295388323)).
+add(nextInWay(2990947706, 2990947646, 295388323)).
+add(way(295388342)).
+add(wayTag(295388342, "addr:housenumber", "100")).
+add(wayTag(295388342, "addr:country", "DE")).
+add(wayTag(295388342, "addr:street", "Flughafenstrasse")).
+add(wayTag(295388342, "addr:postcode", "70629")).
+add(wayTag(295388342, "building", "industrial")).
+add(wayTag(295388342, "addr:city", "Stuttgart")).
+add(nextInWay(2990947740, 2990947733, 295388342)).
+add(nextInWay(2990947733, 2990947752, 295388342)).
+add(nextInWay(2990947752, 2990947755, 295388342)).
+add(nextInWay(2990947755, 2990947766, 295388342)).
+add(nextInWay(2990947766, 2990947772, 295388342)).
+add(nextInWay(2990947772, 2990947758, 295388342)).
+add(nextInWay(2990947758, 2990947759, 295388342)).
+add(nextInWay(2990947759, 2990947740, 295388342)).
+add(way(295388396)).
+add(wayTag(295388396, "access", "private")).
+add(wayTag(295388396, "lit", "yes")).
+add(wayTag(295388396, "mapillary", "187406230383159")).
+add(wayTag(295388396, "highway", "service")).
+add(wayTag(295388396, "oneway", "yes")).
+add(wayTag(295388396, "survey:date", "2022-07-20")).
+add(nextInWay(1063799626, 2990108908, 295388396)).
+add(nextInWay(2990108908, 9168418342, 295388396)).
+add(nextInWay(9168418342, 9168418343, 295388396)).
+add(nextInWay(9168418343, 601597293, 295388396)).
+add(nextInWay(601597293, 9168418344, 295388396)).
+add(nextInWay(9168418344, 2990947748, 295388396)).
+add(nextInWay(2990947748, 2990947711, 295388396)).
+add(nextInWay(2990947711, 2990947699, 295388396)).
+add(way(992327233)).
+add(wayTag(992327233, "parking", "surface")).
+add(wayTag(992327233, "access", "private")).
+add(wayTag(992327233, "amenity", "parking")).
+add(wayTag(992327233, "parking:orientation", "parallel")).
+add(wayTag(992327233, "capacity", "4")).
+add(nextInWay(9168418341, 9168418340, 992327233)).
+add(nextInWay(9168418340, 9168418339, 992327233)).
+add(nextInWay(9168418339, 9168418338, 992327233)).
+add(nextInWay(9168418338, 9168418341, 992327233)).

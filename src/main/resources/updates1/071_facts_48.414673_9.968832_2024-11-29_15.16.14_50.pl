@@ -1,0 +1,56 @@
+delete(position(27196957)).
+delete(node(27196955)).
+delete(node(2271592757)).
+delete(node(2271592762)).
+delete(node(2436371553)).
+add(position(27196959)).
+add(node(452644850)).
+add(node(452644851)).
+add(node(452644852)).
+add(node(779227813)).
+add(node(1702638447)).
+add(node(1702638449)).
+add(node(2297003770)).
+add(node(2436371900)).
+add(way(38334227)).
+add(wayTag(38334227, "surface", "asphalt")).
+add(wayTag(38334227, "lane_markings", "no")).
+add(wayTag(38334227, "name", "Lehrer-Tal-Weg")).
+add(wayTag(38334227, "highway", "unclassified")).
+add(nextInWay(452644850, 452644851, 38334227)).
+add(way(158026125)).
+add(wayTag(158026125, "landuse", "forest")).
+add(wayTag(158026125, "leaf_type", "broadleaved")).
+add(nextInWay(1702638449, 1702638447, 158026125)).
+add(nextInWay(1702638447, 1702638448, 158026125)).
+add(nextInWay(1702638448, 1702638450, 158026125)).
+add(nextInWay(1702638450, 1702638453, 158026125)).
+add(nextInWay(1702638453, 1702638458, 158026125)).
+add(nextInWay(1702638458, 1702638462, 158026125)).
+add(nextInWay(1702638462, 1702638465, 158026125)).
+add(nextInWay(1702638465, 1702638463, 158026125)).
+add(nextInWay(1702638463, 1702638460, 158026125)).
+add(nextInWay(1702638460, 1702638459, 158026125)).
+add(nextInWay(1702638459, 1702638457, 158026125)).
+add(nextInWay(1702638457, 1702638461, 158026125)).
+add(nextInWay(1702638461, 1702638464, 158026125)).
+add(nextInWay(1702638464, 1702638466, 158026125)).
+add(nextInWay(1702638466, 1702638470, 158026125)).
+add(nextInWay(1702638470, 1702638476, 158026125)).
+add(nextInWay(1702638476, 1702638475, 158026125)).
+add(nextInWay(1702638475, 1702638467, 158026125)).
+add(nextInWay(1702638467, 1702638455, 158026125)).
+add(nextInWay(1702638455, 1702638451, 158026125)).
+add(nextInWay(1702638451, 1702638449, 158026125)).
+add(way(219028450)).
+add(wayTag(219028450, "surface", "paved")).
+add(wayTag(219028450, "service", "driveway")).
+add(wayTag(219028450, "name", "Lehrer-Tal-Weg")).
+add(wayTag(219028450, "highway", "service")).
+add(wayTag(219028450, "vehicle", "no")).
+add(nextInWay(452644851, 452644852, 219028450)).
+add(nextInWay(452644852, 452644853, 219028450)).
+add(nextInWay(452644853, 452644854, 219028450)).
+add(nextInWay(452644854, 2282314986, 219028450)).
+add(nextInWay(2282314986, 2282314966, 219028450)).
+add(nextInWay(2282314966, 2282314948, 219028450)).

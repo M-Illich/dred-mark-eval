@@ -1,0 +1,164 @@
+delete(position(2734454001)).
+delete(node(54193104)).
+delete(nodeTag(54193104, "created_by", "JOSM")).
+delete(node(243881885)).
+delete(node(270255074)).
+delete(node(1698472114)).
+delete(node(2734626405)).
+delete(node(4117216043)).
+delete(node(4117216045)).
+delete(node(7745288915)).
+delete(node(7745288919)).
+delete(node(7745288936)).
+delete(node(9586639742)).
+delete(way(829857475)).
+delete(wayTag(829857475, "landuse", "allotments")).
+delete(nextInWay(7745288922, 7745288909, 829857475)).
+delete(nextInWay(7745288909, 7745288908, 829857475)).
+delete(nextInWay(7745288908, 7745288907, 829857475)).
+delete(nextInWay(7745288907, 7745288906, 829857475)).
+delete(nextInWay(7745288906, 7745288920, 829857475)).
+delete(nextInWay(7745288920, 7745288919, 829857475)).
+delete(nextInWay(7745288919, 7745288922, 829857475)).
+add(position(54193097)).
+add(node(243455332)).
+add(node(243687286)).
+add(node(1453565679)).
+add(node(1453565680)).
+add(node(1453565681)).
+add(node(1453565682)).
+add(node(2734454000)).
+add(node(2734558591)).
+add(node(4117216039)).
+add(node(7745288905)).
+add(node(7745288917)).
+add(node(7745288918)).
+add(node(7745288921)).
+add(node(7745288926)).
+add(node(7745288927)).
+add(node(7745288928)).
+add(node(7745288929)).
+add(node(7745288930)).
+add(node(7745288931)).
+add(node(8062950030)).
+add(node(8062950033)).
+add(node(9586639746)).
+add(node(9586639747)).
+add(way(132070544)).
+add(wayTag(132070544, "addr:suburb", "Plieningen")).
+add(wayTag(132070544, "addr:housenumber", "41")).
+add(wayTag(132070544, "addr:country", "DE")).
+add(wayTag(132070544, "addr:street", "Maurenstrasse")).
+add(wayTag(132070544, "addr:postcode", "70599")).
+add(wayTag(132070544, "building", "service")).
+add(wayTag(132070544, "operator", "Stadtentwaesserung Stuttgart")).
+add(wayTag(132070544, "addr:city", "Stuttgart")).
+add(nextInWay(1453565679, 1453565680, 132070544)).
+add(nextInWay(1453565680, 1453565682, 132070544)).
+add(nextInWay(1453565682, 1453565681, 132070544)).
+add(nextInWay(1453565681, 1453565679, 132070544)).
+add(way(132286410)).
+add(wayTag(132286410, "waterway", "stream")).
+add(wayTag(132286410, "name", "Koersch")).
+add(wayTag(132286410, "wikipedia", "de:Koersch")).
+add(wayTag(132286410, "boat", "no")).
+add(nextInWay(1455519009, 4117214248, 132286410)).
+add(nextInWay(4117214248, 243455265, 132286410)).
+add(nextInWay(243455265, 4117214253, 132286410)).
+add(nextInWay(4117214253, 1936574533, 132286410)).
+add(nextInWay(1936574533, 243455329, 132286410)).
+add(nextInWay(243455329, 1936574530, 132286410)).
+add(nextInWay(1936574530, 243455330, 132286410)).
+add(nextInWay(243455330, 4117214255, 132286410)).
+add(nextInWay(4117214255, 4117214262, 132286410)).
+add(nextInWay(4117214262, 4117214274, 132286410)).
+add(nextInWay(4117214274, 243455331, 132286410)).
+add(nextInWay(243455331, 4117214280, 132286410)).
+add(nextInWay(4117214280, 403561516, 132286410)).
+add(nextInWay(403561516, 4117216028, 132286410)).
+add(nextInWay(4117216028, 4117216031, 132286410)).
+add(nextInWay(4117216031, 4117216034, 132286410)).
+add(nextInWay(4117216034, 2734610113, 132286410)).
+add(nextInWay(2734610113, 4117216035, 132286410)).
+add(nextInWay(4117216035, 4117216036, 132286410)).
+add(nextInWay(4117216036, 4117216037, 132286410)).
+add(nextInWay(4117216037, 4117216038, 132286410)).
+add(nextInWay(4117216038, 4117216039, 132286410)).
+add(nextInWay(4117216039, 243455332, 132286410)).
+add(way(829857477)).
+add(nextInWay(1453565680, 1453565682, 829857477)).
+add(nextInWay(1453565682, 1453565681, 829857477)).
+add(nextInWay(1453565681, 1453565679, 829857477)).
+add(nextInWay(1453565679, 1453565680, 829857477)).
+add(way(829857478)).
+add(nextInWay(7745288931, 7745288930, 829857478)).
+add(nextInWay(7745288930, 7745288905, 829857478)).
+add(nextInWay(7745288905, 7745288929, 829857478)).
+add(nextInWay(7745288929, 7745288928, 829857478)).
+add(nextInWay(7745288928, 7745288927, 829857478)).
+add(nextInWay(7745288927, 7745288926, 829857478)).
+add(nextInWay(7745288926, 7745288925, 829857478)).
+add(nextInWay(7745288925, 7745288924, 829857478)).
+add(nextInWay(7745288924, 7745288923, 829857478)).
+add(nextInWay(7745288923, 7745288922, 829857478)).
+add(nextInWay(7745288922, 7745288921, 829857478)).
+add(nextInWay(7745288921, 7745288931, 829857478)).
+add(way(865045717)).
+add(wayTag(865045717, "landuse", "allotments")).
+add(wayTag(865045717, "name:signed", "no")).
+add(nextInWay(8062950051, 8062950034, 865045717)).
+add(nextInWay(8062950034, 8062950033, 865045717)).
+add(nextInWay(8062950033, 8062950032, 865045717)).
+add(nextInWay(8062950032, 8062950031, 865045717)).
+add(nextInWay(8062950031, 8062950050, 865045717)).
+add(nextInWay(8062950050, 7432270013, 865045717)).
+add(nextInWay(7432270013, 8062950051, 865045717)).
+add(way(1068841393)).
+add(wayTag(1068841393, "wires", "double")).
+add(wayTag(1068841393, "note", "Urspruenglich mit 220 kV betrieben, aber Umbauarbeiten in Moehringen und die Isolatoren an manchen Masten (Nr. 70 z.B.) zeigen dass nur noch 110 kV drauf sein koennen.")).
+add(wayTag(1068841393, "cables", "6")).
+add(wayTag(1068841393, "ref", "306")).
+add(wayTag(1068841393, "name", "Anlage 306; MORNG-WDLNG (2 x 110 kV)")).
+add(wayTag(1068841393, "power", "line")).
+add(wayTag(1068841393, "source", "Yahoo;survey")).
+add(wayTag(1068841393, "circuits", "2")).
+add(wayTag(1068841393, "operator", "Netze BW GmbH")).
+add(wayTag(1068841393, "voltage", "110000")).
+add(nextInWay(90592660, 90592657, 1068841393)).
+add(nextInWay(90592657, 90592654, 1068841393)).
+add(nextInWay(90592654, 90592645, 1068841393)).
+add(nextInWay(90592645, 129783439, 1068841393)).
+add(nextInWay(129783439, 129782371, 1068841393)).
+add(nextInWay(129782371, 90592637, 1068841393)).
+add(nextInWay(90592637, 393533800, 1068841393)).
+add(nextInWay(393533800, 90592629, 1068841393)).
+add(nextInWay(90592629, 90592624, 1068841393)).
+add(nextInWay(90592624, 90592622, 1068841393)).
+add(nextInWay(90592622, 1833134113, 1068841393)).
+add(nextInWay(1833134113, 1918272818, 1068841393)).
+add(nextInWay(1918272818, 90592617, 1068841393)).
+add(nextInWay(90592617, 90592612, 1068841393)).
+add(nextInWay(90592612, 90592608, 1068841393)).
+add(nextInWay(90592608, 1684072780, 1068841393)).
+add(nextInWay(1684072780, 90592606, 1068841393)).
+add(nextInWay(90592606, 90606243, 1068841393)).
+add(nextInWay(90606243, 90606251, 1068841393)).
+add(nextInWay(90606251, 90606258, 1068841393)).
+add(nextInWay(90606258, 90606267, 1068841393)).
+add(nextInWay(90606267, 90606272, 1068841393)).
+add(nextInWay(90606272, 90606279, 1068841393)).
+add(nextInWay(90606279, 90606282, 1068841393)).
+add(nextInWay(90606282, 90606283, 1068841393)).
+add(nextInWay(90606283, 9959049386, 1068841393)).
+add(nextInWay(9959049386, 90606284, 1068841393)).
+add(nextInWay(90606284, 287580914, 1068841393)).
+add(nextInWay(287580914, 287580910, 1068841393)).
+add(nextInWay(287580910, 258897683, 1068841393)).
+add(nextInWay(258897683, 258897682, 1068841393)).
+add(relation(11344578)).
+add(relationTag(11344578, "note", "keine wirtschaftliche Bedeutung")).
+add(relationTag(11344578, "landuse", "meadow")).
+add(relationTag(11344578, "type", "multipolygon")).
+add(nextInRelation(829857477, 829857478, 11344578)).
+add(relationMember(829857477, "way", "inner", 11344578)).
+add(relationMember(829857478, "way", "outer", 11344578)).
