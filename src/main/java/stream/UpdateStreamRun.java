@@ -71,11 +71,7 @@ public abstract class UpdateStreamRun extends StreamToProlog {
 
 			// read answers for each query
 			queryAnswers = readAnswers(in, printMaterialization);
-			
-			// TODO
-//			System.out.println("answers: " + queryAnswers.getFirst().size());
-						
-			
+
 			in.close();
 			out.close();
 			clientSocket.close();
@@ -85,7 +81,7 @@ public abstract class UpdateStreamRun extends StreamToProlog {
 			BufferedReader cmdReader = new BufferedReader(new InputStreamReader(prologCall.getInputStream()));
 			if (printStatistics) {
 				System.out.println("-- command output --");
-	 		}
+			}
 			statistics.integrateData(readOutput(cmdReader, printStatistics));
 			cmdReader.close();
 			// get additional messages, like execution time if available

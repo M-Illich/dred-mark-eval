@@ -19,7 +19,7 @@ public class RealUpdateTest {
 	String updateFolder = "src/test/resources/updates";
 	File file0 = new File(updateFolder + "/00_facts_48.398621_9.984068_2024-08-10_09.23.33_100.pl");
 	File file1 = new File(updateFolder + "/01_facts_48.397888_9.984138_2024-08-10_09.23.39_100.pl");
-	RealUpdateStreamRun usr = new RealUpdateStreamRun("no_file", updateFolder, false);
+	RealUpdateStreamRun usr = new RealUpdateStreamRun("no_file", updateFolder);
 
 	// facts occurring in test files
 	Fact node1 = new Fact("node(1)");
@@ -75,14 +75,7 @@ public class RealUpdateTest {
 
 	}
 
-	@Test
-	public void testGetSeconds() {
-		long time = usr.getTimeSeconds(file0);
-		long expected = 9 * 3600 + 23 * 60 + 33;
-		assertEquals(expected, time);
-		assertEquals(6, usr.getTimeSeconds(file1) - time);
-
-	}
+	
 
 	@Test
 	public void testReadUpdate() {
@@ -95,27 +88,5 @@ public class RealUpdateTest {
 
 	}
 
-	@Test
-	public void testkeepTaggedFacts() {
-		Set<Fact> set = new HashSet<Fact>();
-		Fact node1 = new Fact("node(1)");
-		Fact node2 = new Fact("node(2)");
-		Fact nodeTag1 = new Fact("nodeTag(1, \"test\", \"yes\")");
-		Fact way3 = new Fact("way(3)");
-		Fact wayTag3 = new Fact("wayTag(3, \"test\", \"yes\")");
-		set.add(node1);
-		set.add(node2);
-		set.add(nodeTag1);
-		set.add(way3);
-		set.add(wayTag3);
-
-		Set<Fact> testSet = usr.keepRelatedFacts(set);
-
-		assertEquals(4, testSet.size());
-		assertTrue(testSet.contains(node1));
-		assertTrue(testSet.contains(way3));
-		assertTrue(!testSet.contains(node2));
-
-	}
 
 }

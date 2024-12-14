@@ -1,73 +1,89 @@
 package stream;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-
-import data.Fact;
-import data.Update;
 
 public class Evaluation {
 
 	/**
 	 * number of repeated runs to compute average runtime
 	 */
-	final static int REPETITIONS = 5; // TODO
+	final static int REPETITIONS = 5;
+
+	/**
+	 * "synthetic" or "real" tests are possible
+	 */
+	static String TEST_TYPE = "synthetic";
+
+	/**
+	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming) for "real":
+	 * 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
+	 */
+	static int TEST_CASE = 0;
 
 	public static void main(String[] args) {
 
-		/*
-		 * recommendation: keep number of updates high
-		 * 
-		 * random seeds: -2952287021128233795 with maxNode = 20, initial = 100, updates
-		 * = 100, size = 10-100
-		 * 
-		 * -1005128985613677429l 928174635l 2487642182737836315l
-		 * 
-		 * -4429514994751527719 test for U = 10 and increasing number of updates
-		 * 
-		 * 
-		 */		
+		// TODO
+		TEST_TYPE = "real"; 
+		TEST_CASE = 1;
 
-		Random rnd = new Random();
-		long randomSeed = rnd.nextLong();
-//		randomSeed = -8192733726540027428l;
-		System.out.println("random seed:" + randomSeed);
+		if (TEST_TYPE == "synthetic") {
+			// parameters for update stream
+			int maxNodeNumber = 20;
+			int initialDataSize = 100;
+			int updateSize = 10;
+			int numberOfUpdates = 50;
+			int updateDelay = 0;
+			int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
+			String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize",
+					"numberOfUpdates", "updateDelay" };
 
-		// parameters for update stream
-		int maxNodeNumber = 10;
-		int initialDataSize = 5;
-		int updateSize = 10;
-		int numberOfUpdates = 50;
-		int updateDelay = 0;
-		int[] parameters = new int[] { maxNodeNumber, initialDataSize, updateSize, numberOfUpdates, updateDelay };
-		String[] parameterNames = new String[] { "maxNodeNumber", "initialDataSize", "updateSize", "numberOfUpdates",
-				"updateDelay" };
+			/**
+			 * index of parameter for which different, increasing values are considered
+			 * during evaluation
+			 */
+			int variantIndex = 2;
+			int variantStart = 10;
+			int variantEnd = 80;
+			int variantStep = 10;
 
-		/**
-		 * index of parameter for which different, increasing values are considered
-		 * during evaluation
-		 */
-		int variantIndex = 2;
-		int variantStart = 1;
-		int variantEnd = 3;
-		int variantStep = 1;
+			Random rnd = new Random();
+			long randomSeed = rnd.nextLong();
+			randomSeed = -7987291794494113099l;
+			System.out.println("random seed:" + randomSeed);
+			// used random seeds:
+			// -- transitive paths:
+			// -8530167300591734801 -7052395318707035129 -1747236591629776228
+			// -- sequential renaming:
+			// -1286130758052520077 1844037384923181921 -7987291794494113099
 
-		List<String> files = List.of("dred_no_mark.pl", "dred_mark.pl"); //, "dred_mark_only_negative.pl");
-//		List<String> files = List.of("dred_no_mark_alt.pl", "dred_mark_alt.pl");
-		for (String file : files) {
-//			performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
-//					variantEnd, variantStep);
+			List<String> files = null;
+			switch (TEST_CASE) {
+			case 0:
+				files = List.of("dred_no_mark.pl", "dred_mark.pl");
+				break;
+				
+			case 1:
+				files = List.of("dred_no_mark_alt.pl", "dred_mark_alt_indirect.pl");	// TODO
+				// maxNodeNumber = 100
+				parameters[0] = 100;
+				break;
+			}
+			
+			for (String file : files) {
+				performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
+						variantEnd, variantStep);
+			}
 		}
 
-		String updateFolder = "src/main/resources/updates";	// TODO
-		List<String> filesReal = List.of("dred_no_mark_osm_simple.pl", "dred_mark_osm_simple.pl");
-//		List<String> filesReal = List.of("dred_no_mark_train.pl", "dred_mark_train.pl");
-		for (String file : filesReal) {
-			performRealEvaluation(file, updateFolder, false);
+		else if (TEST_TYPE == "real") {
+			String updateFolder = "src/main/resources/updates/filtered/updates_track" + TEST_CASE;
+			List<String> filesReal = List.of("dred_no_mark_osm_simple.pl", "dred_mark_osm_simple.pl");
+			for (String file : filesReal) {
+				performRealEvaluation(file, updateFolder);
+			}
 		}
 
 	}
@@ -103,7 +119,8 @@ public class Evaluation {
 		try {
 			// store results as table in a file
 			writer = new PrintWriter(
-					"results-" + approach + "-" + parameterNames[variantIndex] + "_" + randomSeed + ".csv", "UTF-8");
+					"results-" + approach + "-changing_" + parameterNames[variantIndex] + "_" + randomSeed + ".csv",
+					"UTF-8");
 			// different statistics (used as columns for table in file)
 			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
 			String parameterNamesString = Arrays.toString(parameterNames).replaceAll(" ", "");
@@ -165,31 +182,29 @@ public class Evaluation {
 	 *                     be executed
 	 * @param updateFolder {@code String} name of folder where each stream update is
 	 *                     stored as file
-	 * @param realDelay    {@code boolean} stating if there should be a delay
-	 *                     between updates based on real GPS time points
 	 */
-	public static void performRealEvaluation(String file, String folder, boolean realDelay) {
+	public static void performRealEvaluation(String file, String updateFolder) {
 
 		String approach = file.substring(5, file.length() - 3);
+		String updatesName = updateFolder.substring(updateFolder.lastIndexOf("/") + 1);
 		System.out.println(approach);
 
 		PrintWriter writer;
 
 		try {
 			// store results as table in a file
-			writer = new PrintWriter(
-					"results-" + approach + "-map_stream-" + (realDelay ? "real_delay" : "no_delay") + ".csv", "UTF-8");
+			writer = new PrintWriter("results-" + approach + "-map_stream-" + updatesName + ".csv", "UTF-8");
 			// different statistics (used as columns for table in file)
 			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
 			writer.println(categories);
 
 			// create update stream
-			RealUpdateStreamRun usr = new RealUpdateStreamRun(file, folder, realDelay);
+			RealUpdateStreamRun usr = new RealUpdateStreamRun(file, updateFolder);
 
 			float avgCpuTime = 0;
 			for (int i = 0; i < REPETITIONS; i++) {
 				// process update stream
-				usr.execute(false, false, true);		// TODO false
+				usr.execute(false, false, true); // TODO false
 				avgCpuTime += usr.statistics.cpuTime;
 			}
 

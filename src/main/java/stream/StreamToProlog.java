@@ -30,8 +30,6 @@ public class StreamToProlog {
 
 		// open command shell and call SWI-Prolog for specified file and goal
 		pb.command("cmd.exe", "/c", "cd src/main/resources && swipl --stack-limit=4G -g " + goal + " -t halt " + file);
-				// 	TODO											----
-//		pb.command("cmd.exe", "/c", "cd src/main/resources/compiled && swipl -g " + goal + " -t halt " + file);
 
 		Process process = null;
 		try {
@@ -78,7 +76,7 @@ public class StreamToProlog {
 					answers.add(facts);
 					facts = new HashSet<>();
 					// show which query is processed next
-					if (!print) {						
+					if (!print) {
 						System.out.print(count + " ");
 						count++;
 					}
