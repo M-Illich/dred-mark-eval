@@ -15,19 +15,15 @@ public class Evaluation {
 	/**
 	 * "synthetic" or "real" tests are possible
 	 */
-	static String TEST_TYPE = "synthetic";
+	static String TEST_TYPE = "real"; // "synthetic"; // 
 
 	/**
-	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming) for "real":
-	 * 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
+	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming);
+	 * for "real": 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
 	 */
-	static int TEST_CASE = 0;
+	static int TEST_CASE = 2;
 
 	public static void main(String[] args) {
-
-		// TODO
-		TEST_TYPE = "real"; 
-		TEST_CASE = 1;
 
 		if (TEST_TYPE == "synthetic") {
 			// parameters for update stream
@@ -51,7 +47,7 @@ public class Evaluation {
 
 			Random rnd = new Random();
 			long randomSeed = rnd.nextLong();
-			randomSeed = -7987291794494113099l;
+//			randomSeed = -7987291794494113099l;
 			System.out.println("random seed:" + randomSeed);
 			// used random seeds:
 			// -- transitive paths:
@@ -62,16 +58,16 @@ public class Evaluation {
 			List<String> files = null;
 			switch (TEST_CASE) {
 			case 0:
-				files = List.of("dred_no_mark.pl", "dred_mark.pl");
+				files = List.of("dred_no_mark_trans.pl", "dred_mark_trans.pl");
 				break;
-				
+
 			case 1:
-				files = List.of("dred_no_mark_alt.pl", "dred_mark_alt_indirect.pl");	// TODO
+				files = List.of("dred_no_mark_seq.pl", "dred_mark_seq.pl");
 				// maxNodeNumber = 100
 				parameters[0] = 100;
 				break;
 			}
-			
+
 			for (String file : files) {
 				performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
 						variantEnd, variantStep);
@@ -80,10 +76,11 @@ public class Evaluation {
 
 		else if (TEST_TYPE == "real") {
 			String updateFolder = "src/main/resources/updates/filtered/updates_track" + TEST_CASE;
-			List<String> filesReal = List.of("dred_no_mark_osm_simple.pl", "dred_mark_osm_simple.pl");
+			List<String> filesReal = List.of("dred_no_mark_map.pl", "dred_mark_map.pl");
 			for (String file : filesReal) {
 				performRealEvaluation(file, updateFolder);
 			}
+
 		}
 
 	}
@@ -204,7 +201,7 @@ public class Evaluation {
 			float avgCpuTime = 0;
 			for (int i = 0; i < REPETITIONS; i++) {
 				// process update stream
-				usr.execute(false, false, true); // TODO false
+				usr.execute(false, false, false);
 				avgCpuTime += usr.statistics.cpuTime;
 			}
 

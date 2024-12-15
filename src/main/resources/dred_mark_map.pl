@@ -204,6 +204,15 @@ nextInWay(X,_,Z1,O1,Q1,M1), nextInWay(_,X,Z2,O2,Q2,M2)
 	applied_rules(1,del).	
 	
 phase(0), current_query(Q),
+nextInWay(_,X,Z1,O1,Q1,M1), nextInWay(X,_,Z2,O2,Q2,M2) 
+\ apply_one, connection(Z1,Z2,add,_,_)<=> 
+	Z1 \== Z2,
+	member([del,Q],[[O1,Q1],[O2,Q2]]) | 
+	compute_positive_mark([(O1,M1,ex),(O2,M2,ex)],M),
+	connection(Z1,Z2,del,Q,M),
+	applied_rules(1,del).	
+	
+phase(0), current_query(Q),
 nextInWay(_,X,Z1,O1,Q1,M1), nextInWay(_,X,Z2,O2,Q2,M2) 
 \ apply_one, connection(Z1,Z2,add,_,_)<=> 
 	Z1 \== Z2,
@@ -219,7 +228,13 @@ connection(X,Y,O1,Q1,M1), connection(Y,Z,O2,Q2,M2)
 	compute_positive_mark([(O1,M1,ex),(O2,M2,ex)],M),
 	connection(X,Z,del,Q,M),
 	applied_rules(1,del).		
-	
+
+% phase(0), current_query(Q),
+% connection(X,Y,del,Q,M1) 
+% \ apply_one, connection(Y,X,add,_,_)<=> 
+	% compute_positive_mark([(del,M1,ex)],M),
+	% connection(Y,X,del,Q,M),
+	% applied_rules(1,del).		
 
 	
 % - compute positive mark -
@@ -257,6 +272,14 @@ nextInWay(X,_,Z1,add,Q,M1), nextInWay(_,X,Z2,add,_,M2)
 	applied_rules(1,red).	
 	
 phase(1), 
+nextInWay(_,X,Z1,add,Q,M1), nextInWay(X,_,Z2,add,_,M2) 
+\ apply_one, connection(Z1,Z2,del,_,_)<=> 
+	Z1 \== Z2 | 
+	compute_negative_mark([M1, M2], M),
+	connection(Z1,Z2,add,Q,M),
+	applied_rules(1,red).		
+	
+phase(1), 
 nextInWay(_,X,Z1,add,Q,M1), nextInWay(_,X,Z2,add,_,M2) 
 \ apply_one, connection(Z1,Z2,del,_,_)<=> 
 	Z1 \== Z2 | 
@@ -270,6 +293,13 @@ connection(X,Y,add,Q,M1), connection(Y,Z,add,_,M2)
 	compute_negative_mark([M1, M2], M),
 	connection(X,Z,add,Q,M),
 	applied_rules(1,red).		
+	
+% phase(1), 
+% connection(X,Y,add,Q,M1)
+% \ apply_one, connection(Y,X,del,_,_)<=> 
+	% compute_negative_mark([M1], M),
+	% connection(Y,X,add,Q,M),
+	% applied_rules(1,red).			
 
 
 % - compute negative mark -
@@ -327,6 +357,13 @@ nextInWay(X,_,Z1,add,Q1,M1), nextInWay(_,X,Z2,add,Q2,M2) ==>
 	derived_fact([connection,Z1,Z2],Q,M).
 	
 phase(3), current_query(Q),
+nextInWay(_,X,Z1,add,Q1,M1), nextInWay(X,_,Z2,add,Q2,M2) ==>
+	Z1 \== Z2,
+	member(Q,[Q1,Q2]) | 
+	compute_negative_mark([M1, M2], M),
+	derived_fact([connection,Z1,Z2],Q,M).	
+	
+phase(3), current_query(Q),
 nextInWay(_,X,Z1,add,Q1,M1), nextInWay(_,X,Z2,add,Q2,M2) ==>
 	Z1 \== Z2,
 	member(Q,[Q1,Q2]) | 
@@ -338,6 +375,11 @@ connection(X,Y,add,Q1,M1), connection(Y,Z,add,Q2,M2) ==>
 	member(Q,[Q1,Q2]) | 
 	compute_negative_mark([M1, M2], M),
 	derived_fact([connection,X,Z],Q,M).
+	
+% phase(3), current_query(Q),
+% connection(X,Y,add,Q,M1) ==>
+	% compute_negative_mark([M1], M),
+	% derived_fact([connection,Y,X],Q,M).	
 
 
 % insert derived head facts

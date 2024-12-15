@@ -1,55 +1,7 @@
 /*
-DRed where changes of next query are introduced as marks
+DRed where changes of next update are introduced as marks
 
-general idea:
-- collect and combine updates from stream until a query appears
-- if some query is currently processed, then
-	- if no other query given, we mark facts that are changed by new, combined update
-	- if another query already waiting, then wait with marking until query is next to be processed
--> marks only refer to next pending query	
-	
-
-
-pending(Fact,add/del,ID)
-current_query(ID)
-mark_query(ID)
-next_query_id(ID)
-query(Q,ID)
-
---> 
-- we first introduce facts as pending and associate it with next available query ID
-- two pending with same fact and ID remove each other (thus, updates are combined)
-- when new query introduced by stream, it gets the next query ID, and we increase the next value
-- when query processing finished, current and mark (i.e., current+1) query ID is increased
-- query only processed when equal to current query ID, 
-	then related pending is transformed into fact constraint
-	but: first only del, 
-		then later when insertion phase starts, also remaining pending add facts
-	
-- after rederivation, we check for each del-fact if it is marked
-	if yes, then it is transformed into a pending fact with mark query ID
-	else, fact is just removed
-- after insertion and answering query, we check remaining add facts for mark
-	if marked, then fact is transformed into del
-	else do nothing
-	
-- general problem:
-	changing mark can lead to repeated rule applications
-	-> idea: use variable if not marked
-			assigning value to variabe then serves as marking
-			without deleting+re-adding fact
-		-> this might also enable us to mark a fact even if it has already been derived
-			if we pass on the same variable
-			e.g., A(X)-->B(X) will also mark B if A is marked via X
-
-- a fact is marked if there is a pending duplicate that has mark query ID,	
-	we then also remove pending
-
-- phase constraint used to separate overdeletion, rederivation, and insertion
-- current query constraint used in rule applications
-	to ensure that at least one new introduced fact used
-	thus, repetitions avoided, too
-	
+transitive paths
 	
 */
 
@@ -232,7 +184,8 @@ updt(O,[F|Fs],Q) <=>
 
 	% edge(X,Y) --> path(X,Y)
 phase(0), current_query(Q),
-fact([edge,X,Y],del,Q,M) \ apply_one, fact([path,X,Y],add,_,_) <=> 
+fact([edge,X,Y],del,Q,M1) \ apply_one, fact([path,X,Y],add,_,_) <=> 
+	compute_positive_mark([(del,M1,ex)],M),
 	fact([path,X,Y],del,Q,M),
 	% enable counting of applied rules per phase
 	applied_rules(1,del). 
@@ -273,7 +226,8 @@ phase(0), current_query(1), fact([edge,1,2],add,0,M1), fact([path,2,3],del,1,1),
 
 	% edge(X,Y) --> path(X,Y)
 phase(1),
-fact([edge,X,Y],add,Q,M) \ apply_one, fact([path,X,Y],del,_,_) <=> 
+fact([edge,X,Y],add,Q,M1) \ apply_one, fact([path,X,Y],del,_,_) <=> 
+	compute_negative_mark([M1], M),
 	fact([path,X,Y],add,Q,M),
 	% enable counting of applied rules per phase
 	applied_rules(1,red).		
@@ -323,7 +277,9 @@ fact(F,add,_,_) \ derived_fact(F,_,_) <=> true.
 
 	% edge(X,Y) --> path(X,Y)
 phase(3), current_query(Q),
-fact([edge,X,Y],add,Q,M) ==> derived_fact([path,X,Y],Q,M).
+fact([edge,X,Y],add,Q,M1) ==> 
+	compute_negative_mark([M1], M),
+	derived_fact([path,X,Y],Q,M).
 	
 	% edge(X,Y), path(Y,Z) --> path(X,Z)
 phase(3), current_query(Q),

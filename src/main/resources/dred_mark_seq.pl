@@ -1,55 +1,7 @@
 /*
-DRed where changes of next query are introduced as marks
+dred_mark_alt 
 
-general idea:
-- collect and combine updates from stream until a query appears
-- if some query is currently processed, then
-	- if no other query given, we mark facts that are changed by new, combined update
-	- if another query already waiting, then wait with marking until query is next to be processed
--> marks only refer to next pending query	
-	
-
-
-pending(Fact,add/del,ID)
-current_query(ID)
-mark_query(ID)
-next_query_id(ID)
-query(Q,ID)
-
---> 
-- we first introduce facts as pending and associate it with next available query ID
-- two pending with same fact and ID remove each other (thus, updates are combined)
-- when new query introduced by stream, it gets the next query ID, and we increase the next value
-- when query processing finished, current and mark (i.e., current+1) query ID is increased
-- query only processed when equal to current query ID, 
-	then related pending is transformed into fact constraint
-	but: first only del, 
-		then later when insertion phase starts, also remaining pending add facts
-	
-- after rederivation, we check for each del-fact if it is marked
-	if yes, then it is transformed into a pending fact with mark query ID
-	else, fact is just removed
-- after insertion and answering query, we check remaining add facts for mark
-	if marked, then fact is transformed into del
-	else do nothing
-	
-- general problem:
-	changing mark can lead to repeated rule applications
-	-> idea: use variable if not marked
-			assigning value to variabe then serves as marking
-			without deleting+re-adding fact
-		-> this might also enable us to mark a fact even if it has already been derived
-			if we pass on the same variable
-			e.g., A(X)-->B(X) will also mark B if A is marked via X
-
-- a fact is marked if there is a pending duplicate that has mark query ID,	
-	we then also remove pending
-
-- phase constraint used to separate overdeletion, rederivation, and insertion
-- current query constraint used in rule applications
-	to ensure that at least one new introduced fact used
-	thus, repetitions avoided, too
-	
+sequential renaming of facts
 	
 */
 
@@ -58,9 +10,8 @@ query(Q,ID)
 	loop/0, read_stream/0, apply_one/0, phase/1, 
 	available_input/1, extract_input/2,
 	query/2, update/2, updt/3, stream_end/0,
-	pending_fact/3, derived_fact/3,
-	edge/5, path/5,
-	next_query_id/1, current_query/1, mark_query/1, create_query/1,
+	pending_fact/3, fact/4, derived_fact/3,
+	next_query_id/1, current_query/1, mark_query/1,create_query/1,
 	compute_positive_mark/2, compute_negative_mark/2,
 	clean/0, applied_rules/2, marked_facts/2, marked_facts/3, print/0.
 
@@ -103,8 +54,8 @@ applied_rules(N,P), applied_rules(M,P) <=>
 marked_facts(N,add,[edge|_]) <=> marked_facts(N,addEx).	
 marked_facts(N,del,[edge|_]) <=> marked_facts(N,delEx).	
 	% implicit
-marked_facts(N,add,[path|_]) <=> marked_facts(N,addIm).
-marked_facts(N,del,[path|_]) <=> marked_facts(N,delIm).
+marked_facts(N,add,_) <=> marked_facts(N,addIm).
+marked_facts(N,del,_) <=> marked_facts(N,delIm).
 
 % count number of marked facts
 marked_facts(N,O), marked_facts(M,O) <=>
@@ -117,13 +68,12 @@ print, marked_facts(N,O) ==> writeln(marked_facts(N,O)).
 
 
 % remove constraints for simpler output
+clean \ fact(_,_,_,_) <=> true.	
 clean \ stream(_) <=> true.
 clean \ phase(_) <=> true.		
 clean \ next_query_id(_) <=> true.	
 clean \ current_query(_) <=> true.			
-clean \ mark_query(_) <=> true.	
-clean \ edge(_,_,_,_,_) <=> true.	
-clean \ path(_,_,_,_,_) <=> true.	
+clean \ mark_query(_) <=> true.		
 
 
 
@@ -141,13 +91,10 @@ stream_end, apply_one, loop <=> true.
 pending_fact(F,add,Q), pending_fact(F,del,Q) <=> true.
 
 % new del-fact replaces old add-fact
-edge(X,Y,del,Qd,_) \ edge(X,Y,add,Qa,_) <=> Qd > Qa | true.
-path(X,Y,del,Qd,_) \ path(X,Y,add,Qa,_) <=> Qd > Qa | true.
+fact(F,del,Qd,_) \ fact(F,add,Qa,_) <=> Qd > Qa | true.
 
 % prevent duplicates
-edge(X,Y,_,_,_) \ edge(X,Y,_,_,_) <=> true.
-path(X,Y,_,_,_) \ path(X,Y,_,_,_) <=> true.
-
+fact(F,_,_,_) \ fact(F,_,_,_) <=> true.
 % only one rule application per iteration
 apply_one \ apply_one <=> true.	
 	
@@ -191,23 +138,15 @@ create_query(Q), next_query_id(N) <=>
 	M is N + 1,
 	next_query_id(M),
 	query(Q,N).
-
+	
 % if no other query, insert delete-facts of current query
-query(_,Q), current_query(Q) \ pending_fact([edge,X,Y],del,Q) <=>
+query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
 	% variable at end allows mark if needed
-%	fact(F,del,Q,_).
-	edge(X,Y,del,Q,_).
-query(_,Q), current_query(Q) \ pending_fact([path,X,Y],del,Q) <=>
-	% variable at end allows mark if needed
-	path(X,Y,del,Q,_).
+	fact(F,del,Q,_).
 
 	% new query is next one
 % mark facts that are changed by next query
-query(_,Q), mark_query(Q), edge(X,Y,O1,_,M) \ pending_fact([edge,X,Y],O2,Q) <=>
-	O1 \== O2 |
-	% mark fact by assigning value to variable
-	M = 1.	
-query(_,Q), mark_query(Q), path(X,Y,O1,_,M) \ pending_fact([path,X,Y],O2,Q) <=>
+query(_,Q), mark_query(Q), fact(F,O1,_,M) \ pending_fact(F,O2,Q) <=>
 	O1 \== O2 |
 	% mark fact by assigning value to variable
 	M = 1.	
@@ -242,23 +181,38 @@ updt(O,[F|Fs],Q) <=>
 % -- overdeletion phase --
 % pass deletion on to derived facts
 
-	% edge(X,Y) --> path(X,Y)
+	% edge(X,Y) --> edge1(X,Y)
 phase(0), current_query(Q),
-edge(X,Y,del,Q,M) \ apply_one, path(X,Y,add,_,_) <=> 
-	path(X,Y,del,Q,M),
+fact([edge,X,Y],del,Q,M1) \ apply_one, fact([edge1,X,Y],add,_,_) <=> 
+	compute_positive_mark([(del,M1,ex)],M),
+	fact([edge1,X,Y],del,Q,M),
 	% enable counting of applied rules per phase
-	applied_rules(1,del). 
+	applied_rules(1,del).	
 	
-	% edge(X,Y), path(Y,Z) --> path(X,Z)
+	% edge1(X,Y) --> edge2(X,Y)
 phase(0), current_query(Q),
-edge(X,Y,O1,Q1,M1), path(Y,Z,O2,Q2,M2) \ apply_one, path(X,Z,add,_,_) <=> 
-	member([del,Q],[[O1,Q1],[O2,Q2]]) |
-	compute_positive_mark([(O1,M1,ex), (O2,M2,im)],M),
-	path(X,Z,del,Q,M),
+fact([edge1,X,Y],del,Q,M1) \ apply_one, fact([edge2,X,Y],add,_,_) <=> 
+	compute_positive_mark([(del,M1,ex)],M),
+	fact([edge2,X,Y],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).	
+	
+	% edge2(X,Y) --> edge3(X,Y)
+phase(0), current_query(Q),
+fact([edge2,X,Y],del,Q,M1) \ apply_one, fact([edge3,X,Y],add,_,_) <=> 
+	compute_positive_mark([(del,M1,ex)],M),
+	fact([edge3,X,Y],del,Q,M),
 	% enable counting of applied rules per phase
 	applied_rules(1,del).
-
-
+	
+	% edge3(X,Y) --> edge4(X,Y)
+phase(0), current_query(Q),
+fact([edge3,X,Y],del,Q,M1) \ apply_one, fact([edge4,X,Y],add,_,_) <=> 
+	compute_positive_mark([(del,M1,ex)],M),
+	fact([edge4,X,Y],del,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,del).		
+	
 	
 % - compute positive mark -
 /* idea: remove constraint if conditions not met,
@@ -270,59 +224,65 @@ compute_positive_mark([(del,M,ex)|_],_) <=> var(M) | true.
 compute_positive_mark([(add,1,_)|_],_) <=> true.
 compute_positive_mark([(_,M,im)|_],_) <=> var(M) | true.
 	% requirements hold so far --> consider next elements
-compute_positive_mark([_|L],M) <=> compute_positive_mark(L,M).	
-
+compute_positive_mark([_|L],M) <=> compute_positive_mark(L,M).		
 
 
 %----------	
 % -- rederivation phase --	
 % look for a rule instance that can still derive a deleted fact
 
-% edge(X,Y) --> path(X,Y)
+	% edge(X,Y) --> edge1(X,Y)
 phase(1),
-edge(X,Y,add,Q,M) \ apply_one, path(X,Y,del,_,_) <=> 
-	path(X,Y,add,Q,M),
+fact([edge,X,Y],add,Q,M1) \ apply_one, fact([edge1,X,Y],del,_,_) <=> 
+	compute_negative_mark([M1], M),
+	fact([edge1,X,Y],add,Q,M),
 	% enable counting of applied rules per phase
 	applied_rules(1,red).		
 	
-	% edge(X,Y), path(Y,Z) --> path(X,Z)
+	% edge1(X,Y) --> edge2(X,Y)
 phase(1),
-edge(X,Y,add,Q,M1), path(Y,Z,add,_,M2) \ apply_one, path(X,Z,del,_,_) <=>
-	compute_negative_mark([M1, M2], M),
-	path(X,Z,add,Q,M),
+fact([edge1,X,Y],add,Q,M1) \ apply_one, fact([edge2,X,Y],del,_,_) <=> 
+	compute_negative_mark([M1], M),
+	fact([edge2,X,Y],add,Q,M),
 	% enable counting of applied rules per phase
-	applied_rules(1,red).	
-
-
+	applied_rules(1,red).
+	
+	% edge2(X,Y) --> edge3(X,Y)
+phase(1),
+fact([edge2,X,Y],add,Q,M1) \ apply_one, fact([edge3,X,Y],del,_,_) <=> 
+	compute_negative_mark([M1], M),
+	fact([edge3,X,Y],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+	
+	% edge3(X,Y) --> edge4(X,Y)
+phase(1),
+fact([edge3,X,Y],add,Q,M1) \ apply_one, fact([edge4,X,Y],del,_,_) <=> 
+	compute_negative_mark([M1], M),
+	fact([edge4,X,Y],add,Q,M),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).
+	
+	
 % - compute negative mark -
 /* at least one element in list has to be 1*/
 compute_negative_mark([],_) <=> true.
 compute_negative_mark([1|_],M) <=> M = 1.
-compute_negative_mark([_|L],M) <=> compute_negative_mark(L,M).
+compute_negative_mark([_|L],M) <=> compute_negative_mark(L,M).	
 
 
-% - apply deletions 
-phase(2), mark_query(Q) \ edge(X,Y,del,_,1) <=> 
-	pending_fact([edge,X,Y],add,Q),
+% - apply deletions and new insertions
+% keep marked del-facts for next query and remove rest
+phase(2), mark_query(Q) \ fact(F,del,_,1) <=> 
+	pending_fact(F,add,Q),
 	% enable counting of marked facts
-	marked_facts(1,del,[edge,X,Y]).
-phase(2) \ edge(_,_,del,_,M) <=> var(M) | true.
-
-phase(2), mark_query(Q) \ path(X,Y,del,_,1) <=> 
-	pending_fact([path,X,Y],add,Q),
-	% enable counting of marked facts
-	marked_facts(1,del,[path,X,Y]).
-phase(2) \ path(_,_,del,_,M) <=> var(M) | true.
-
+	marked_facts(1,del,F).
+phase(2) \ fact(_,del,_,M) <=> var(M) | true.
 
 % insert remaining pending facts of current query
-phase(2), query(_,Q), current_query(Q) \ pending_fact([edge,X,Y],add,Q) <=>
+phase(2), query(_,Q), current_query(Q) \ pending_fact(F,add,Q) <=>
 	% variable at end allows mark if needed
-	edge(X,Y,add,Q,_).
-phase(2), query(_,Q), current_query(Q) \ pending_fact([path,X,Y],add,Q) <=>
-	% variable at end allows mark if needed
-	path(X,Y,add,Q,_).	
-	
+	fact(F,add,Q,_).
 
 
 %----------	
@@ -331,31 +291,39 @@ phase(2), query(_,Q), current_query(Q) \ pending_fact([path,X,Y],add,Q) <=>
 	(re-inserting apply_one-constraint can re-trigger application) */
 	
 % do not apply rule if derived fact alread present
-edge(X,Y,add,_,_) \ derived_fact([edge,X,Y],_,_) <=> true.	
-path(X,Y,add,_,_) \ derived_fact([path,X,Y],_,_) <=> true.	
+fact(F,add,_,_) \ derived_fact(F,_,_) <=> true.	
 
-% edge(X,Y) --> path(X,Y)
+	% edge(X,Y) --> edge1(X,Y)
 phase(3), current_query(Q),
-edge(X,Y,add,Q,M) ==> derived_fact([path,X,Y],Q,M).
+fact([edge,X,Y],add,Q,M1) ==> 
+	compute_negative_mark([M1], M),
+	derived_fact([edge1,X,Y],Q,M).
 	
-	% edge(X,Y), path(Y,Z) --> path(X,Z)
+	% edge1(X,Y) --> edge2(X,Y)
 phase(3), current_query(Q),
-edge(X,Y,add,Q1,M1), path(Y,Z,add,Q2,M2) ==>
-	member(Q, [Q1, Q2]) |
-	compute_negative_mark([M1, M2], M),
-	derived_fact([path,X,Z],Q,M).
+fact([edge1,X,Y],add,Q,M1) ==> 
+	compute_negative_mark([M1], M),
+	derived_fact([edge2,X,Y],Q,M).
+	
+	% edge2(X,Y) --> edge3(X,Y)
+phase(3), current_query(Q),
+fact([edge2,X,Y],add,Q,M1) ==> 
+	compute_negative_mark([M1], M),	
+	derived_fact([edge3,X,Y],Q,M).
+	
+	% edge3(X,Y) --> edge4(X,Y)
+phase(3), current_query(Q),
+fact([edge3,X,Y],add,Q,M1) ==> 
+	compute_negative_mark([M1], M),
+	derived_fact([edge4,X,Y],Q,M).	
+
 
 
 % insert derived head facts
-apply_one, derived_fact([edge,X,Y],Q,M) <=> 
-	edge(X,Y,add,Q,M),
+apply_one, derived_fact(F,Q,M) <=> 
+	fact(F,add,Q,M),
 	% enable counting of applied rules per phase
 	applied_rules(1,ins).	
-apply_one, derived_fact([path,X,Y],Q,M) <=> 
-	path(X,Y,add,Q,M),
-	% enable counting of applied rules per phase
-	applied_rules(1,ins).		
-
 
 
 %-------------------------------------------------
@@ -370,31 +338,22 @@ current_query(Q), query(_,Q) \ apply_one, phase(N) <=>
 % write query answers as line in output stream
 phase(4), current_query(N), query(Q,N), stream(S) ==> 
 	writeln(S,query(Q,N)).
-
-phase(4), current_query(N), query(Q,N), edge(X,Y,add,_,_), stream(S) ==> 
-	unifiable(Q,[edge,X,Y],_) |
-	writeln(S,[edge,X,Y]).	
-phase(4), current_query(N), query(Q,N), path(X,Y,add,_,_), stream(S) ==> 
-	unifiable(Q,[path,X,Y],_) |
-	writeln(S,[path,X,Y]).	
-
+phase(4), current_query(N), query(Q,N), fact(F,add,_,_), stream(S) ==> 
+	unifiable(Q,F,_) |
+	writeln(S,F).
 % mark end of answers in stream
 phase(4), stream(S), current_query(N) \ query(_,N) <=> 
 	writeln(S,""), 
-	flush_output(S). 
+	flush_output(S).
 
 %----------	
 % -- prepare next query --
 
 % transform marked add-facts into del-facts for next query
-phase(4), mark_query(Q) \ edge(X,Y,add,_,1) <=> 
-	edge(X,Y,del,Q,_),
+phase(4), mark_query(Q) \ fact(F,add,_,1) <=> 
+	fact(F,del,Q,_),
 	% enable counting of marked facts
-	marked_facts(1,add,[edge,X,Y]).	
-phase(4), mark_query(Q) \ path(X,Y,add,_,1) <=> 
-	path(X,Y,del,Q,_),
-	% enable counting of marked facts
-	marked_facts(1,add,[path,X,Y]).	
+	marked_facts(1,add,F).
 	
 % increase current and mark ID value and reset phase
 phase(4), current_query(_), mark_query(M) <=>

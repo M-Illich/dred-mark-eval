@@ -1,12 +1,13 @@
 /*
 read facts rom stream and compute materialization
-	i.e., exhaustivel apply rules until no further facts can be derived
+	i.e., exhaustively apply rules until no further facts can be derived
 */
 
 :- use_module(library(chr)).
 :- chr_constraint init/1, stream/1,
-	available_input/1, extract_input/1,
-	fact/1, end/0.
+	available_input/1, extract_input/1, end/0,
+	node/1, nextInWay/3,  connection/2,
+	count/1.
 
 :- chr_option(debug, off).
 :- chr_option(optimize, off).
@@ -41,32 +42,46 @@ available_input([S]) <=>
 	read_line_to_string(S,L), 
 	term_string(T,L),
 	extract_input(T).
+	
 
-
+	
 % get facts from input
 extract_input([]) <=> true.
-extract_input([X|Xs]) <=>
-	fact(X),
+extract_input([[node,X]|Xs]) <=>	
+	node(X),
 	extract_input(Xs).
+extract_input([[nextInWay,X,Y,Z]|Xs]) <=>
+	nextInWay(X,Y,Z),
+	extract_input(Xs).
+% exclude irrelevant fats
+extract_input([_|Xs]) <=>
+	extract_input(Xs).	
 	
 
 % remove duplicates
-fact(X) \ fact(X) <=> true.	
+node(X) \ node(X) <=> true.
+nextInWay(X,Y,Z) \ nextInWay(X,Y,Z) <=> true.
+connection(X,Y) \ connection(X,Y) <=> true.
 		
 
 %-------------------------------------------------	
 % -- compute materialization --
-	% edge(X,Y) --> path(X,Y)
-fact([edge,X,Y]) ==> fact([path,X,Y]).
-	
-	% edge(X,Y), path(Y,Z) --> path(X,Z)
-fact([edge,X,Y]), fact([path,Y,Z]) ==> fact([path,X,Z]).
-
+nextInWay(X,_,Z1), nextInWay(X,_,Z2) ==> Z1 \== Z2 | connection(Z1,Z2).	
+nextInWay(X,_,Z1), nextInWay(_,X,Z2) ==> Z1 \== Z2 | connection(Z1,Z2).	
+nextInWay(_,X,Z1), nextInWay(X,_,Z2) ==> Z1 \== Z2 | connection(Z1,Z2).	
+nextInWay(_,X,Z1), nextInWay(_,X,Z2) ==> Z1 \== Z2 | connection(Z1,Z2).	
+connection(X,Y), connection(Y,Z) ==> connection(X,Z).
+% connection(X,Y) ==> connection(Y,X).
 
 %-------------------------------------------------	
 % -- write all facts to stream --
-fact(F), stream(S) ==> 
-	writeln(S,F).
+node(X), stream(S) ==> 	
+	writeln(S,[node,X]).
+nextInWay(X,Y,Z), stream(S) ==> 
+	writeln(S,[nextInWay,X,Y,Z]).
+connection(X,Y), stream(S) ==> 
+	writeln(S,[connection,X,Y]).
+	
 % mark end of answers in stream
 stream(S), end <=> 
 	writeln(S,""), 

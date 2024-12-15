@@ -1,6 +1,7 @@
 /*
-rules based on data from
-https://github.com/mrupp-sudo/gps-osm-project/blob/main/src/main/resources/datalog_rules.pl
+classical DRed
+
+transitive paths
 
 */
 
@@ -9,10 +10,9 @@ https://github.com/mrupp-sudo/gps-osm-project/blob/main/src/main/resources/datal
 	loop/0, read_stream/0, apply_one/0, phase/1, 
 	available_input/1, extract_input/2,
 	query/2, update/2, updt/3, stream_end/0,
-	pending_fact/3,  derived_fact/2,
-	next_query_id/1, current_query/1, create_query/1, 
-	clean/0, applied_rules/2, print/0,
-	nextInWay/5,  connection/4.
+	pending_fact/3, fact/3, derived_fact/2,
+	next_query_id/1, current_query/1, create_query/1,
+	clean/0, applied_rules/2, print/0.
 
 :- chr_option(debug, off).
 :- chr_option(optimize, off).
@@ -52,12 +52,11 @@ print, applied_rules(N,P) ==> writeln(applied_rules(N,P)).
 
 
 % remove facts for simpler output
+clean \ fact(_,_,_) <=> true.	
 clean \ stream(_) <=> true.
 clean \ phase(_) <=> true.		
 clean \ next_query_id(_) <=> true.	
-clean \ current_query(_) <=> true.	
-clean \ nextInWay(_,_,_,_,_) <=> true.
-clean \ connection(_,_,_,_) <=> true.
+clean \ current_query(_) <=> true.			
 
 
 %----------
@@ -74,15 +73,10 @@ stream_end, apply_one, loop <=> true.
 pending_fact(F,add,Q), pending_fact(F,del,Q) <=> true.
 
 % new del-fact replaces old add-fact
-nextInWay(X,Y,Z,del,Qd) \ nextInWay(X,Y,Z,add,Qa) <=> Qd > Qa | true.
-connection(X,Y,del,Qd) \ connection(X,Y,add,Qa) <=> Qd > Qa | true.
-
+fact(F,del,Qd) \ fact(F,add,Qa) <=> Qd > Qa | true.
 
 % prevent duplicates
-nextInWay(X,Y,Z,_,_) \ nextInWay(X,Y,Z,_,_) <=> true.
-connection(X,Y,_,_) \ connection(X,Y,_,_) <=> true.
-
-
+fact(F,_,_) \ fact(F,_,_) <=> true.
 % only one rule application per iteration
 apply_one \ apply_one <=> true.	
 
@@ -124,13 +118,10 @@ create_query(Q), next_query_id(N) <=>
 	next_query_id(M),
 	query(Q,N).
 	
-	
 % if no other query, insert delete-facts of current query
-query(_,Q), current_query(Q) \ pending_fact([nextInWay,X,Y,Z],del,Q) <=>
-	nextInWay(X,Y,Z,del,Q).
-query(_,Q), current_query(Q) \ pending_fact([connection,X,Y],del,Q) <=>	
-	connection(X,Y,del,Q).
-
+query(_,Q), current_query(Q) \ pending_fact(F,del,Q) <=>
+	% variable at end allows mark if needed
+	fact(F,del,Q).
 
 
 %----------	
@@ -162,81 +153,49 @@ updt(O,[F|Fs],Q) <=>
 % -- overdeletion phase --
 % pass deletion on to derived facts
 
+	% edge(X,Y) --> path(X,Y)
 phase(0), current_query(Q),
-nextInWay(X,_,Z1,O1,Q1), nextInWay(X,_,Z2,O2,Q2) 
-\ apply_one, connection(Z1,Z2,add,_)<=> 
-	Z1 \== Z2,
-	member([del,Q],[[O1,Q1],[O2,Q2]])	| 
-	connection(Z1,Z2,del,Q),
+fact([edge,X,Y],del,Q) \ apply_one, fact([path,X,Y],add,_) <=> 
+	fact([path,X,Y],del,Q),
+	% enable counting of applied rules per phase
 	applied_rules(1,del).	
 	
+	% edge(X,Y), path(Y,Z) --> path(X,Z)
 phase(0), current_query(Q),
-nextInWay(X,_,Z1,O1,Q1), nextInWay(_,X,Z2,O2,Q2) 
-\ apply_one, connection(Z1,Z2,add,_)<=> 
-	Z1 \== Z2,
-	member([del,Q],[[O1,Q1],[O2,Q2]]) | 
-	connection(Z1,Z2,del,Q),
-	applied_rules(1,del).	
-	
-phase(0), current_query(Q),
-nextInWay(_,X,Z1,O1,Q1), nextInWay(_,X,Z2,O2,Q2) 
-\ apply_one, connection(Z1,Z2,add,_)<=> 
-	Z1 \== Z2,
-	member([del,Q],[[O1,Q1],[O2,Q2]]) | 
-	connection(Z1,Z2,del,Q),
-	applied_rules(1,del).	
-	
-phase(0), current_query(Q),
-connection(X,Y,O1,Q1), connection(Y,Z,O2,Q2) 
-\ apply_one, connection(X,Z,add,_)<=> 
-	member([del,Q],[[O1,Q1],[O2,Q2]]) | 
-	connection(X,Z,del,Q),
+fact([edge,X,Y],O1,Q1), fact([path,Y,Z],O2,Q2) \ apply_one, fact([path,X,Z],add,_) <=> 
+	member([del,Q],[[O1,Q1],[O2,Q2]]) |
+	fact([path,X,Z],del,Q),
+	% enable counting of applied rules per phase
 	applied_rules(1,del).		
-
+	
 
 
 %----------	
 % -- rederivation phase --	
 % look for a rule instance that can still derive a deleted fact
+
+	% edge(X,Y) --> path(X,Y)
+phase(1),
+fact([edge,X,Y],add,Q) \ apply_one, fact([path,X,Y],del,_) <=> 
+	fact([path,X,Y],add,Q),
+	% enable counting of applied rules per phase
+	applied_rules(1,red).		
 	
-phase(1), 
-nextInWay(X,_,Z1,add,Q), nextInWay(X,_,Z2,add,_) 
-\ apply_one, connection(Z1,Z2,del,_)<=> 
-	Z1 \== Z2 | 
-	connection(Z1,Z2,add,Q),
-	applied_rules(1,red).	
-	
-phase(1), 
-nextInWay(X,_,Z1,add,Q), nextInWay(_,X,Z2,add,_) 
-\ apply_one, connection(Z1,Z2,del,_)<=> 
-	Z1 \== Z2 | 
-	connection(Z1,Z2,add,Q),
-	applied_rules(1,red).	
-	
-phase(1), 
-nextInWay(_,X,Z1,add,Q), nextInWay(_,X,Z2,add,_) 
-\ apply_one, connection(Z1,Z2,del,_)<=> 
-	Z1 \== Z2 | 
-	connection(Z1,Z2,add,Q),
-	applied_rules(1,red).	
-	
-phase(1), 
-connection(X,Y,add,Q), connection(Y,Z,add,_) 
-\ apply_one, connection(X,Z,del,_)<=> 
-	connection(X,Z,add,Q),
+	% edge(X,Y), path(Y,Z) --> path(X,Z)
+phase(1),
+fact([edge,X,Y],add,Q), fact([path,Y,Z],add,_) \ apply_one, fact([path,X,Z],del,_) <=>
+	fact([path,X,Z],add,Q),
+	% enable counting of applied rules per phase
 	applied_rules(1,red).		
 
 
-% - apply deletions
-phase(2) \ nextInWay(_,_,_,del,_) <=> true.
-phase(2) \ connection(_,_,del,_) <=> true.
+% - apply deletions and new insertions
+phase(2) \ fact(_,del,_) <=> true.
 
 % insert remaining pending facts of current query
-phase(2), query(_,Q), current_query(Q) \ pending_fact([nextInWay,X,Y,Z],add,Q) <=>
-	nextInWay(X,Y,Z,add,Q).
-phase(2), query(_,Q), current_query(Q) \ pending_fact([connection,X,Y],add,Q) <=>	
-	connection(X,Y,add,Q).
-
+phase(2), query(_,Q), current_query(Q) \ pending_fact(F,add,Q) <=>
+	% variable at end allows mark if needed
+	fact(F,add,Q).
 
 
 %----------	
@@ -245,42 +204,24 @@ phase(2), query(_,Q), current_query(Q) \ pending_fact([connection,X,Y],add,Q) <=
 	(re-inserting apply_one-constraint can re-trigger application) */
 
 % do not apply rule if derived fact alread present
-nextInWay(X,Y,Z,add,_) \ derived_fact([nextInWay,X,Y,Z],_) <=> true.	
-connection(X,Y,add,_) \ derived_fact([connection,X,Y],_) <=> true.	
+fact(F,add,_) \ derived_fact(F,_) <=> true.		
 
+	% edge(X,Y) --> path(X,Y)
+phase(3), current_query(Q),
+fact([edge,X,Y],add,Q) ==> derived_fact([path,X,Y],Q).
+	
+	% edge(X,Y), path(Y,Z) --> path(X,Z)
+phase(3), current_query(Q),
+fact([edge,X,Y],add,Q1), fact([path,Y,Z],add,Q2) ==>
+	member(Q, [Q1, Q2]) |
+	derived_fact([path,X,Z],Q).
 
-phase(3), current_query(Q),
-nextInWay(X,_,Z1,add,Q1), nextInWay(X,_,Z2,add,Q2) ==>
-	Z1 \== Z2,
-	member(Q,[Q1,Q2]) | 
-	derived_fact([connection,Z1,Z2],Q).
-	
-phase(3), current_query(Q),
-nextInWay(X,_,Z1,add,Q1), nextInWay(_,X,Z2,add,Q2) ==>
-	Z1 \== Z2,
-	member(Q,[Q1,Q2]) | 
-	derived_fact([connection,Z1,Z2],Q).
-	
-phase(3), current_query(Q),
-nextInWay(_,X,Z1,add,Q1), nextInWay(_,X,Z2,add,Q2) ==>
-	Z1 \== Z2,
-	member(Q,[Q1,Q2]) | 
-	derived_fact([connection,Z1,Z2],Q).	
-	
-phase(3), current_query(Q),
-connection(X,Y,add,Q1), connection(Y,Z,add,Q2) ==>
-	member(Q,[Q1,Q2]) | 
-	derived_fact([connection,X,Z],Q).		
-		
 
 % insert derived head facts
-apply_one, derived_fact([nextInWay,X,Y,Z],Q) <=> 	
-	nextInWay(X,Y,Z,add,Q),
-	applied_rules(1,ins).
-apply_one, derived_fact([connection,X,Y],Q) <=> 	
-	connection(X,Y,add,Q),
-	applied_rules(1,ins).
-
+apply_one, derived_fact(F,Q) <=> 
+	fact(F,add,Q),
+	% enable counting of applied rules per phase
+	applied_rules(1,ins).	
 
 
 %-------------------------------------------------
@@ -295,14 +236,9 @@ current_query(Q), query(_,Q) \ apply_one, phase(N) <=>
 % write query answers as line in output stream
 phase(4), current_query(N), query(Q,N), stream(S) ==> 
 	writeln(S,query(Q,N)).
-	
-phase(4), current_query(N), query(Q,N), nextInWay(X,Y,Z,add,_), stream(S) ==> 
-	unifiable(Q,[nextInWay,X,Y,Z],_) |
-	writeln(S,[nextInWay,X,Y,Z]).
-phase(4), current_query(N), query(Q,N), connection(X,Y,add,_), stream(S) ==> 
-	unifiable(Q,[connection,X,Y],_) |
-	writeln(S,[connection,X,Y]).
-
+phase(4), current_query(N), query(Q,N), fact(F,add,_), stream(S) ==> 
+	unifiable(Q,F,_) |
+	writeln(S,F).
 % mark end of answers in stream
 phase(4), stream(S), current_query(N) \ query(_,N) <=> 
 	writeln(S,""), 

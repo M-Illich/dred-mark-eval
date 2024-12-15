@@ -1,6 +1,9 @@
 /*
 read facts rom stream and compute materialization
 	i.e., exhaustivel apply rules until no further facts can be derived
+	
+transitive paths	
+	
 */
 
 :- use_module(library(chr)).
@@ -56,18 +59,11 @@ fact(X) \ fact(X) <=> true.
 
 %-------------------------------------------------	
 % -- compute materialization --
-	% edge(X,Y) --> edge1(X,Y)
-fact([edge,X,Y]) ==> fact([edge1,X,Y]).
+	% edge(X,Y) --> path(X,Y)
+fact([edge,X,Y]) ==> fact([path,X,Y]).
 	
-	% edge1(X,Y) --> edge2(X,Y)
-fact([edge1,X,Y]) ==> fact([edge2,X,Y]).
-
-	% edge2(X,Y) --> edge3(X,Y)
-fact([edge2,X,Y]) ==> fact([edge3,X,Y]).
-	
-	% edge3(X,Y) --> edge4(X,Y)
-fact([edge3,X,Y]) ==> fact([edge4,X,Y]).
-
+	% edge(X,Y), path(Y,Z) --> path(X,Z)
+fact([edge,X,Y]), fact([path,Y,Z]) ==> fact([path,X,Z]).
 
 
 %-------------------------------------------------	

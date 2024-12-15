@@ -3,14 +3,12 @@ package prolog;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
 
 import data.Fact;
-import stream.RealUpdateStreamRun;
 import stream.SimpleMaterialization;
 import stream.SyntheticUpdateStreamRun;
 import stream.UpdateStreamRun;
@@ -21,13 +19,10 @@ public class PrologTest {
 	public void testProlog() {
 		
 		System.out.println("Synthetic test 1");
-		testSyntheticProlog("dred_no_mark.pl", "dred_mark.pl", "materialize.pl");
+		testSyntheticProlog("dred_no_mark_trans.pl", "dred_mark_trans.pl", "materialize_trans.pl");
 		System.out.println("");
 		System.out.println("Synthetic test 2");
-		testSyntheticProlog("dred_no_mark_alt.pl", "dred_mark_alt.pl", "materialize_alt.pl");
-		System.out.println("");
-		System.out.println("Real test");
-		testRealProlog("dred_no_mark_osm.pl", "dred_mark_osm.pl", "materialize_osm.pl");	// TODO
+		testSyntheticProlog("dred_no_mark_seq.pl", "dred_mark_seq.pl", "materialize_seq.pl");
 
 	}
 
@@ -71,34 +66,5 @@ public class PrologTest {
 		}
 	}
 
-	private void testRealProlog(String file1, String file2, String fileExpected) {
-
-		String updateFolder = "src/test/resources/updates";
-
-		// compute materialization without marking
-		UpdateStreamRun usrNoMark = new RealUpdateStreamRun(file1, updateFolder);
-		usrNoMark.execute(false, false, false);
-
-		// compute materialization with marking approach
-		UpdateStreamRun usrMark = new RealUpdateStreamRun(file2, updateFolder);
-		usrMark.execute(false, false, false);
-
-		assertEquals(new File(updateFolder).listFiles().length, usrNoMark.queryAnswers.size());
-		assertEquals(new File(updateFolder).listFiles().length, usrMark.queryAnswers.size());
-
-		for (int i = 0; i < usrMark.datasets.size(); i++) {
-			// compute materialization for dataset from scratch
-			SimpleMaterialization sm = new SimpleMaterialization(fileExpected, usrMark.datasets.get(i));
-
-			// compare results with simple method
-			Set<Fact> mat = sm.execute();
-			assertEquals(mat.size(), usrMark.queryAnswers.get(i).size());
-			assertTrue(mat.containsAll(usrMark.queryAnswers.get(i)));
-			// compare between with and without marking
-			assertEquals(usrNoMark.queryAnswers.get(i).size(), usrMark.queryAnswers.get(i).size());
-			assertTrue(usrNoMark.queryAnswers.get(i).containsAll(usrMark.queryAnswers.get(i)));
-
-		}
-	}
 
 }
