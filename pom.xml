@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uniulm.ki</groupId>
-	<artifactId>mat-updt-stream</artifactId>
+	<artifactId>dred-mark-eval</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 
