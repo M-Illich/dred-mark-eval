@@ -5,5 +5,5 @@ Tests are provided for both synthetic and real data to compare the marking appro
 The selection and execution of the tests is done in the `Evaluation`-class.
 
 # Prerequisites: 
-- [Java v.22](https://www.oracle.com/java/technologies/downloads/)
+- [Java v.22](https://www.oracle.com/java/technologies/downloads/) and [Maven v3.9.9](https://maven.apache.org/)
 - [SWI-Prolog v.9.3.15](https://www.swi-prolog.org/Download.html)
