@@ -22,14 +22,14 @@ public class StreamToProlog {
 	 */
 	public Process callProlog(int localPort, String file) {
 
-		ProcessBuilder pb = new ProcessBuilder();
-
 		// prolog goal to initialize process, connect to specified local port, and
 		// measure runtime
 		String goal = "time(init(localhost:" + localPort + "))";
 
-		// open command shell and call SWI-Prolog for specified file and goal
-		pb.command("cmd.exe", "/c", "cd src/main/resources && swipl --stack-limit=4G -g " + goal + " -t halt " + file);
+		// call SWI-Prolog for specified file and goal
+		String[] command = { "swipl", "--stack-limit=4G", "-g", goal, "-t", "halt", file };
+		ProcessBuilder pb = new ProcessBuilder(command);
+		pb.directory(new java.io.File("src/main/resources"));
 
 		Process process = null;
 		try {
