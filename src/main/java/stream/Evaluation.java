@@ -1,6 +1,8 @@
 package stream;
 
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -15,17 +17,40 @@ public class Evaluation {
 	/**
 	 * "synthetic" or "real" tests are possible
 	 */
-	static String TEST_TYPE = "real"; // "synthetic"; // 
+	static String TEST_TYPE = "real"; // "synthetic"; //
 
 	/**
-	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming);
-	 * for "real": 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
+	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming); for "real":
+	 * 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
 	 */
 	static int TEST_CASE = 2;
 
-	public static void main(String[] args) {
+	/**
+	 * index to choose random seed from array
+	 */
+	static int RND_SEED_INDEX = 0;
 
-		if (TEST_TYPE == "synthetic") {
+	/**
+	 * random seeds used for synthetic "transitive path" tests
+	 */
+	static long[] RND_SEED_TRANS = new long[] { 0, -8530167300591734801l, -7052395318707035129l,
+			-1747236591629776228l };
+
+	/**
+	 * random seeds used for synthetic "sequential renaming" tests
+	 */
+	static long[] RND_SEED_SEQ = new long[] { 0, -1286130758052520077l, 1844037384923181921l, -7987291794494113099l };
+
+	public static void main(String[] args) throws Exception {
+
+		if (args.length >= 2) {
+			TEST_TYPE = args[0];
+			TEST_CASE = Integer.parseInt(args[1]);
+		}
+
+		System.out.println("test type: " + TEST_TYPE + "  --  test case: " + TEST_CASE);
+
+		if (TEST_TYPE.contentEquals("synthetic")) {
 			// parameters for update stream
 			int maxNodeNumber = 20;
 			int initialDataSize = 100;
@@ -45,28 +70,39 @@ public class Evaluation {
 			int variantEnd = 80;
 			int variantStep = 10;
 
+			// determine random seed for update generation
 			Random rnd = new Random();
 			long randomSeed = rnd.nextLong();
-//			randomSeed = -7987291794494113099l;
-			System.out.println("random seed:" + randomSeed);
-			// used random seeds:
-			// -- transitive paths:
-			// -8530167300591734801 -7052395318707035129 -1747236591629776228
-			// -- sequential renaming:
-			// -1286130758052520077 1844037384923181921 -7987291794494113099
+			// add new random seed to predetermined ones
+			RND_SEED_TRANS[0] = randomSeed;
+			RND_SEED_SEQ[0] = randomSeed;
+			// determine index to select random seed from array
+			if (args.length == 3) {
+				RND_SEED_INDEX = Integer.parseInt(args[2]);
+			}
+			if (RND_SEED_INDEX < 0 || RND_SEED_INDEX > 3) {
+				throw new Exception("Invalid argument. Only 0, 1, 2, or 3 are allowed for random seed selection.");
+			}
 
+			// list of prolog files related to different test cases
 			List<String> files = null;
 			switch (TEST_CASE) {
 			case 0:
 				files = List.of("dred_no_mark_trans.pl", "dred_mark_trans.pl");
+				randomSeed = RND_SEED_TRANS[RND_SEED_INDEX];
 				break;
 
 			case 1:
 				files = List.of("dred_no_mark_seq.pl", "dred_mark_seq.pl");
 				// maxNodeNumber = 100
 				parameters[0] = 100;
+				randomSeed = RND_SEED_SEQ[RND_SEED_INDEX];
 				break;
+			default:
+				throw new Exception("Invalid test case. Only 0 or 1 are allowed for synthetic test");
 			}
+
+			System.out.println("random seed:" + randomSeed);
 
 			for (String file : files) {
 				performRandomEvaluation(file, randomSeed, parameters, parameterNames, variantIndex, variantStart,
@@ -74,13 +110,21 @@ public class Evaluation {
 			}
 		}
 
-		else if (TEST_TYPE == "real") {
-			String updateFolder = "src/main/resources/updates/filtered/updates_track" + TEST_CASE;
-			List<String> filesReal = List.of("dred_no_mark_map.pl", "dred_mark_map.pl");
-			for (String file : filesReal) {
-				performRealEvaluation(file, updateFolder);
+		else if (TEST_TYPE.contentEquals("real")) {
+			if (TEST_CASE == 0 || TEST_CASE == 1 || TEST_CASE == 2) {
+				String updateFolder = "src/main/resources/updates/filtered/updates_track" + TEST_CASE;
+				List<String> filesReal = List.of("dred_no_mark_map.pl", "dred_mark_map.pl");
+				for (String file : filesReal) {
+					performRealEvaluation(file, updateFolder);
+				}
+			} else {
+				throw new Exception("Invalid test case. Only 0, 1, or 2 are allowed for real test");
 			}
 
+		}
+		// invalid test type
+		else {
+			throw new Exception("Invalid test type. Only \"synthetic\" or \"real\" are allowed.");
 		}
 
 	}
@@ -114,10 +158,10 @@ public class Evaluation {
 		PrintWriter writer;
 
 		try {
+			Files.createDirectories(Paths.get("results"));
 			// store results as table in a file
-			writer = new PrintWriter(
-					"results-" + approach + "-changing_" + parameterNames[variantIndex] + "_" + randomSeed + ".csv",
-					"UTF-8");
+			writer = new PrintWriter("results/results-" + approach + "-changing_" + parameterNames[variantIndex] + "_"
+					+ randomSeed + ".csv", "UTF-8");
 			// different statistics (used as columns for table in file)
 			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
 			String parameterNamesString = Arrays.toString(parameterNames).replaceAll(" ", "");
@@ -189,8 +233,9 @@ public class Evaluation {
 		PrintWriter writer;
 
 		try {
+			Files.createDirectories(Paths.get("results"));
 			// store results as table in a file
-			writer = new PrintWriter("results-" + approach + "-map_stream-" + updatesName + ".csv", "UTF-8");
+			writer = new PrintWriter("results/results-" + approach + "-map_stream-" + updatesName + ".csv", "UTF-8");
 			// different statistics (used as columns for table in file)
 			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
 			writer.println(categories);

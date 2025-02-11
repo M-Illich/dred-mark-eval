@@ -27,9 +27,8 @@ public class StreamToProlog {
 		String goal = "time(init(localhost:" + localPort + "))";
 
 		// call SWI-Prolog for specified file and goal
-		String[] command = { "swipl", "--stack-limit=4G", "-g", goal, "-t", "halt", file };
+		String[] command = { "swipl", "--stack-limit=4G", "-g", goal, "-t", "halt", "src/main/prolog/" + file };
 		ProcessBuilder pb = new ProcessBuilder(command);
-		pb.directory(new java.io.File("src/main/resources"));
 
 		Process process = null;
 		try {
