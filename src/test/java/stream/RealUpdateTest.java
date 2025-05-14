@@ -17,36 +17,21 @@ import data.Update;
 public class RealUpdateTest {
 
 	String updateFolder = "src/test/resources/updates";
-	File file0 = new File(updateFolder + "/00_facts_48.398621_9.984068_2024-08-10_09.23.33_100.pl");
-	File file1 = new File(updateFolder + "/01_facts_48.397888_9.984138_2024-08-10_09.23.39_100.pl");
+	File file0 = new File(updateFolder + "/01.pl");
+	File file1 = new File(updateFolder + "/02.pl");
 	RealUpdateStreamRun usr = new RealUpdateStreamRun("no_file", updateFolder);
 
 	// facts occurring in test files
-	Fact node1 = new Fact("node(1)");
-	Fact node2 = new Fact("node(2)");
-	Fact node3 = new Fact("node(3)");
-	Fact node4 = new Fact("node(4)");
-	Fact node5 = new Fact("node(5)");
-	Fact node6 = new Fact("node(6)");
-	Fact node7 = new Fact("node(7)");
-	Fact node8 = new Fact("node(8)");
-	Fact nodeTag1 = new Fact("nodeTag(1, \"highway\", \"give_way\")");
-	Fact nodeTag2 = new Fact("nodeTag(2, \"highway\", \"stop\")");
-	Fact nodeTag3 = new Fact("nodeTag(3, \"highway\", \"traffic_signals\")");
-	Fact nodeTag4 = new Fact("nodeTag(4, \"highway\", \"crossing\")");
-	Fact nodeTag5 = new Fact("nodeTag(5, \"highway\", \"tram_level_crossing\")");
-	Fact nodeTag6 = new Fact("nodeTag(6, \"highway\", \"level_crossing\")");
-	Fact nodeTag7a = new Fact("nodeTag(7, \"public_transport\", \"stop_position\")");
-	Fact nodeTag7b = new Fact("nodeTag(7, \"bus\", \"yes\")");
-	Fact nodeTag8a = new Fact("nodeTag(8, \"public_transport\", \"stop_position\")");
-	Fact nodeTag8b = new Fact("nodeTag(8, \"tram\", \"yes\")");
+	Fact f1 = new Fact("nextInWay(1, 2, 1)");
+	Fact f2 = new Fact("nextInWay(2, 3, 2)");
+	Fact f3 = new Fact("nextInWay(3, 4, 3)");
+	Fact f4 = new Fact("nextInWay(4, 5, 3)");
+	
 	// update sets
-	Set<Fact> add0 = new HashSet<Fact>(
-			Set.of(node1, nodeTag1, node2, nodeTag2, node3, nodeTag3, node4, nodeTag4, node5, nodeTag5));
-	Set<Fact> add1 = new HashSet<Fact>(
-			Set.of(node6, nodeTag6, node7, nodeTag7a, nodeTag7b, node8, nodeTag8a, nodeTag8b));
+	Set<Fact> add0 = new HashSet<Fact>(Set.of(f1, f2, f3));
+	Set<Fact> add1 = new HashSet<Fact>(Set.of(f4));
 	Set<Fact> delete0 = new HashSet<Fact>();
-	Set<Fact> delete1 = new HashSet<Fact>(Set.of(node1, nodeTag1, node2, nodeTag2, node3, nodeTag3));
+	Set<Fact> delete1 = new HashSet<Fact>(Set.of(f1));
 
 	@Test
 	public void testCreateUpdateStream() {
