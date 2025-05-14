@@ -3,6 +3,7 @@ package prolog;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -19,14 +20,20 @@ public class PrologTest {
 	@Test
 	public void testProlog() {
 
-		System.out.println("Synthetic test 1");
-		testSyntheticProlog("dred_no_mark_trans.pl", "dred_mark_trans.pl", "materialize_trans.pl");
+		System.out.println("Synthetic test 1 - DRed");
+		testSyntheticProlog("dred/dred_no_mark_trans.pl", "dred/dred_mark_trans.pl", "materialize_trans.pl");
+		System.out.println("Synthetic test 1 - B/F");
+		testSyntheticProlog("bf/bf_no_mark_trans.pl", "bf/bf_mark_trans.pl", "materialize_trans.pl");
 		System.out.println("");
-		System.out.println("Synthetic test 2");
-		testSyntheticProlog("dred_no_mark_seq.pl", "dred_mark_seq.pl", "materialize_seq.pl");
+		System.out.println("Synthetic test 2 - DRed");
+		testSyntheticProlog("dred/dred_no_mark_seq.pl", "dred/dred_mark_seq.pl", "materialize_seq.pl");
+		System.out.println("Synthetic test 2 - B/F");
+		testSyntheticProlog("bf/bf_no_mark_seq.pl", "bf/bf_mark_seq.pl", "materialize_seq.pl");
 		System.out.println("");
-		System.out.println("Real test");
-		testRealProlog("dred_no_mark_map.pl", "dred_mark_map.pl", "materialize_map.pl");
+		System.out.println("Real test - DRed");
+		testRealProlog("dred/dred_no_mark_map.pl", "dred/dred_mark_map.pl", "materialize_map.pl");
+		System.out.println("Real test - B/F");
+		testRealProlog("bf/bf_no_mark_map.pl", "bf/bf_mark_map.pl", "materialize_map.pl");
 
 	}
 
@@ -37,7 +44,7 @@ public class PrologTest {
 		System.out.println("random seed: " + randomSeed);
 
 		int maxNodeNumber = 10;
-		int numberOfUpdates = 5;
+		int numberOfUpdates = 10;
 
 		// compute materialization without marking
 		UpdateStreamRun usrNoMark = new SyntheticUpdateStreamRun(file1, randomSeed, maxNodeNumber, numberOfUpdates, 0);
@@ -57,12 +64,26 @@ public class PrologTest {
 
 			// compare results with simple method
 			Set<Fact> mat = sm.execute();
+			// detect differences
+			HashSet<Fact> diff = new HashSet<>();
+			if (mat.size() < usrMark.queryAnswers.get(i).size()) {
+				diff.addAll(usrMark.queryAnswers.get(i));
+				diff.removeAll(mat);
+			} else {
+				diff.addAll(mat);
+				diff.removeAll(usrMark.queryAnswers.get(i));
+			}
+
+			for (Fact fact : diff) {
+				System.out.println("diff: " + fact);
+			}
+
 			assertEquals(mat.size(), usrMark.queryAnswers.get(i).size());
 			assertTrue(mat.containsAll(usrMark.queryAnswers.get(i)));
 
 			// compare between with and without marking
-			assertEquals(usrNoMark.queryAnswers.get(i).size(), usrMark.queryAnswers.get(i).size());
-			assertTrue(usrNoMark.queryAnswers.get(i).containsAll(usrMark.queryAnswers.get(i)));
+			assertEquals(usrMark.queryAnswers.get(i).size(), usrNoMark.queryAnswers.get(i).size());
+			assertTrue(usrMark.queryAnswers.get(i).containsAll(usrNoMark.queryAnswers.get(i)));
 
 		}
 	}

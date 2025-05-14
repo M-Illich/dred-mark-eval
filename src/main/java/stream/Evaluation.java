@@ -15,20 +15,25 @@ public class Evaluation {
 	final static int REPETITIONS = 5;
 
 	/**
+	 * "dred" or "bf" tests are possible
+	 */
+	static String TEST_ALGO = "bf"; // "dred"; //
+
+	/**
 	 * "synthetic" or "real" tests are possible
 	 */
 	static String TEST_TYPE = "real"; // "synthetic"; //
 
 	/**
-	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming); for "real":
-	 * 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
+	 * for "synthetic": 0 (transitive paths) or 1 (sequential renaming); 
+	 * for "real": 0 (GPS track0), 1 (GPS track1), or 2 (GPS track2)
 	 */
 	static int TEST_CASE = 2;
 
 	/**
-	 * index to choose random seed from array
+	 * index to choose random seed from array (only for synthetic tests)
 	 */
-	static int RND_SEED_INDEX = 0;
+	static int RND_SEED_INDEX = 3;
 
 	/**
 	 * random seeds used for synthetic "transitive path" tests
@@ -43,9 +48,14 @@ public class Evaluation {
 
 	public static void main(String[] args) throws Exception {
 
-		if (args.length >= 2) {
-			TEST_TYPE = args[0];
-			TEST_CASE = Integer.parseInt(args[1]);
+		if (args.length >= 3) {
+			TEST_ALGO = args[0];
+			TEST_TYPE = args[1];
+			TEST_CASE = Integer.parseInt(args[2]);
+		}
+
+		if (TEST_ALGO != "dred" && TEST_ALGO != "bf") {
+			throw new Exception("Invalid test algorithm. Only \"dred\" or \"bf\" are possible");
 		}
 
 		System.out.println("test type: " + TEST_TYPE + "  --  test case: " + TEST_CASE);
@@ -77,8 +87,8 @@ public class Evaluation {
 			RND_SEED_TRANS[0] = randomSeed;
 			RND_SEED_SEQ[0] = randomSeed;
 			// determine index to select random seed from array
-			if (args.length == 3) {
-				RND_SEED_INDEX = Integer.parseInt(args[2]);
+			if (args.length == 4) {
+				RND_SEED_INDEX = Integer.parseInt(args[3]);
 			}
 			if (RND_SEED_INDEX < 0 || RND_SEED_INDEX > 3) {
 				throw new Exception("Invalid argument. Only 0, 1, 2, or 3 are allowed for random seed selection.");
@@ -88,12 +98,20 @@ public class Evaluation {
 			List<String> files = null;
 			switch (TEST_CASE) {
 			case 0:
-				files = List.of("dred_no_mark_trans.pl", "dred_mark_trans.pl");
+				if (TEST_ALGO == "dred") {
+					files = List.of("dred/dred_no_mark_trans.pl", "dred/dred_mark_trans.pl");
+				} else {
+					files = List.of("bf/bf_no_mark_trans.pl", "bf/bf_mark_trans.pl");
+				}
 				randomSeed = RND_SEED_TRANS[RND_SEED_INDEX];
 				break;
 
 			case 1:
-				files = List.of("dred_no_mark_seq.pl", "dred_mark_seq.pl");
+				if (TEST_ALGO == "dred") {
+					files = List.of("dred/dred_no_mark_seq.pl", "dred/dred_mark_seq.pl");
+				} else {
+					files = List.of("bf/bf_no_mark_seq.pl", "bf/bf_mark_seq.pl");
+				}
 				// maxNodeNumber = 100
 				parameters[0] = 100;
 				randomSeed = RND_SEED_SEQ[RND_SEED_INDEX];
@@ -113,7 +131,12 @@ public class Evaluation {
 		else if (TEST_TYPE.contentEquals("real")) {
 			if (TEST_CASE == 0 || TEST_CASE == 1 || TEST_CASE == 2) {
 				String updateFolder = "src/main/resources/updates/filtered/updates_track" + TEST_CASE;
-				List<String> filesReal = List.of("dred_no_mark_map.pl", "dred_mark_map.pl");
+				List<String> filesReal;
+				if (TEST_ALGO == "dred") {
+					filesReal = List.of("dred/dred_no_mark_map.pl", "dred/dred_mark_map.pl");
+				} else {
+					filesReal = List.of("bf/bf_no_mark_map.pl", "bf/bf_mark_map.pl");
+				}
 				for (String file : filesReal) {
 					performRealEvaluation(file, updateFolder);
 				}
@@ -152,7 +175,7 @@ public class Evaluation {
 	public static void performRandomEvaluation(String file, long randomSeed, int[] parameters, String[] parameterNames,
 			int variantIndex, int variantStart, int variantEnd, int variantStep) {
 
-		String approach = file.substring(5, file.length() - 3);
+		String approach = file.substring(file.indexOf("/") + 1, file.length() - 3);
 		System.out.println(approach);
 
 		PrintWriter writer;
@@ -163,7 +186,11 @@ public class Evaluation {
 			writer = new PrintWriter("results/results-" + approach + "-changing_" + parameterNames[variantIndex] + "_"
 					+ randomSeed + ".csv", "UTF-8");
 			// different statistics (used as columns for table in file)
-			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
+			String categories = "cpuTime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
+			// backward/forward uses different statistics
+			if (TEST_ALGO == "bf") {
+				categories = categories.replace("appliedRules(red)", "appliedRules(bwd),appliedRules(fwd)");
+			}
 			String parameterNamesString = Arrays.toString(parameterNames).replaceAll(" ", "");
 			parameterNamesString = parameterNamesString.substring(1, parameterNamesString.length() - 1);
 			String parametersString = Arrays.toString(parameters).replaceAll(" ", "");
@@ -196,10 +223,11 @@ public class Evaluation {
 
 				// get measured values from statistics
 				String measures = variant + "," + avgCpuTime + "," + usr.statistics.appliedRules.get("del") + ","
-						+ usr.statistics.appliedRules.get("red") + "," + usr.statistics.appliedRules.get("ins") + ","
-						+ usr.statistics.markedFacts.get("addEx") + "," + usr.statistics.markedFacts.get("addIm") + ","
-						+ usr.statistics.markedFacts.get("delEx") + "," + usr.statistics.markedFacts.get("delIm") + ","
-						+ parametersString;
+						+ (TEST_ALGO == "dred" ? usr.statistics.appliedRules.get("red")
+								: (usr.statistics.appliedRules.get("bwd") + "," + usr.statistics.appliedRules.get("fwd")))
+						+ "," + usr.statistics.appliedRules.get("ins") + "," + usr.statistics.markedFacts.get("addEx")
+						+ "," + usr.statistics.markedFacts.get("addIm") + "," + usr.statistics.markedFacts.get("delEx")
+						+ "," + usr.statistics.markedFacts.get("delIm") + "," + parametersString;
 
 				// write statistics to file
 				writer.println(measures);
@@ -226,7 +254,7 @@ public class Evaluation {
 	 */
 	public static void performRealEvaluation(String file, String updateFolder) {
 
-		String approach = file.substring(5, file.length() - 3);
+		String approach = file.substring(file.indexOf("/") + 1, file.length() - 3);
 		String updatesName = updateFolder.substring(updateFolder.lastIndexOf("/") + 1);
 		System.out.println(approach);
 
@@ -237,7 +265,11 @@ public class Evaluation {
 			// store results as table in a file
 			writer = new PrintWriter("results/results-" + approach + "-map_stream-" + updatesName + ".csv", "UTF-8");
 			// different statistics (used as columns for table in file)
-			String categories = "runtime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
+			String categories = "cpuTime,appliedRules(del),appliedRules(red),appliedRules(ins),markedFacts(addEx),markedFacts(addIm),markedFacts(delEx),markedFacts(delIm)";
+			// backward/forward uses different statistics
+			if (TEST_ALGO == "bf") {
+				categories = categories.replace("appliedRules(red)", "appliedRules(bwd),appliedRules(fwd)");
+			}
 			writer.println(categories);
 
 			// create update stream
@@ -258,9 +290,11 @@ public class Evaluation {
 
 			// get measured values from statistics
 			String measures = avgCpuTime + "," + usr.statistics.appliedRules.get("del") + ","
-					+ usr.statistics.appliedRules.get("red") + "," + usr.statistics.appliedRules.get("ins") + ","
-					+ usr.statistics.markedFacts.get("addEx") + "," + usr.statistics.markedFacts.get("addIm") + ","
-					+ usr.statistics.markedFacts.get("delEx") + "," + usr.statistics.markedFacts.get("delIm");
+					+ (TEST_ALGO == "dred" ? usr.statistics.appliedRules.get("red")
+							: (usr.statistics.appliedRules.get("bwd") + "," + usr.statistics.appliedRules.get("fwd")))
+					+ "," + usr.statistics.appliedRules.get("ins") + "," + usr.statistics.markedFacts.get("addEx") + ","
+					+ usr.statistics.markedFacts.get("addIm") + "," + usr.statistics.markedFacts.get("delEx") + ","
+					+ usr.statistics.markedFacts.get("delIm");
 
 			// write statistics to file
 			writer.println(measures);
